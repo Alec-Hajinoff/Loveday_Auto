@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AdminPanel.css";
-import GetUsers from "./GetUsers";
+
 import ManageUsers from "./ManageUsers";
 
 const AdminPanel = () => {
@@ -26,10 +26,6 @@ const AdminPanel = () => {
         <h4>User Management</h4>
       </div>
       <div className="admin-panel-content">
-        <GetUsers
-          onUserSelect={handleUserSelect}
-          refreshTrigger={refreshUsersTrigger}
-        />
         <ManageUsers
           selectedUser={selectedUser}
           onUserUpdated={handleUserUpdated}
