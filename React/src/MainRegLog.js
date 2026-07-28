@@ -3,7 +3,6 @@ import "./MainRegLog.css";
 import Main from "./Main.js";
 import UserRegistration from "./UserRegistration.js";
 import UserLogin from "./UserLogin.js";
-import TechnologyStack from "./TechnologyStack.js";
 
 function MainRegLog() {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -35,7 +34,6 @@ function MainRegLog() {
       <div className="row">
         <div className="col-12 col-lg-9">
           <Main />
-          <TechnologyStack />
         </div>
 
         <div className="col-12 col-lg-3 sticky-sidebar">
@@ -52,9 +50,9 @@ function MainRegLog() {
               </button>
               {showTooltip && (
                 <span className="custom-tooltip-content">
-                  Registered clients can submit requirements with text and files,
-                  request changes as work progresses, and track every update
-                  through a clear, chronological timeline.
+                  Registered clients can submit requirements with text and
+                  files, request changes as work progresses, and track every
+                  update through a clear, chronological timeline.
                 </span>
               )}
             </span>
