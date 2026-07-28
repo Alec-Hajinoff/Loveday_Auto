@@ -1,0 +1,27 @@
+.footer {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+  padding: 15px;
+  font-weight: 500;
+  margin-top: 35px;
+}
+
+.footer-links {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.footer-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.footer-separator {
+  margin: 0 10px;
+  color: inherit;
+}

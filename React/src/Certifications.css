@@ -1,0 +1,35 @@
+.certification-link {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+
+  padding: 0;
+  text-decoration: none;
+}
+
+.certification-link:hover {
+  text-decoration: underline;
+}
+
+.certifications-container h2 {
+  color: var(--color-primary-500);
+}
+
+.certifications-list-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.certification-item {
+  margin: 0;
+}
+
+.certification-icon {
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  color: var(--color-primary-500);
+}

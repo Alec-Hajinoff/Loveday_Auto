@@ -1,0 +1,20 @@
+.tos-container .tos-main-title,
+.tos-container .tos-heading {
+  color: var(--color-primary-500);
+  margin-bottom: 16px;
+}
+
+.tos-container .tos-text,
+.tos-container .tos-list {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  margin-bottom: 16px;
+}
+
+.tos-container .tos-list {
+  padding-left: 20px;
+}
+
+.tos-container .tos-list-item {
+  margin-bottom: 8px;
+}

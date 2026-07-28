@@ -1,0 +1,101 @@
+.portfolio-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-title {
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+  background: radial-gradient(
+    circle,
+    var(--color-primary-100) 0%,
+    var(--color-primary-50) 60%,
+    white 100%
+  );
+
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  color: var(--color-primary-600);
+}
+
+.portfolio-container h2 {
+  color: var(--color-primary-500);
+}
+
+.portfolio-container p,
+.portfolio-container ul {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  margin-bottom: 16px;
+}
+
+.portfolio-container ul {
+  padding-left: 20px;
+}
+
+.portfolio-container li {
+  margin-bottom: 8px;
+}
+
+.logo-container {
+  float: left;
+  margin: 0 20px 10px 0;
+  max-width: 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.logo-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 0 5px 5px white;
+  pointer-events: none;
+}
+
+.clearfix-custom::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.inline-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.external-icon {
+  font-size: 0.75rem;
+  margin-left: 2px;
+  vertical-align: super;
+  display: inline-block;
+}
+
+.inline-link:hover {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.github-inspection-block {
+  margin-top: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 576px) {
+  .portfolio-logo {
+    float: none;
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 100%;
+  }
+}

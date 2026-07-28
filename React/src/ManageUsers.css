@@ -1,0 +1,179 @@
+.manage-users-container {
+  margin-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}
+
+.user-info-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.user-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.user-info-row:last-child {
+  border-bottom: none;
+}
+
+.user-info-value {
+  text-align: right;
+}
+
+.user-info-value-with-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-edit-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-edit-icon:hover {
+  opacity: 0.7;
+}
+
+.inline-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.inline-edit-container .form-control-sm {
+  width: 200px;
+}
+
+.inline-edit-container .btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  border-radius: 4px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  color: white;
+  border-radius: 4px;
+}
+
+.delete-row {
+  border-top: 1px solid #e9ecef;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.delete-controls {
+  text-align: right;
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-confirm-delete {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-confirm-delete:hover {
+  opacity: 0.8;
+}
+
+.btn-confirm-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-cancel-delete {
+  background-color: #6c757d;
+  border: none;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-cancel-delete:hover {
+  opacity: 0.8;
+}
+
+.btn-cancel-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .user-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .delete-confirmation {
+    justify-content: flex-start;
+  }
+
+  .user-info-value {
+    text-align: left;
+  }
+
+  .inline-edit-container {
+    width: 100%;
+  }
+
+  .inline-edit-container .form-control-sm {
+    width: 100%;
+    flex: 1;
+  }
+}

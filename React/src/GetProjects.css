@@ -1,0 +1,138 @@
+.get-projects-container {
+  margin-top: 2rem;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-item {
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.project-header {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.project-header:hover {
+  background-color: #f8f9fa;
+}
+
+.project-toggle-icon {
+  font-size: 0.75rem;
+  color: #6c757d;
+  width: 20px;
+  display: inline-block;
+}
+
+.project-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  background-color: var(--color-primary-50);
+}
+
+.status-in_progress {
+  background-color: var(--color-primary-50);
+}
+
+.status-completed {
+  background-color: var(--color-primary-300);
+}
+
+.project-date {
+  white-space: nowrap;
+}
+
+.project-body {
+  border-top: 1px solid #e9ecef;
+  background-color: #fefefe;
+}
+
+.project-description {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.attachment-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.attachment-item {
+  padding: 0.25rem 0;
+}
+
+.attachment-links {
+  display: inline-block;
+}
+
+.attachment-links .btn-link {
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.attachment-links .btn-link:hover {
+  text-decoration: underline;
+}
+
+.get-projects-header {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 35px;
+  margin-bottom: 1.5rem;
+}
+
+.get-projects-header h4 {
+  margin: 0;
+  font-weight: 500;
+  color: inherit;
+}
+
+.project-external-icon {
+  font-size: 0.75rem;
+  margin-left: 2px;
+  vertical-align: super;
+  display: inline-block;
+}
+
+@media (max-width: 991.98px) {
+  .get-projects-header {
+    margin-top: 15px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .project-header .d-flex .d-flex:first-child {
+    width: 100%;
+  }
+
+  .project-header .d-flex .d-flex:last-child {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .project-date {
+    white-space: normal;
+  }
+
+  .attachment-links {
+    display: block;
+    margin-top: 0.25rem;
+  }
+}

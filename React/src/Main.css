@@ -1,0 +1,24 @@
+.main-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.intro-section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-title {
+  font-weight: bold;
+  font-style: italic;
+  background: radial-gradient(
+    circle,
+    var(--color-primary-100) 0%,
+    var(--color-primary-50) 60%,
+    white 100%
+  );
+
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  color: var(--color-primary-600);
+}
