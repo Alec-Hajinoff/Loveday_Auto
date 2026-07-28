@@ -1,4 +1,4 @@
-# Loveday Auto Repairs Ltd – Web Application
+# Auto Repair Business – Web Application
 
 A full-stack portfolio web application project for an auto repair business, designed to modernise customer interactions and streamline internal operations.
 
