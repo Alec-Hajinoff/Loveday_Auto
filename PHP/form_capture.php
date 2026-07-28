@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
-$dbname = 'hertford_standard';
+$dbname = 'loveday_auto';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
