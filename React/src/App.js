@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 import Header from "./Header";
-import NavigationBar from "./NavigationBar";
+
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
 import { checkSession } from "./ApiService";
@@ -39,11 +39,7 @@ function AppContent() {
         isLoading={isLoading}
         onLogoutComplete={verifySession}
       />
-      <NavigationBar
-        isAuthenticated={isAuthenticated}
-        isLoading={isLoading}
-        userRole={userRole}
-      />
+
       <AppRoutes />
       <Footer />
     </div>
