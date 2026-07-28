@@ -189,32 +189,6 @@ export const checkSession = async () => {
   }
 };
 
-// getProjects() fetches a client's existing projects for display in user dashboard.
-
-export const getProjects = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/get_projects.php",
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Get projects error:", error);
-    throw new Error(
-      error.message || "An error occurred while fetching projects.",
-    );
-  }
-};
-
 // projectMessages() allows a client to submit messages and attachments for a specific project.
 
 export const projectMessages = async (projectId, formData) => {

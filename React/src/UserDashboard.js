@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 
-import GetProjects from "./GetProjects";
-
 function UserDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
 
@@ -22,8 +20,6 @@ function UserDashboard() {
               progress, and manage your existing work.
             </p>
           </div>
-
-          <GetProjects refreshTrigger={refreshProjects} />
         </div>
       </div>
     </div>
