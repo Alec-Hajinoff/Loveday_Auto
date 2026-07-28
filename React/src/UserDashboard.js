@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
-import ProjectSubmission from "./ProjectSubmission";
+
 import GetProjects from "./GetProjects";
 
 function UserDashboard() {
@@ -23,7 +23,6 @@ function UserDashboard() {
             </p>
           </div>
 
-          <ProjectSubmission onProjectSubmitted={handleProjectSubmitted} />
           <GetProjects refreshTrigger={refreshProjects} />
         </div>
       </div>

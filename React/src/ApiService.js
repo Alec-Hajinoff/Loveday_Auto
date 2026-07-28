@@ -189,41 +189,6 @@ export const checkSession = async () => {
   }
 };
 
-// projectSubmission() allows a client to submit their project.
-
-export const projectSubmission = async (formData) => {
-  try {
-    const data = new FormData();
-    data.append("title", formData.title);
-    data.append("description", formData.description);
-
-    formData.attachments.forEach((file, index) => {
-      data.append("attachments[]", file);
-    });
-
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/project_submission.php",
-      {
-        method: "POST",
-        credentials: "include",
-        body: data,
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error("Project submission error:", error);
-    throw new Error(
-      error.message || "An error occurred during project submission.",
-    );
-  }
-};
-
 // getProjects() fetches a client's existing projects for display in user dashboard.
 
 export const getProjects = async () => {
