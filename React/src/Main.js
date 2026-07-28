@@ -1,6 +1,5 @@
 import React from "react";
 import "./Main.css";
-import ContactForm from "./ContactForm";
 
 function Main() {
   return (
@@ -17,8 +16,6 @@ function Main() {
           Hertford Standard is a portfolio and client‑management application
           designed to showcase my capabilities as a software engineer.
         </p>
-
-        <ContactForm />
       </div>
     </div>
   );
