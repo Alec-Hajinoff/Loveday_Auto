@@ -189,32 +189,6 @@ export const checkSession = async () => {
   }
 };
 
-// projectTimeline() fetches all messages and attachments for a specific project and displays them as a timeline.
-
-export const projectTimeline = async (projectId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8001/Loveday_Auto/PHP/project_timeline.php?project_id=${projectId}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Get project timeline error:", error);
-    throw new Error(
-      error.message || "An error occurred while fetching project messages.",
-    );
-  }
-};
-
 // statusUpdate() allows admin to update a project's status.
 
 export const statusUpdate = async (projectId, status) => {
