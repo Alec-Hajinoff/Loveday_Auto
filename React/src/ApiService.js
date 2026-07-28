@@ -191,94 +191,9 @@ export const checkSession = async () => {
 
 
 
-// manageUsers() fetches user data for the selected user.
 
-export const manageUsers = async (userId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8001/Loveday_Auto/PHP/manage_users.php?user_id=${userId}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Manage users error:", error);
-    throw new Error(
-      error.message || "An error occurred while fetching user data.",
-    );
-  }
-};
-
-// updateUserName() updates a user's name.
-
-export const updateUserName = async (userId, newName) => {
-  try {
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/update_user_name.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          user_id: userId,
-          name: newName,
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Update user name error:", error);
-    throw new Error(
-      error.message || "An error occurred while updating user name.",
-    );
-  }
-};
-
-// userDeletion() deletes a user and all associated data (cascade).
-
-export const userDeletion = async (userId) => {
-  try {
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/user_deletion.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          user_id: userId,
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("User deletion error:", error);
-    throw new Error(error.message || "An error occurred while deleting user.");
-  }
-};
 
 // contactForm() sends contact form data to admin via email without storing the data in database.
 
