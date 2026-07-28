@@ -189,39 +189,6 @@ export const checkSession = async () => {
   }
 };
 
-// statusUpdate() allows admin to update a project's status.
-
-export const statusUpdate = async (projectId, status) => {
-  try {
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/status_update.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          project_id: projectId,
-          status: status,
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Status update error:", error);
-    throw new Error(
-      error.message || "An error occurred while updating status.",
-    );
-  }
-};
-
 // getUsers() fetches all user names for the admin dropdown selection.
 
 export const getUsers = async () => {
