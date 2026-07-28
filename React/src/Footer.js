@@ -18,15 +18,6 @@ function Footer() {
               <a href={`mailto:${email}`}>{email}</a>
             </em>
           </p>
-          <div className="footer-links">
-            <Link to="/Privacypolicy" className="footer-link">
-              Privacy Policy
-            </Link>
-            <span className="footer-separator">|</span>
-            <Link to="/Termsofservice" className="footer-link">
-              Terms of Service
-            </Link>
-          </div>
         </div>
       </div>
     </div>
