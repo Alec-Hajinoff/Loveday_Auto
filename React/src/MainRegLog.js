@@ -32,34 +32,8 @@ function MainRegLog() {
   return (
     <div className="container text-center">
       <div className="row">
-        <div className="col-12 col-lg-9">
+        <div className="col-12">
           <Main />
-        </div>
-
-        <div className="col-12 col-lg-3 sticky-sidebar">
-          <p className="section-divider">
-            New client? Please register:
-            <span className="custom-tooltip-wrapper" ref={tooltipRef}>
-              <button
-                type="button"
-                className="tooltip-btn"
-                onClick={toggleTooltip}
-                aria-label="Help information"
-              >
-                <sup>?</sup>
-              </button>
-              {showTooltip && (
-                <span className="custom-tooltip-content">
-                  Registered clients can submit requirements with text and
-                  files, request changes as work progresses, and track every
-                  update through a clear, chronological timeline.
-                </span>
-              )}
-            </span>
-          </p>
-          <UserRegistration />
-          <p className="section-divider">Existing client? Please login:</p>
-          <UserLogin />
         </div>
       </div>
     </div>
