@@ -58,7 +58,9 @@ function UserLogin() {
     }
 
     if (formData.password.length < 8) {
-      setErrorMessage("Please ensure your password is at least 8 characters long.");
+      setErrorMessage(
+        "Please ensure your password is at least 8 characters long.",
+      );
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
@@ -84,7 +86,10 @@ function UserLogin() {
         clearUnverifiedMessageAfterDelay();
         setFormData({ password: "" });
       } else {
-        setErrorMessage(data.message || "We couldn’t sign you in at the moment. Please check your details and try again.");
+        setErrorMessage(
+          data.message ||
+            "We couldn’t sign you in at the moment. Please check your details and try again.",
+        );
         clearErrorMessageAfterDelay();
         setFormData({ password: "" });
       }
@@ -102,7 +107,9 @@ function UserLogin() {
     const email = emailInput ? emailInput.value : formData.email;
 
     if (!email || !email.trim()) {
-      setErrorMessage("Please enter your email address so we can help you reset your password.");
+      setErrorMessage(
+        "Please enter your email address so we can help you reset your password.",
+      );
       clearErrorMessageAfterDelay();
       return;
     }
@@ -127,81 +134,98 @@ function UserLogin() {
   };
 
   return (
-    <div className="user-login-wrapper">
-      <form className="row g-2" onSubmit={handleSubmit} noValidate>
-        {" "}
-        {/* noValidate disables browser validation */}
-        <div className="form-group">
-          <input
-            autoComplete="off"
-            type="email"
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-            className="form-control"
-            id="yourEmailLogin"
-            name="email"
-            required
-            placeholder="Email address"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <input
-            autoComplete="off"
-            type="password"
-            className="form-control"
-            id="yourPasswordLogin"
-            name="password"
-            required
-            minLength="8"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-        {unverifiedMessage && (
-          <div id="unverified-message" className="error" aria-live="polite">
-            {unverifiedMessage}
+    /* BOOTSTRAP: Added container to center content horizontally on the page */
+    <div className="container my-5">
+      {/* BOOTSTRAP: Added row with justify-content-center to align the column in the middle */}
+      <div className="row justify-content-center">
+        {/* BOOTSTRAP: Retained col-12 col-lg-3 width so the form matches the 3-column span from MainRegLog */}
+        <div className="col-12 col-lg-3">
+          <div className="user-login-wrapper">
+            <form className="row g-2" onSubmit={handleSubmit} noValidate>
+              {" "}
+              {/* noValidate disables browser validation */}
+              <div className="form-group">
+                <input
+                  autoComplete="off"
+                  type="email"
+                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                  className="form-control"
+                  id="yourEmailLogin"
+                  name="email"
+                  required
+                  placeholder="Email address"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  autoComplete="off"
+                  type="password"
+                  className="form-control"
+                  id="yourPasswordLogin"
+                  name="password"
+                  required
+                  minLength="8"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              {unverifiedMessage && (
+                <div
+                  id="unverified-message"
+                  className="error"
+                  aria-live="polite"
+                >
+                  {unverifiedMessage}
+                </div>
+              )}
+              <div id="error-message-one" className="error" aria-live="polite">
+                {errorMessage}
+              </div>
+              {resetMessage && (
+                <div
+                  id="reset-message"
+                  className="reset-message"
+                  aria-live="polite"
+                >
+                  {resetMessage}
+                </div>
+              )}
+              <button type="submit" className="btn btn-secondary" id="loginBtn">
+                Login
+                <span
+                  className="spinner-border spinner-border-sm ms-2"
+                  role="status"
+                  aria-hidden="true"
+                  id="spinnerLogin"
+                  style={{ display: loading ? "inline-block" : "none" }}
+                ></span>
+              </button>
+              <div className="forgot-password-link-container">
+                <button
+                  type="button"
+                  className="forgot-password-link"
+                  onClick={handleForgotPassword}
+                  disabled={resetLoading}
+                >
+                  Forgot your password?
+                  {resetLoading && (
+                    <span
+                      className="spinner-border spinner-border-sm ms-2"
+                      role="status"
+                      aria-hidden="true"
+                      id="spinnerReset"
+                    ></span>
+                  )}
+                </button>
+              </div>
+              <div id="liveAlertPlaceholder"></div>
+            </form>
           </div>
-        )}
-        <div id="error-message-one" className="error" aria-live="polite">
-          {errorMessage}
         </div>
-        {resetMessage && (
-          <div id="reset-message" className="reset-message" aria-live="polite">
-            {resetMessage}
-          </div>
-        )}
-        <button type="submit" className="btn btn-secondary" id="loginBtn">
-          Login
-          <span
-            className="spinner-border spinner-border-sm ms-2"
-            role="status"
-            aria-hidden="true"
-            id="spinnerLogin"
-            style={{ display: loading ? "inline-block" : "none" }}
-          ></span>
-        </button>
-        <div className="forgot-password-link-container">
-          <button
-            type="button"
-            className="forgot-password-link"
-            onClick={handleForgotPassword}
-            disabled={resetLoading}
-          >
-            Forgot your password?
-            {resetLoading && (
-              <span
-                className="spinner-border spinner-border-sm ms-2"
-                role="status"
-                aria-hidden="true"
-                id="spinnerReset"
-              ></span>
-            )}
-          </button>
-        </div>
-        <div id="liveAlertPlaceholder"></div>
-      </form>
+      </div>
     </div>
   );
 }

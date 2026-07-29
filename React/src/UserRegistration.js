@@ -90,64 +90,75 @@ function UserRegistration() {
   };
 
   return (
-    <div className="user-registration-wrapper">
-      <form className="row g-2" onSubmit={handleSubmit} noValidate>
-        {" "}
-        {/*noValidate disables the browser outputting its error messages
-    and custom validation runs for name, email address, password*/}
-        <div className="form-group">
-          <input
-            autoComplete="off"
-            type="text"
-            pattern="[a-zA-Z ]+"
-            className="form-control"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            placeholder="Your full name"
-          />
+    /* BOOTSTRAP: Added container to center content horizontally on the page */
+    <div className="container my-5">
+      {/* BOOTSTRAP: Added row with justify-content-center to align the column in the middle */}
+      <div className="row justify-content-center">
+        {/* BOOTSTRAP: Retained col-12 col-lg-3 width so the form matches the 3-column span from MainRegLog */}
+        <div className="col-12 col-lg-3">
+          <div className="user-registration-wrapper">
+            <form className="row g-2" onSubmit={handleSubmit} noValidate>
+              {" "}
+              {/*noValidate disables the browser outputting its error messages
+          and custom validation runs for name, email address, password*/}
+              <div className="form-group">
+                <input
+                  autoComplete="off"
+                  type="text"
+                  pattern="[a-zA-Z ]+"
+                  className="form-control"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your full name"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  autoComplete="off"
+                  type="email"
+                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                  className="form-control"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="Email address"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  autoComplete="off"
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  minLength="8"
+                  placeholder="Choose a strong password"
+                />
+              </div>
+              {successMessage && (
+                <div id="success-message">{successMessage}</div>
+              )}
+              <div id="error-message">{errorMessage}</div>
+              <button type="submit" className="btn btn-secondary">
+                {loading ? "Registering" : "Register"}
+                <span
+                  className="spinner-border spinner-border-sm ms-2"
+                  role="status"
+                  aria-hidden="true"
+                  id="spinnerRegister"
+                  style={{ display: loading ? "inline-block" : "none" }}
+                ></span>
+              </button>
+              <div id="registerPlaceholder"></div>
+            </form>
+          </div>
         </div>
-        <div className="form-group">
-          <input
-            autoComplete="off"
-            type="email"
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-            className="form-control"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            placeholder="Email address"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            autoComplete="off"
-            type="password"
-            className="form-control"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            minLength="8"
-            placeholder="Choose a strong password"
-          />
-        </div>
-        {successMessage && <div id="success-message">{successMessage}</div>}
-        <div id="error-message">{errorMessage}</div>
-        <button type="submit" className="btn btn-secondary">
-          {loading ? "Registering" : "Register"}
-          <span
-            className="spinner-border spinner-border-sm ms-2"
-            role="status"
-            aria-hidden="true"
-            id="spinnerRegister"
-            style={{ display: loading ? "inline-block" : "none" }}
-          ></span>
-        </button>
-        <div id="registerPlaceholder"></div>
-      </form>
+      </div>
     </div>
   );
 }
