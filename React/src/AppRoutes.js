@@ -7,6 +7,8 @@ import VerifyEmail from "./VerifyEmail";
 import PasswordReset from "./PasswordReset";
 import AdminDashboard from "./AdminDashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import UserLogin from "./UserLogin";
+import UserRegistration from "./UserRegistration";
 
 import React from "react";
 
@@ -14,6 +16,8 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<MainRegLog />} />
+      <Route path="/UserLogin" element={<UserLogin />} />
+      <Route path="/UserRegistration" element={<UserRegistration />} />
 
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
       <Route path="/LogoutComponent" element={<LogoutComponent />} />

@@ -21,9 +21,19 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           </div>
 
           <div className="col-12 col-md-3 text-end">
-            {!isLoading && isAuthenticated && (
-              <LogoutComponent onLogoutComplete={onLogoutComplete} />
-            )}
+            {!isLoading &&
+              (isAuthenticated ? (
+                <LogoutComponent onLogoutComplete={onLogoutComplete} />
+              ) : (
+                <div className="d-flex align-items-center justify-content-end gap-3">
+                  <Link to="/UserLogin" className="btn-text">
+                    Log in
+                  </Link>
+                  <Link to="/UserRegistration" className="btn-text">
+                    Sign up
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
       </div>
