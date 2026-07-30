@@ -5,8 +5,8 @@ import { registerUser } from "./ApiService";
 
 function UserRegistration() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -38,13 +38,6 @@ function UserRegistration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const namePattern = /^[a-zA-Z ]+$/;
-    if (!namePattern.test(formData.name)) {
-      setErrorMessage("Please enter a name using letters and spaces only.");
-      clearErrorMessageAfterDelay();
-      return;
-    }
-
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
       setErrorMessage(
@@ -68,7 +61,8 @@ function UserRegistration() {
           "You're almost there! Please check your email for a link to confirm your address and complete sign-in.",
         );
         clearSuccessMessageAfterDelay();
-        setFormData({ name: "", email: "", password: "" });
+
+        setFormData({ email: "", password: "" });
         setErrorMessage("");
       } else {
         setErrorMessage(
@@ -77,43 +71,29 @@ function UserRegistration() {
         );
         clearErrorMessageAfterDelay();
 
-        setFormData({ name: "", email: "", password: "" });
+        setFormData({ email: "", password: "" });
       }
     } catch (error) {
       setErrorMessage(error.message);
       clearErrorMessageAfterDelay();
 
-      setFormData({ name: "", email: "", password: "" });
+      setFormData({ email: "", password: "" });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    /* BOOTSTRAP: Added container to center content horizontally on the page */
+    /* BOOTSTRAP: Container maintains vertical spacing and horizontal centering */
     <div className="container my-5">
-      {/* BOOTSTRAP: Added row with justify-content-center to align the column in the middle */}
+      {/* BOOTSTRAP: Row centering the form on the page */}
       <div className="row justify-content-center">
-        {/* BOOTSTRAP: Retained col-12 col-lg-3 width so the form matches the 3-column span from MainRegLog */}
+        {/* BOOTSTRAP: Keeps 3-column span width for consistent appearance */}
         <div className="col-12 col-lg-3">
           <div className="user-registration-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
               {" "}
-              {/*noValidate disables the browser outputting its error messages
-          and custom validation runs for name, email address, password*/}
-              <div className="form-group">
-                <input
-                  autoComplete="off"
-                  type="text"
-                  pattern="[a-zA-Z ]+"
-                  className="form-control"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your full name"
-                />
-              </div>
+              {/* noValidate disables standard browser validation */}
               <div className="form-group">
                 <input
                   autoComplete="off"

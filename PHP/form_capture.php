@@ -24,7 +24,7 @@ if (empty($mailUsername) || empty($mailPassword)) {
 }
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -45,10 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
+$servername     = '127.0.0.1';
+$username       = 'root';
 $passwordServer = '';
-$dbname = 'loveday_auto';
+$dbname         = 'loveday_auto';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -64,22 +64,21 @@ if ($input === null) {
     exit;
 }
 
-$name = $input['name'] ?? null;
-$email = filter_var($input['email'] ?? '', FILTER_SANITIZE_EMAIL);
+$email    = filter_var($input['email'] ?? '', FILTER_SANITIZE_EMAIL);
 $password = $input['password'] ?? null;
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode(['success' => false, 'message' => 'Invalid email format']);
     exit;
 }
 
-if (!$name || !$email || !$password) {
+if (! $email || ! $password) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields']);
     exit;
 }
 
 try {
-    $checkSql = 'SELECT id FROM users WHERE email = :email LIMIT 1';
+    $checkSql  = 'SELECT id FROM users WHERE email = :email LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':email', $email);
     $checkStmt->execute();
@@ -87,14 +86,14 @@ try {
     if ($checkStmt->rowCount() > 0) {
         echo json_encode([
             'success' => false,
-            'message' => 'We couldn’t use this email. Please try a different one.'
+            'message' => 'We couldn’t use this email. Please try a different one.',
         ]);
         exit;
     }
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'message' => 'Database error during email verification'
+        'message' => 'Database error during email verification',
     ]);
     exit;
 }
@@ -106,14 +105,14 @@ try {
 
     $verificationToken = bin2hex(random_bytes(32));
 
-    $sql = 'INSERT INTO users (email, password, name, verification_token, verification_token_expires_at, is_verified)
-        VALUES (:email, :password, :name, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)';
+    $sql = 'INSERT INTO users (email, password, verification_token, verification_token_expires_at, is_verified)
+        VALUES (:email, :password, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)';
 
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $hashedPassword);
-        $stmt->bindParam(':name', $name);
+
         $stmt->bindParam(':token', $verificationToken);
         $stmt->execute();
 
@@ -126,19 +125,20 @@ try {
         try {
             $mail->SMTPDebug = SMTP::DEBUG_OFF;
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = $mailUsername;
-            $mail->Password = $mailPassword;
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $mailUsername;
+            $mail->Password   = $mailPassword;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Port       = 587;
 
             $mail->setFrom($mailUsername, 'Hertford Standard');
-            $mail->addAddress($email, $name);
+
+            $mail->addAddress($email);
 
             $mail->isHTML(false);
             $mail->Subject = 'Verify your email address - Hertford Standard';
-            $mail->Body = "Thank you for creating an account with Hertford Standard.\n\n"
+            $mail->Body    = "Thank you for creating an account with Hertford Standard.\n\n"
                 . "Please click the link below to verify your email address:\n"
                 . $verificationLink . "\n\n"
                 . "Once verified, you will be able to sign in to your account.\n\n"
@@ -154,7 +154,7 @@ try {
             error_log('PHPMailer Error: ' . $e->getMessage());
             echo json_encode([
                 'success' => false,
-                'message' => 'Registration completed but failed to send verification email. Please contact support.'
+                'message' => 'Registration completed but failed to send verification email. Please contact support.',
             ]);
         }
     } else {
