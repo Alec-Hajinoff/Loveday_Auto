@@ -2,7 +2,7 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
+$servername     = '127.0.0.1';
+$username       = 'root';
 $passwordServer = '';
-$dbname = 'loveday_auto';
+$dbname         = 'loveday_auto';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -45,7 +45,7 @@ if ($input === null) {
 
 $token = $input['token'] ?? null;
 
-if (!$token) {
+if (! $token) {
     echo json_encode(['success' => false, 'message' => 'It looks like the verification link is incomplete. Please use the full link from your email.']);
     exit;
 }
@@ -53,15 +53,15 @@ if (!$token) {
 try {
     $conn->beginTransaction();
 
-    $checkSql = 'SELECT id, email, is_verified FROM users 
-                 WHERE verification_token = :token AND verification_token_expires_at > NOW() 
+    $checkSql = 'SELECT id, email, is_verified FROM users
+                 WHERE verification_token = :token AND verification_token_expires_at > NOW()
                  LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':token', $token);
     $checkStmt->execute();
 
     if ($checkStmt->rowCount() === 0) {
-        $expiredSql = 'SELECT id FROM users WHERE verification_token = :token AND verification_token_expires_at <= NOW() LIMIT 1';
+        $expiredSql  = 'SELECT id FROM users WHERE verification_token = :token AND verification_token_expires_at <= NOW() LIMIT 1';
         $expiredStmt = $conn->prepare($expiredSql);
         $expiredStmt->bindParam(':token', $token);
         $expiredStmt->execute();
@@ -83,10 +83,11 @@ try {
         exit;
     }
 
-    $updateSql = 'UPDATE users 
-                  SET is_verified = 1, 
-                      verification_token = NULL, 
-                      verification_token_expires_at = NULL 
+    $updateSql = 'UPDATE users
+                  SET is_verified = 1,
+                      verification_token = NULL,
+                      verification_token_expires_at = NULL,
+                      updated_at = NOW()
                   WHERE id = :id';
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bindParam(':id', $user['id']);

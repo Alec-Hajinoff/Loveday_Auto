@@ -5,7 +5,7 @@ require_once 'session_config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
+$servername     = '127.0.0.1';
+$username       = 'root';
 $passwordServer = '';
-$dbname = 'loveday_auto';
+$dbname         = 'loveday_auto';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -45,7 +45,7 @@ if ($input === null) {
     exit;
 }
 
-$token = $input['token'] ?? '';
+$token       = $input['token'] ?? '';
 $newPassword = $input['password'] ?? '';
 
 if (empty($token) || empty($newPassword)) {
@@ -61,9 +61,9 @@ if (strlen($newPassword) < 8) {
 try {
     $conn->beginTransaction();
 
-    $verifySql = 'SELECT id FROM users 
-                  WHERE password_reset_token = :token 
-                  AND password_token_expires_at > NOW() 
+    $verifySql = 'SELECT id FROM users
+                  WHERE password_reset_token = :token
+                  AND password_token_expires_at > NOW()
                   LIMIT 1';
 
     $verifyStmt = $conn->prepare($verifySql);
@@ -73,7 +73,7 @@ try {
     if ($verifyStmt->rowCount() === 0) {
         echo json_encode([
             'success' => false,
-            'message' => 'This link has expired or is invalid. Please request a new password reset link.'
+            'message' => 'This link has expired or is invalid. Please request a new password reset link.',
         ]);
         exit;
     }
@@ -82,10 +82,11 @@ try {
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $updateSql = 'UPDATE users 
-                  SET password = :password, 
-                      password_reset_token = NULL, 
-                      password_token_expires_at = NULL 
+    $updateSql = 'UPDATE users
+                  SET password = :password,
+                      password_reset_token = NULL,
+                      password_token_expires_at = NULL,
+                      updated_at = NOW()
                   WHERE id = :id';
 
     $updateStmt = $conn->prepare($updateSql);
