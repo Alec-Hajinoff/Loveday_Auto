@@ -2,7 +2,7 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
@@ -26,10 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $isAuthenticated = isset($_SESSION['id']);
-$isAdmin = $isAuthenticated && isset($_SESSION['is_admin']) ? (bool) $_SESSION['is_admin'] : false;
+
+$userRole = $isAuthenticated && isset($_SESSION['role']) ? $_SESSION['role'] : null;
 
 echo json_encode([
     'authenticated' => $isAuthenticated,
-    'userId' => $isAuthenticated ? $_SESSION['id'] : null,
-    'is_admin' => $isAdmin
+    'userId'        => $isAuthenticated ? $_SESSION['id'] : null,
+    'role'          => $userRole,
 ]);
