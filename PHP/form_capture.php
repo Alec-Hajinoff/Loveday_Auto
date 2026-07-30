@@ -105,8 +105,8 @@ try {
 
     $verificationToken = bin2hex(random_bytes(32));
 
-    $sql = 'INSERT INTO users (email, password, verification_token, verification_token_expires_at, is_verified)
-        VALUES (:email, :password, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)';
+    $sql = 'INSERT INTO users (role_id, email, password, verification_token, verification_token_expires_at, is_verified, created_at, updated_at)
+        VALUES (4, :email, :password, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0, NOW(), NOW())';
 
     $stmt = $conn->prepare($sql);
     if ($stmt) {
