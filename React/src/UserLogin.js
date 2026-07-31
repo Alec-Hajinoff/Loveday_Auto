@@ -72,14 +72,10 @@ function UserLogin() {
     try {
       const data = await loginUser(formData);
       if (data.status === "success") {
-        if (
-          data.is_admin === true ||
-          data.is_admin === 1 ||
-          data.is_admin === "1"
-        ) {
-          navigate("/AdminDashboard");
-        } else {
+        if (data.role === "customer") {
           navigate("/UserDashboard");
+        } else {
+          navigate("/AdminDashboard");
         }
       } else if (data.status === "unverified") {
         setUnverifiedMessage(data.message);
