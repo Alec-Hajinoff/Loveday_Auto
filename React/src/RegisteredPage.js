@@ -18,8 +18,10 @@ function RegisteredPage() {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-3">
             <p className="registered-section-divider">Registered user login:</p>
-            <UserLogin />
           </div>
+        </div>
+        <div>
+          <UserLogin />
         </div>
       </div>
     </div>
