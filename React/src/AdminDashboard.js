@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 
-import AdminPanel from "./AdminPanel";
-
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
 
@@ -22,8 +20,6 @@ function AdminDashboard() {
               projects and system settings.
             </p>
           </div>
-
-          <AdminPanel />
         </div>
       </div>
     </div>
