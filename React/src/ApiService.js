@@ -188,3 +188,27 @@ export const checkSession = async () => {
     return { authenticated: false };
   }
 };
+
+// businessHoursManager() sends selected business opening hours to the backend.
+
+export const businessHoursManager = async (businessHoursData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/business_hours_manager.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ business_hours: businessHoursData }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error saving business hours:", error);
+    throw new Error("An error occurred while saving business hours.");
+  }
+};

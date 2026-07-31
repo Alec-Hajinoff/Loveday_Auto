@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
+import BusinessHoursManager from "./BusinessHoursManager";
 
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -20,6 +21,8 @@ function AdminDashboard() {
               projects and system settings.
             </p>
           </div>
+          <hr />
+          <BusinessHoursManager />
         </div>
       </div>
     </div>
