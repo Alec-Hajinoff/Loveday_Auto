@@ -232,3 +232,27 @@ export const bookingCalendar = async (startDate, endDate) => {
     throw new Error("An error occurred while loading the calendar.");
   }
 };
+
+// Sends a selected appointment slot to the database
+
+export const selectedAppointmentSlot = async (bookingData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/selected_appointment_slot.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(bookingData),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error booking appointment slot:", error);
+    throw new Error("An error occurred while confirming your booking.");
+  }
+};

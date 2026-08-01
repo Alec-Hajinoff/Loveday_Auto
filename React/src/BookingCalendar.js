@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./BookingCalendar.css";
-import { bookingCalendar } from "./ApiService";
+
+import { bookingCalendar, selectedAppointmentSlot } from "./ApiService";
 
 const formatISO = (date) => {
   const y = date.getFullYear();
@@ -27,7 +28,10 @@ function BookingCalendar() {
   const [currentMonday, setCurrentMonday] = useState(getMonday(new Date()));
   const [slotsData, setSlotsData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+
+  const [selectedSlots, setSelectedSlots] = useState([]);
+
+  const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
   const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -61,23 +65,58 @@ function BookingCalendar() {
   }, [loadCalendarSlots]);
 
   const handlePrevWeek = () => {
+    setSelectedSlots([]);
     const prev = new Date(currentMonday);
     prev.setDate(prev.getDate() - 7);
     setCurrentMonday(prev);
   };
 
   const handleNextWeek = () => {
+    setSelectedSlots([]);
     const next = new Date(currentMonday);
     next.setDate(next.getDate() + 7);
     setCurrentMonday(next);
   };
 
   const handleToday = () => {
+    setSelectedSlots([]);
     setCurrentMonday(getMonday(new Date()));
   };
 
   const handleSelectSlot = (slot) => {
-    setSelectedSlot(slot);
+    setSelectedSlots((prev) => {
+      const exists = prev.some((s) => s.id === slot.id);
+      if (exists) {
+        return prev.filter((s) => s.id !== slot.id);
+      } else {
+        return [...prev, slot];
+      }
+    });
+  };
+
+  const handleConfirmBooking = async () => {
+    if (selectedSlots.length === 0) return;
+
+    setSubmitting(true);
+    setMessage("");
+
+    try {
+      const slotIds = selectedSlots.map((s) => s.id);
+      const response = await selectedAppointmentSlot({ slot_ids: slotIds });
+
+      if (response.status === "success") {
+        setMessage("Booking confirmed!");
+        setSelectedSlots([]);
+
+        await loadCalendarSlots();
+      } else {
+        setMessage(response.message || "Booking failed.");
+      }
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const timeRows = Array.from(
@@ -118,7 +157,7 @@ function BookingCalendar() {
       </p>
 
       {loading && <div>Loading schedule...</div>}
-      {message && <div className="text-danger mb-2">{message}</div>}
+      {message && <div className="text-info mb-2">{message}</div>}
 
       {!loading && (
         <div className="table-responsive">
@@ -155,8 +194,9 @@ function BookingCalendar() {
                         return <td key={dateIso}>-</td>;
                       }
 
-                      const isSelected =
-                        selectedSlot && selectedSlot.id === slot.id;
+                      const isSelected = selectedSlots.some(
+                        (s) => s.id === slot.id,
+                      );
 
                       return (
                         <td key={dateIso}>
@@ -186,12 +226,22 @@ function BookingCalendar() {
         </div>
       )}
 
-      {selectedSlot && (
-        <div className="alert alert-info mt-3">
-          Selected Slot: <strong>{selectedSlot.date}</strong> at{" "}
-          <strong>
-            {selectedSlot.start_time} - {selectedSlot.end_time}
-          </strong>
+      {selectedSlots.length > 0 && (
+        <div className="alert alert-info mt-3 d-flex align-items-center justify-content-between">
+          <div>
+            <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
+            {selectedSlots
+              .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
+              .join(", ")}
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm ms-3"
+            onClick={handleConfirmBooking}
+            disabled={submitting}
+          >
+            {submitting ? "Booking..." : "Confirm Booking"}
+          </button>
         </div>
       )}
     </div>
