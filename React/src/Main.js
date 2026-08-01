@@ -1,8 +1,6 @@
 import React from "react";
 import "./Main.css";
 
-import BookingCalendar from "./BookingCalendar";
-
 function Main() {
   return (
     <div className="main-container">
@@ -19,9 +17,6 @@ function Main() {
           designed to showcase my capabilities as a software engineer.
         </p>
       </div>
-
-      <hr />
-      <BookingCalendar />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
+/* MODIFICATION: Imported BookingCalendar component */
+import BookingCalendar from "./BookingCalendar";
 
 function UserDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -20,6 +22,9 @@ function UserDashboard() {
               progress, and manage your existing work.
             </p>
           </div>
+          {/* MODIFICATION: Rendered BookingCalendar inside UserDashboard for logged-in customers */}
+          <hr />
+          <BookingCalendar />
         </div>
       </div>
     </div>
