@@ -1,0 +1,41 @@
+.booking-calendar-container {
+  margin: 1.5rem 0;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #dee2e6;
+  text-align: center;
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.slot-btn {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.25rem;
+}
+
+.slot-booked {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.85rem;
+}

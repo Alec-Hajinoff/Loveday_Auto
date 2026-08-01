@@ -3,6 +3,8 @@ import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BusinessHoursManager from "./BusinessHoursManager";
 
+import BookingCalendar from "./BookingCalendar";
+
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
 
@@ -23,6 +25,9 @@ function AdminDashboard() {
           </div>
           <hr />
           <BusinessHoursManager />
+
+          <hr />
+          <BookingCalendar />
         </div>
       </div>
     </div>

@@ -212,3 +212,23 @@ export const businessHoursManager = async (businessHoursData) => {
     throw new Error("An error occurred while saving business hours.");
   }
 };
+
+// bookingCalendar() retrieves from the database availability slots for a given date range.
+
+export const bookingCalendar = async (startDate, endDate) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8001/Loveday_Auto/PHP/booking_calendar.php?start_date=${startDate}&end_date=${endDate}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching booking calendar:", error);
+    throw new Error("An error occurred while loading the calendar.");
+  }
+};
