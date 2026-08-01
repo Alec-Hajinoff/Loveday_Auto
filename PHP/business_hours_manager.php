@@ -31,7 +31,6 @@ if (! isset($input['business_hours']) || ! is_array($input['business_hours'])) {
 }
 
 try {
-
     $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -57,15 +56,63 @@ try {
         ]);
     }
 
+    $hours_by_day = [];
+    foreach ($input['business_hours'] as $entry) {
+        $hours_by_day[(int) $entry['day_of_week']] = [
+            'open_time'  => $entry['open_time'],
+            'close_time' => $entry['close_time'],
+        ];
+    }
+
+    $slot_sql = 'INSERT IGNORE INTO availability_slots (date, start_time, end_time, is_available, created_at, updated_at)
+                 VALUES (:date, :start_time, :end_time, 1, NOW(), NOW())';
+    $slot_stmt = $pdo->prepare($slot_sql);
+
+    $start_date = new DateTime('today');
+    $end_date   = (new DateTime('today'))->modify('+3 months');
+
+    $interval = new DateInterval('P1D'); // 1 day step
+    $period   = new DatePeriod($start_date, $interval, $end_date);
+
+    foreach ($period as $current_day) {
+
+        $day_num = (int) $current_day->format('N');
+
+        if (isset($hours_by_day[$day_num])) {
+            $date_str   = $current_day->format('Y-m-d');
+            $open_time  = new DateTime($date_str . ' ' . $hours_by_day[$day_num]['open_time']);
+            $close_time = new DateTime($date_str . ' ' . $hours_by_day[$day_num]['close_time']);
+
+            $slot_interval = new DateInterval('PT30M');
+
+            while ($open_time < $close_time) {
+                $slot_start = $open_time->format('H:i:s');
+                $open_time->add($slot_interval);
+
+                if ($open_time > $close_time) {
+                    break;
+                }
+
+                $slot_end = $open_time->format('H:i:s');
+
+                $slot_stmt->execute([
+                    ':date'       => $date_str,
+                    ':start_time' => $slot_start,
+                    ':end_time'   => $slot_end,
+                ]);
+            }
+        }
+    }
+
     $pdo->commit();
-    echo json_encode(['status' => 'success', 'message' => 'Business hours saved successfully.']);
+    echo json_encode(['status' => 'success', 'message' => 'Business hours and 3-month availability slots saved successfully.']);
 
 } catch (PDOException $e) {
     if (isset($pdo) && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
     file_put_contents('error_log.txt', $e->getMessage() . PHP_EOL, FILE_APPEND);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to save business hours.']);
+    echo json_encode(['status' => 'error', 'message' => 'Failed to save business hours and slots.']);
 } finally {
     $pdo = null;
 }
