@@ -256,3 +256,27 @@ export const selectedAppointmentSlot = async (bookingData) => {
     throw new Error("An error occurred while confirming your booking.");
   }
 };
+
+// serviceManager() sends garage services data to the backend
+
+export const serviceManager = async (servicesData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/service_manager.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ services: servicesData }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error saving services:", error);
+    throw new Error("An error occurred while saving services.");
+  }
+};

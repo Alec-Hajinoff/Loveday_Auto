@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BusinessHoursManager from "./BusinessHoursManager";
-
 import BookingCalendar from "./BookingCalendar";
+
+import ServiceManager from "./ServiceManager";
 
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -24,7 +25,15 @@ function AdminDashboard() {
             </p>
           </div>
           <hr />
-          <BusinessHoursManager />
+
+          <div className="row">
+            <div className="col-12 col-md-6 mb-4">
+              <BusinessHoursManager />
+            </div>
+            <div className="col-12 col-md-6 mb-4">
+              <ServiceManager />
+            </div>
+          </div>
 
           <hr />
           <BookingCalendar />
