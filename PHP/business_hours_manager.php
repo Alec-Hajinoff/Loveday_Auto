@@ -31,7 +31,7 @@ if (! isset($input['business_hours']) || ! is_array($input['business_hours'])) {
 }
 
 try {
-    /* Connection details matching login_capture.php */
+
     $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -40,7 +40,6 @@ try {
 
     $pdo->beginTransaction();
 
-    /* UPSERT query to insert new records or update open/close times and updated_at if day_of_week exists */
     $sql = 'INSERT INTO business_hours (day_of_week, open_time, close_time, created_at, updated_at)
             VALUES (:day_of_week, :open_time, :close_time, NOW(), NOW())
             ON DUPLICATE KEY UPDATE

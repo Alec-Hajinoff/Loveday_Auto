@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./BusinessHoursManager.css";
 import { businessHoursManager } from "./ApiService";
 
-/* Mapping day numbers: 1 = Monday, 2 = Tuesday, ..., 7 = Sunday */
 const DAYS = [
   { day_of_week: 1, label: "Monday" },
   { day_of_week: 2, label: "Tuesday" },
@@ -14,7 +13,6 @@ const DAYS = [
 ];
 
 function BusinessHoursManager() {
-  /* MODIFICATION: Removed hardcoded default times (08:00 and 17:00). Initialized open_time and close_time as empty strings */
   const [schedule, setSchedule] = useState(
     DAYS.map((day) => ({
       day_of_week: day.day_of_week,
@@ -49,7 +47,6 @@ function BusinessHoursManager() {
     e.preventDefault();
     setMessage("");
 
-    /* Filter selected days and check if selected days have both open_time and close_time set */
     const selectedDays = schedule
       .filter((item) => item.selected)
       .map(({ day_of_week, open_time, close_time }) => ({
@@ -63,7 +60,6 @@ function BusinessHoursManager() {
       return;
     }
 
-    /* Validate that all selected days have hours filled in */
     const missingTimes = selectedDays.some(
       (item) => !item.open_time || !item.close_time,
     );
