@@ -3,6 +3,8 @@ import "./BookingCalendar.css";
 
 import { bookingCalendar, selectedAppointmentSlot } from "./ApiService";
 
+import BookingDetailsForm from "./BookingDetailsForm";
+
 const formatISO = (date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -94,7 +96,7 @@ function BookingCalendar() {
     });
   };
 
-  const handleConfirmBooking = async () => {
+  const handleConfirmBooking = async (details) => {
     if (selectedSlots.length === 0) return;
 
     setSubmitting(true);
@@ -102,7 +104,14 @@ function BookingCalendar() {
 
     try {
       const slotIds = selectedSlots.map((s) => s.id);
-      const response = await selectedAppointmentSlot({ slot_ids: slotIds });
+      const payload = {
+        slot_ids: slotIds,
+        service_id: details.service_id,
+        vehicle_reg: details.vehicle_reg,
+        notes: details.notes,
+      };
+
+      const response = await selectedAppointmentSlot(payload);
 
       if (response.status === "success") {
         setMessage("Booking confirmed!");
@@ -227,21 +236,17 @@ function BookingCalendar() {
       )}
 
       {selectedSlots.length > 0 && (
-        <div className="alert alert-info mt-3 d-flex align-items-center justify-content-between">
-          <div>
+        <div className="mt-3">
+          <div className="alert alert-info">
             <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
             {selectedSlots
               .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
               .join(", ")}
           </div>
-          <button
-            type="button"
-            className="btn btn-primary btn-sm ms-3"
-            onClick={handleConfirmBooking}
-            disabled={submitting}
-          >
-            {submitting ? "Booking..." : "Confirm Booking"}
-          </button>
+          <BookingDetailsForm
+            onConfirm={handleConfirmBooking}
+            submitting={submitting}
+          />
         </div>
       )}
     </div>
