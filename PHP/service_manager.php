@@ -28,6 +28,14 @@ if (! isset($_SESSION['id'])) {
     exit;
 }
 
+$user_id   = $_SESSION['id'];
+$user_role = $_SESSION['role'] ?? 'customer';
+
+if (! in_array(strtolower($user_role), ['owner', 'admin'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Forbidden: Admin permissions required.']);
+    exit;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (! isset($input['services']) || ! is_array($input['services']) || empty($input['services'])) {

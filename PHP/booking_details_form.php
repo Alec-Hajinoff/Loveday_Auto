@@ -23,6 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+if (! isset($_SESSION['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized access. Please log in.']);
+    exit;
+}
+
+$user_id   = $_SESSION['id'];
+$user_role = $_SESSION['role'] ?? 'customer';
+
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

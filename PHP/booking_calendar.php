@@ -23,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+$user_id   = $_SESSION['id'] ?? null;
+$user_role = $_SESSION['role'] ?? null;
+
 $start_date = $_GET['start_date'] ?? null;
 $end_date   = $_GET['end_date'] ?? null;
 

@@ -28,8 +28,10 @@ if (! isset($_SESSION['id'])) {
     exit;
 }
 
-$user_id = $_SESSION['id'];
-$input   = json_decode(file_get_contents('php://input'), true);
+$user_id   = $_SESSION['id'];
+$user_role = $_SESSION['role'] ?? 'customer';
+
+$input = json_decode(file_get_contents('php://input'), true);
 
 if (! isset($input['slot_ids']) || ! is_array($input['slot_ids']) || empty($input['slot_ids'])) {
     echo json_encode(['status' => 'error', 'message' => 'Please select at least one appointment slot.']);

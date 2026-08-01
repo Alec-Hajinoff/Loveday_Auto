@@ -23,6 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+if (! isset($_SESSION['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized access. Please log in.']);
+    exit;
+}
+
+$user_id   = $_SESSION['id'];
+$user_role = $_SESSION['role'] ?? 'customer';
+
+if (! in_array(strtolower($user_role), ['owner', 'admin'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Forbidden: Admin access required.']);
+    exit;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (! isset($input['business_hours']) || ! is_array($input['business_hours'])) {
@@ -71,11 +84,10 @@ try {
     $start_date = new DateTime('today');
     $end_date   = (new DateTime('today'))->modify('+3 months');
 
-    $interval = new DateInterval('P1D'); // 1 day step
+    $interval = new DateInterval('P1D');
     $period   = new DatePeriod($start_date, $interval, $end_date);
 
     foreach ($period as $current_day) {
-
         $day_num = (int) $current_day->format('N');
 
         if (isset($hours_by_day[$day_num])) {
