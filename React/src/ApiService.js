@@ -391,3 +391,26 @@ export const customerProfilePost = async (profileData) => {
     throw new Error("An error occurred while saving profile details.");
   }
 };
+
+// customerDeleteAccount() soft-deletes user profile data and destroys active session
+
+export const customerDeleteAccount = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/customer_delete_account.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    throw new Error("An error occurred while deleting your account.");
+  }
+};

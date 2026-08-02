@@ -4,6 +4,7 @@ import LogoutComponent from "./LogoutComponent";
 import BookingCalendar from "./BookingCalendar";
 import CustomerBookingsList from "./CustomerBookingsList";
 import CustomerProfile from "./CustomerProfile";
+import CustomerDeleteAccount from "./CustomerDeleteAccount";
 
 function UserDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -30,6 +31,10 @@ function UserDashboard() {
 
           <hr />
           <BookingCalendar />
+
+          <hr />
+
+          <CustomerDeleteAccount />
         </div>
       </div>
     </div>
