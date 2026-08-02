@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./CustomerBookingsList.css";
 import { customerBookingsList } from "./ApiService";
+import CustomerCancelBooking from "./CustomerCancelBooking";
 
 function CustomerBookingsList() {
   const [upcoming, setUpcoming] = useState([]);
@@ -8,25 +9,31 @@ function CustomerBookingsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await customerBookingsList();
-        if (response.status === "success") {
-          setUpcoming(response.upcoming);
-          setPast(response.past);
-        } else {
-          setError(response.message || "Could not load bookings.");
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchBookings = useCallback(async () => {
+    try {
+      const response = await customerBookingsList();
+      if (response.status === "success") {
+        setUpcoming(response.upcoming);
+        setPast(response.past);
+      } else {
+        setError(response.message || "Could not load bookings.");
       }
-    };
-
-    fetchBookings();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
+
+  const handleBookingCancelled = () => {
+    fetchBookings();
+
+    window.dispatchEvent(new CustomEvent("bookingUpdated"));
+  };
 
   if (loading) {
     return <div className="text-muted my-3">Loading your bookings...</div>;
@@ -68,6 +75,13 @@ function CustomerBookingsList() {
           <div className="booking-detail-item">
             <strong>Notes:</strong> {booking.notes}
           </div>
+        )}
+
+        {isUpcoming && (
+          <CustomerCancelBooking
+            appointmentId={booking.appointment_id}
+            onBookingCancelled={handleBookingCancelled}
+          />
         )}
       </div>
     </div>

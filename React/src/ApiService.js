@@ -323,3 +323,27 @@ export const customerBookingsList = async () => {
     throw new Error("An error occurred while fetching your bookings.");
   }
 };
+
+// customerCancelBooking() cancels an appointment and releases its slot
+
+export const customerCancelBooking = async (appointmentId) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/customer_cancel_booking.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ appointment_id: appointmentId }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error cancelling booking:", error);
+    throw new Error("An error occurred while cancelling your booking.");
+  }
+};

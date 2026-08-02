@@ -63,6 +63,19 @@ function BookingCalendar() {
     loadCalendarSlots();
   }, [loadCalendarSlots]);
 
+  useEffect(() => {
+    loadCalendarSlots();
+
+    const handleBookingUpdate = () => {
+      loadCalendarSlots();
+    };
+
+    window.addEventListener("bookingUpdated", handleBookingUpdate);
+    return () => {
+      window.removeEventListener("bookingUpdated", handleBookingUpdate);
+    };
+  }, [loadCalendarSlots]);
+
   const handlePrevWeek = () => {
     setSelectedSlots([]);
     const prev = new Date(currentMonday);
