@@ -45,12 +45,19 @@ if (isset($input['email'], $input['password'])) {
             SELECT u.*, r.name AS role_name
             FROM users u
             JOIN roles r ON u.role_id = r.id
-            WHERE u.email = ?
+            WHERE u.email = ? AND u.is_deleted = 0
         ');
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+
+            if (isset($user['is_deleted']) && (int) $user['is_deleted'] === 1) {
+                $pdo->rollBack();
+                echo json_encode(['status' => 'error', 'message' => 'We couldn’t log you in with those details.']);
+                exit;
+            }
+
             if ($user['is_verified'] == 0) {
                 $pdo->rollBack();
                 echo json_encode([
@@ -75,6 +82,7 @@ if (isset($input['email'], $input['password'])) {
             echo json_encode($response);
         } else {
             $pdo->rollBack();
+
             echo json_encode(['status' => 'error', 'message' => 'We couldn’t log you in with those details.']);
         }
     } catch (PDOException $e) {
