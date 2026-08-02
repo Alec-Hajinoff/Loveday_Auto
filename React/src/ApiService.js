@@ -347,3 +347,47 @@ export const customerCancelBooking = async (appointmentId) => {
     throw new Error("An error occurred while cancelling your booking.");
   }
 };
+
+// customerProfileGet() retrieves profile details of a customer (first_name, surname, phone)
+
+export const customerProfileGet = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/customer_profile_get.php",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    throw new Error("An error occurred while loading your profile.");
+  }
+};
+
+// customerProfilePost() updates customer profile details
+
+export const customerProfilePost = async (profileData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/customer_profile_post.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(profileData),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    throw new Error("An error occurred while saving profile details.");
+  }
+};

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BookingCalendar from "./BookingCalendar";
-
 import CustomerBookingsList from "./CustomerBookingsList";
+import CustomerProfile from "./CustomerProfile";
 
 function UserDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -14,7 +14,6 @@ function UserDashboard() {
 
   return (
     <div className="user-dashboard-container container">
-      {" "}
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9">
           <div className="admin-header">
@@ -23,6 +22,8 @@ function UserDashboard() {
               and book new slots.
             </p>
           </div>
+
+          <CustomerProfile />
 
           <hr />
           <CustomerBookingsList />
