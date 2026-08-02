@@ -300,3 +300,26 @@ export const bookingDetailsForm = async () => {
     throw new Error("An error occurred while fetching services.");
   }
 };
+
+/* customerBookingsList() fetches from the database and displays all customer bookings */
+
+export const customerBookingsList = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/customer_bookings_list.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching customer bookings list:", error);
+    throw new Error("An error occurred while fetching your bookings.");
+  }
+};

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
-/* MODIFICATION: Imported BookingCalendar component */
 import BookingCalendar from "./BookingCalendar";
+
+import CustomerBookingsList from "./CustomerBookingsList";
 
 function UserDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -18,11 +19,14 @@ function UserDashboard() {
         <div className="col-12 col-lg-9">
           <div className="admin-header">
             <p>
-              Welcome to your dashboard. Here you can submit new projects, track
-              progress, and manage your existing work.
+              Welcome to your dashboard. Here you can track your appointments
+              and book new slots.
             </p>
           </div>
-          {/* MODIFICATION: Rendered BookingCalendar inside UserDashboard for logged-in customers */}
+
+          <hr />
+          <CustomerBookingsList />
+
           <hr />
           <BookingCalendar />
         </div>
