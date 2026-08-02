@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./BookingCalendar.css";
 
 import { bookingCalendar, selectedAppointmentSlot } from "./ApiService";
-
 import BookingDetailsForm from "./BookingDetailsForm";
 
 const formatISO = (date) => {
@@ -30,9 +29,7 @@ function BookingCalendar() {
   const [currentMonday, setCurrentMonday] = useState(getMonday(new Date()));
   const [slotsData, setSlotsData] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [selectedSlots, setSelectedSlots] = useState([]);
-
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -104,11 +101,15 @@ function BookingCalendar() {
 
     try {
       const slotIds = selectedSlots.map((s) => s.id);
+
       const payload = {
         slot_ids: slotIds,
         service_id: details.service_id,
         vehicle_reg: details.vehicle_reg,
         notes: details.notes,
+        first_name: details.first_name,
+        surname: details.surname,
+        phone: details.phone,
       };
 
       const response = await selectedAppointmentSlot(payload);
@@ -116,7 +117,6 @@ function BookingCalendar() {
       if (response.status === "success") {
         setMessage("Booking confirmed!");
         setSelectedSlots([]);
-
         await loadCalendarSlots();
       } else {
         setMessage(response.message || "Booking failed.");

@@ -31,6 +31,11 @@ if (! isset($_SESSION['id'])) {
 $user_id   = $_SESSION['id'];
 $user_role = $_SESSION['role'] ?? 'customer';
 
+if ($user_role !== 'customer') {
+    echo json_encode(['status' => 'error', 'message' => 'Access denied. Only customers can access the booking form.']);
+    exit;
+}
+
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -38,12 +43,23 @@ try {
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 
+    /* Fetch garage services for the dropdown menu in the UI for the user's selection. */
     $stmt     = $pdo->query('SELECT id, name, price, duration_minutes FROM services ORDER BY name ASC');
     $services = $stmt->fetchAll();
+
+    /* Fetch existing profile data for the active session user. If the data exists, we prepopulate the fields, otherwsie fields are empty for the user to bill in. */
+    $user_stmt = $pdo->prepare('SELECT first_name, surname, phone FROM users WHERE id = :user_id');
+    $user_stmt->execute([':user_id' => $user_id]);
+    $user_data = $user_stmt->fetch();
 
     echo json_encode([
         'status'   => 'success',
         'services' => $services,
+        'user'     => $user_data ?: [
+            'first_name' => '',
+            'surname'    => '',
+            'phone'      => '',
+        ],
     ]);
 
 } catch (PDOException $e) {

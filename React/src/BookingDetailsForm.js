@@ -7,20 +7,31 @@ function BookingDetailsForm({ onConfirm, submitting }) {
   const [serviceId, setServiceId] = useState("");
   const [vehicleReg, setVehicleReg] = useState("");
   const [notes, setNotes] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchFormData = async () => {
       try {
         const response = await bookingDetailsForm();
         if (response.status === "success") {
           setServices(response.services);
+
+          if (response.user) {
+            setFirstName(response.user.first_name || "");
+            setSurname(response.user.surname || "");
+            setPhone(response.user.phone || "");
+          }
         }
       } catch (err) {
-        console.error("Failed to load services:", err);
+        console.error("Failed to load booking form data:", err);
       }
     };
-    fetchServices();
+    fetchFormData();
   }, []);
 
   const handleSubmit = (e) => {
@@ -39,10 +50,28 @@ function BookingDetailsForm({ onConfirm, submitting }) {
       return;
     }
 
+    if (!firstName.trim()) {
+      setErrorMessage("First name is required.");
+      return;
+    }
+
+    if (!surname.trim()) {
+      setErrorMessage("Surname is required.");
+      return;
+    }
+
+    if (!phone.trim()) {
+      setErrorMessage("Phone number is required.");
+      return;
+    }
+
     onConfirm({
       service_id: serviceId ? parseInt(serviceId, 10) : null,
       vehicle_reg: vehicleReg.trim(),
       notes: notes.trim() || null,
+      first_name: firstName.trim(),
+      surname: surname.trim(),
+      phone: phone.trim(),
     });
   };
 
@@ -99,6 +128,49 @@ function BookingDetailsForm({ onConfirm, submitting }) {
           placeholder="Describe your issue or custom request..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
+        />
+      </div>
+
+      <div className="row">
+        <div className="col-md-6 booking-form-group">
+          <label className="form-label fw-bold">
+            First Name <span className="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="John"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="col-md-6 booking-form-group">
+          <label className="form-label fw-bold">
+            Surname <span className="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Doe"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="booking-form-group">
+        <label className="form-label fw-bold">
+          Phone Number <span className="text-danger">*</span>
+        </label>
+        <input
+          type="tel"
+          className="form-control"
+          placeholder="e.g. 07123456789"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
         />
       </div>
 

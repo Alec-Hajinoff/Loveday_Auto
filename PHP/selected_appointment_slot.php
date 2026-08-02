@@ -31,6 +31,11 @@ if (! isset($_SESSION['id'])) {
 $user_id   = $_SESSION['id'];
 $user_role = $_SESSION['role'] ?? 'customer';
 
+if ($user_role !== 'customer') {
+    echo json_encode(['status' => 'error', 'message' => 'Access denied. Only customers can book appointments.']);
+    exit;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (! isset($input['slot_ids']) || ! is_array($input['slot_ids']) || empty($input['slot_ids'])) {
@@ -43,6 +48,20 @@ $service_id  = isset($input['service_id']) ? (int) $input['service_id'] : null;
 $vehicle_reg = isset($input['vehicle_reg']) ? trim($input['vehicle_reg']) : null;
 $notes       = isset($input['notes']) ? trim($input['notes']) : null;
 
+$first_name = isset($input['first_name']) ? trim($input['first_name']) : '';
+$surname    = isset($input['surname']) ? trim($input['surname']) : '';
+$phone      = isset($input['phone']) ? trim($input['phone']) : '';
+
+if (empty($vehicle_reg)) {
+    echo json_encode(['status' => 'error', 'message' => 'Vehicle registration is required.']);
+    exit;
+}
+
+if (empty($first_name) || empty($surname) || empty($phone)) {
+    echo json_encode(['status' => 'error', 'message' => 'First name, surname, and phone number are required.']);
+    exit;
+}
+
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -51,6 +70,21 @@ try {
     ]);
 
     $pdo->beginTransaction();
+
+    $user_stmt = $pdo->prepare('
+        UPDATE users
+        SET first_name = :first_name,
+            surname = :surname,
+            phone = :phone,
+            updated_at = NOW()
+        WHERE id = :user_id
+    ');
+    $user_stmt->execute([
+        ':first_name' => $first_name,
+        ':surname'    => $surname,
+        ':phone'      => $phone,
+        ':user_id'    => $user_id,
+    ]);
 
     $in_clause  = implode(',', array_fill(0, count($slot_ids), '?'));
     $check_stmt = $pdo->prepare("SELECT id FROM availability_slots WHERE id IN ($in_clause) AND is_available = 1 FOR UPDATE");
