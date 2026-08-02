@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BusinessHoursManager from "./BusinessHoursManager";
-import BookingCalendar from "./BookingCalendar";
 
 import ServiceManager from "./ServiceManager";
 
@@ -34,9 +33,6 @@ function AdminDashboard() {
               <ServiceManager />
             </div>
           </div>
-
-          <hr />
-          <BookingCalendar />
         </div>
       </div>
     </div>
