@@ -131,6 +131,7 @@ function BookingCalendar() {
         setMessage("Booking confirmed!");
         setSelectedSlots([]);
         await loadCalendarSlots();
+        window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setMessage(response.message || "Booking failed.");
       }

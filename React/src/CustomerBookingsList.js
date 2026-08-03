@@ -27,6 +27,15 @@ function CustomerBookingsList() {
 
   useEffect(() => {
     fetchBookings();
+
+    const handleBookingUpdate = () => {
+      fetchBookings();
+    };
+
+    window.addEventListener("bookingUpdated", handleBookingUpdate);
+    return () => {
+      window.removeEventListener("bookingUpdated", handleBookingUpdate);
+    };
   }, [fetchBookings]);
 
   const handleBookingCancelled = () => {
