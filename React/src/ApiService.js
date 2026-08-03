@@ -414,3 +414,26 @@ export const customerDeleteAccount = async () => {
     throw new Error("An error occurred while deleting your account.");
   }
 };
+
+// adminBookingsList() fetchs all garage bookings for Owner/Admin/Mechanic roles
+
+export const adminBookingsList = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/admin_bookings_list.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching admin bookings list:", error);
+    throw new Error("An error occurred while fetching garage bookings.");
+  }
+};
