@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./AdminBookingsList.css";
 import { adminBookingsList } from "./ApiService";
 
+import AdminCancelBooking from "./AdminCancelBooking";
+
 function AdminBookingsList() {
   const [upcoming, setUpcoming] = useState([]);
   const [past, setPast] = useState([]);
@@ -36,6 +38,11 @@ function AdminBookingsList() {
       window.removeEventListener("bookingUpdated", handleBookingUpdate);
     };
   }, [fetchBookings]);
+
+  const handleBookingCancelled = () => {
+    fetchBookings();
+    window.dispatchEvent(new CustomEvent("bookingUpdated"));
+  };
 
   if (loading) {
     return <div className="text-muted my-3">Loading garage bookings...</div>;
@@ -85,11 +92,11 @@ function AdminBookingsList() {
           </div>
         )}
 
-        {/* Placeholder for AdminCancelBooking.js */}
         {isUpcoming && (
-          <div className="admin-cancel-placeholder text-muted">
-            [AdminCancelBooking placeholder]
-          </div>
+          <AdminCancelBooking
+            appointmentId={booking.appointment_id}
+            onBookingCancelled={handleBookingCancelled}
+          />
         )}
       </div>
     </div>

@@ -437,3 +437,27 @@ export const adminBookingsList = async () => {
     throw new Error("An error occurred while fetching garage bookings.");
   }
 };
+
+// adminCancelBooking() allows admins to cancel an appointment and notifies the customer via email
+
+export const adminCancelBooking = async (appointmentId) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/admin_cancel_booking.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ appointment_id: appointmentId }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error cancelling booking as admin:", error);
+    throw new Error("An error occurred while cancelling the booking.");
+  }
+};
