@@ -461,3 +461,23 @@ export const adminCancelBooking = async (appointmentId) => {
     throw new Error("An error occurred while cancelling the booking.");
   }
 };
+
+// adminBookingCalendar() retrieves availability slots for the admin calendar view
+
+export const adminBookingCalendar = async (startDate, endDate) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8001/Loveday_Auto/PHP/admin_booking_calendar.php?start_date=${startDate}&end_date=${endDate}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching admin booking calendar:", error);
+    throw new Error("An error occurred while loading the admin calendar.");
+  }
+};

@@ -5,6 +5,7 @@ import BusinessHoursManager from "./BusinessHoursManager";
 import ServiceManager from "./ServiceManager";
 
 import AdminBookingsList from "./AdminBookingsList";
+import AdminBookingCalendar from "./AdminBookingCalendar";
 
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -26,6 +27,8 @@ function AdminDashboard() {
           </div>
 
           <AdminBookingsList />
+
+          <AdminBookingCalendar />
 
           <hr />
 
