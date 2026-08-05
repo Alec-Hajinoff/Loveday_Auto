@@ -60,7 +60,7 @@ try {
     ]);
 
     $stmt = $pdo->prepare('
-        SELECT id, date, DATE_FORMAT(start_time, "%H:%i") AS start_time, DATE_FORMAT(end_time, "%H:%i") AS end_time, is_available
+        SELECT id, date, DATE_FORMAT(start_time, "%H:%i") AS start_time, DATE_FORMAT(end_time, "%H:%i") AS end_time, status
         FROM availability_slots
         WHERE date >= :start_date AND date <= :end_date
         ORDER BY date ASC, start_time ASC

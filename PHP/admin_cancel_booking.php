@@ -116,7 +116,7 @@ try {
     $deleteStmt = $pdo->prepare('DELETE FROM appointments WHERE id = :id');
     $deleteStmt->execute([':id' => $appointment_id]);
 
-    $updateStmt = $pdo->prepare('UPDATE availability_slots SET is_available = 1, updated_at = NOW() WHERE id = :slot_id');
+    $updateStmt = $pdo->prepare("UPDATE availability_slots SET status = 'available', updated_at = NOW() WHERE id = :slot_id");
     $updateStmt->execute([':slot_id' => $slot_id]);
 
     $customer_email = $appointment['customer_email'];
