@@ -223,7 +223,7 @@ function BookingCalendar() {
 
                       return (
                         <td key={dateIso}>
-                          {slot.is_available === 1 ? (
+                          {slot.status === "available" ? (
                             <button
                               type="button"
                               className={`btn slot-btn ${

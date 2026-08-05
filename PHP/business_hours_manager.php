@@ -77,8 +77,8 @@ try {
         ];
     }
 
-    $slot_sql = 'INSERT IGNORE INTO availability_slots (date, start_time, end_time, is_available, created_at, updated_at)
-                 VALUES (:date, :start_time, :end_time, 1, NOW(), NOW())';
+    $slot_sql = 'INSERT IGNORE INTO availability_slots (date, start_time, end_time, status, created_at, updated_at)
+                 VALUES (:date, :start_time, :end_time, \'available\', NOW(), NOW())';
     $slot_stmt = $pdo->prepare($slot_sql);
 
     $start_date = new DateTime('today');

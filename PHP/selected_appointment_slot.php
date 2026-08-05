@@ -109,8 +109,9 @@ try {
     ]);
 
     $in_clause  = implode(',', array_fill(0, count($slot_ids), '?'));
-    $check_stmt = $pdo->prepare("SELECT id, date, start_time, end_time FROM availability_slots WHERE id IN ($in_clause) AND is_available = 1 FOR UPDATE");
+    $check_stmt = $pdo->prepare("SELECT id, date, start_time, end_time FROM availability_slots WHERE id IN ($in_clause) AND status = 'available' FOR UPDATE");
     $check_stmt->execute($slot_ids);
+
     $available_slots = $check_stmt->fetchAll();
 
     if (count($available_slots) !== count($slot_ids)) {
@@ -119,7 +120,7 @@ try {
         exit;
     }
 
-    $update_stmt = $pdo->prepare("UPDATE availability_slots SET is_available = 0, updated_at = NOW() WHERE id IN ($in_clause)");
+    $update_stmt = $pdo->prepare("UPDATE availability_slots SET status = 'booked', updated_at = NOW() WHERE id IN ($in_clause)");
     $update_stmt->execute($slot_ids);
 
     $app_stmt = $pdo->prepare('
