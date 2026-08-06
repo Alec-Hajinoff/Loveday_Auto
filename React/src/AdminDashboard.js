@@ -6,6 +6,7 @@ import ServiceManager from "./ServiceManager";
 
 import AdminBookingsList from "./AdminBookingsList";
 import AdminBookingCalendar from "./AdminBookingCalendar";
+import AvailabilityHorizonExtender from "./AvailabilityHorizonExtender";
 
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -40,6 +41,8 @@ function AdminDashboard() {
               <ServiceManager />
             </div>
           </div>
+
+          <AvailabilityHorizonExtender />
         </div>
       </div>
     </div>
