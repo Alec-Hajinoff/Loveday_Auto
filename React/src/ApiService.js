@@ -481,3 +481,30 @@ export const adminBookingCalendar = async (startDate, endDate) => {
     throw new Error("An error occurred while loading the admin calendar.");
   }
 };
+
+// blockUnblockActionBar() allows admins to block and unblock booking slos
+
+export const blockUnblockActionBar = async (slotIds, action = null) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/block_unblock_action_bar.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          slot_ids: slotIds,
+          action: action,
+        }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error toggling slot statuses:", error);
+    throw new Error("An error occurred while updating availability slots.");
+  }
+};

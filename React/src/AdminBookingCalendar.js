@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./AdminBookingCalendar.css";
 import { adminBookingCalendar } from "./ApiService";
 
+import BlockUnblockActionBar from "./BlockUnblockActionBar";
+
 const formatISO = (date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -63,6 +65,8 @@ function AdminBookingCalendar() {
   useEffect(() => {
     const handleBookingUpdate = () => {
       loadCalendarSlots();
+
+      setSelectedSlots([]);
     };
 
     window.addEventListener("bookingUpdated", handleBookingUpdate);
@@ -91,6 +95,8 @@ function AdminBookingCalendar() {
   };
 
   const handleSelectSlot = (slot) => {
+    if (slot.status === "booked") return;
+
     setSelectedSlots((prev) => {
       const exists = prev.some((s) => s.id === slot.id);
       if (exists) {
@@ -182,20 +188,23 @@ function AdminBookingCalendar() {
 
                       return (
                         <td key={dateIso}>
-                          {slot.status === "available" ? (
+                          {slot.status === "booked" ? (
+                            <span className="admin-slot-booked">Booked</span>
+                          ) : (
                             <button
                               type="button"
                               className={`btn admin-slot-btn ${
                                 isSelected
-                                  ? "btn-success"
-                                  : "btn-outline-success"
+                                  ? "btn-info"
+                                  : slot.status === "blocked"
+                                    ? "btn-danger"
+                                    : "btn-outline-success"
                               }`}
                               onClick={() => handleSelectSlot(slot)}
                             >
                               {slot.start_time} - {slot.end_time}
+                              {slot.status === "blocked" && " (Blocked)"}
                             </button>
-                          ) : (
-                            <span className="admin-slot-booked">Booked</span>
                           )}
                         </td>
                       );
@@ -207,6 +216,12 @@ function AdminBookingCalendar() {
           </table>
         </div>
       )}
+
+      <BlockUnblockActionBar
+        selectedSlots={selectedSlots}
+        onActionCompleted={() => setSelectedSlots([])}
+        onClearSelection={() => setSelectedSlots([])}
+      />
     </div>
   );
 }
