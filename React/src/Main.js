@@ -1,21 +1,16 @@
 import React from "react";
+import ProductCatalogue from "./ProductCatalogue";
 import "./Main.css";
 
 function Main() {
   return (
     <div className="main-container">
       <section className="hero">
-        <h2 className="hero-title">
-          I build modern and secure web applications for businesses and
-          development teams
-        </h2>
+        <h2 className="hero-title">Loveday Auto Repairs — Services & Parts</h2>
       </section>
 
       <div className="intro-section">
-        <p className="intro-text">
-          Hertford Standard is a portfolio and client‑management application
-          designed to showcase my capabilities as a software engineer.
-        </p>
+        <ProductCatalogue />
       </div>
     </div>
   );

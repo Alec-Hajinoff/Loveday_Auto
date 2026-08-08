@@ -552,3 +552,23 @@ export const adminProductEntry = async (formData) => {
     throw new Error("An error occurred while creating the product.");
   }
 };
+
+// productCatalogueGet() retrieves available products and services for sale for display in the UI.
+
+export const productCatalogueGet = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/product_catalogue_get.php",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching product catalogue:", error);
+    throw new Error("An error occurred while loading the product catalogue.");
+  }
+};
