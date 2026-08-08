@@ -7,23 +7,23 @@ import ServiceManager from "./ServiceManager";
 import AdminBookingsList from "./AdminBookingsList";
 import AdminBookingCalendar from "./AdminBookingCalendar";
 import AvailabilityHorizonExtender from "./AvailabilityHorizonExtender";
+import AdminProductEntry from "./AdminProductEntry";
 
 function AdminDashboard() {
-  const [refreshProjects, setRefreshProjects] = useState(0);
+  const [refreshProducts, setRefreshProducts] = useState(0);
 
-  const handleProjectSubmitted = () => {
-    setRefreshProjects((prev) => prev + 1);
+  const handleProductAdded = () => {
+    setRefreshProducts((prev) => prev + 1);
   };
 
   return (
     <div className="admin-container container">
-      {" "}
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9">
           <div className="admin-header">
             <p>
-              Welcome to your admin dashboard. Here you can manage users,
-              projects and system settings.
+              Welcome to your admin dashboard. Here you can manage bookings,
+              business hours, services, and inventory.
             </p>
           </div>
 
@@ -43,6 +43,10 @@ function AdminDashboard() {
           </div>
 
           <AvailabilityHorizonExtender />
+
+          <hr />
+
+          <AdminProductEntry onProductAdded={handleProductAdded} />
         </div>
       </div>
     </div>

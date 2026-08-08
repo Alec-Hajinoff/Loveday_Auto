@@ -531,3 +531,24 @@ export const availabilityHorizonExtender = async () => {
     throw new Error("An error occurred while extending availability slots.");
   }
 };
+
+// adminProductEntry() posts product details and image to the admin backend (products and services that are for sale)
+
+export const adminProductEntry = async (formData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/admin_product_entry.php",
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw new Error("An error occurred while creating the product.");
+  }
+};

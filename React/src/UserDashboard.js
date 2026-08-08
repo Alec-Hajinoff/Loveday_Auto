@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BookingCalendar from "./BookingCalendar";
@@ -7,12 +7,6 @@ import CustomerProfile from "./CustomerProfile";
 import CustomerDeleteAccount from "./CustomerDeleteAccount";
 
 function UserDashboard() {
-  const [refreshProjects, setRefreshProjects] = useState(0);
-
-  const handleProjectSubmitted = () => {
-    setRefreshProjects((prev) => prev + 1);
-  };
-
   return (
     <div className="user-dashboard-container container">
       <div className="row justify-content-center">
