@@ -7,7 +7,7 @@ function AdminProductEntry({ onProductAdded }) {
     name: "",
     description: "",
     price_gbp: "",
-    type: "good",
+    type: "product",
   });
   const [imageFile, setImageFile] = useState(null);
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -47,7 +47,7 @@ function AdminProductEntry({ onProductAdded }) {
           name: "",
           description: "",
           price_gbp: "",
-          type: "good",
+          type: "product",
         });
         setImageFile(null);
         e.target.reset();
@@ -142,7 +142,7 @@ function AdminProductEntry({ onProductAdded }) {
               onChange={handleInputChange}
               required
             >
-              <option value="good">Good (e.g. Tyres, Parts)</option>
+              <option value="product">Product (e.g. Tyres, Parts)</option>
               <option value="service">Service (e.g. Repair, MOT)</option>
             </select>
           </div>
@@ -169,7 +169,9 @@ function AdminProductEntry({ onProductAdded }) {
           className="btn btn-primary w-100"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Processing..." : "Create Product in Stripe & Database"}
+          {isSubmitting
+            ? "Processing..."
+            : "Create Product in Stripe & Database"}
         </button>
       </form>
     </div>

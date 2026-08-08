@@ -56,7 +56,7 @@ $description = trim($_POST['description'] ?? '');
 $price_gbp   = filter_var($_POST['price_gbp'] ?? '', FILTER_VALIDATE_FLOAT);
 $type        = trim($_POST['type'] ?? '');
 
-if (empty($name) || $price_gbp === false || $price_gbp < 0 || ! in_array($type, ['good', 'service'], true)) {
+if (empty($name) || $price_gbp === false || $price_gbp < 0 || ! in_array($type, ['product', 'service'], true)) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid product input values provided.']);
     exit;
 }
@@ -97,9 +97,8 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
-$stripe_secret_key = 'sk_test_DUMMY_KEY_REPLACE_WITH_YOURS'; // Replace with real Stripe Secret Key
+$stripe_secret_key = 'sk_test_51U1QRBL7U4IZCYm4VXFV13qVvMJ3ivxIv7lmWHjeSTD5FmJUCycze7x5wFIFZvaArD11OkZ0MEW09YHewnWpar2H00M4P6biwi';
 
-// 1. Create Product in Stripe
 $ch = curl_init('https://api.stripe.com/v1/products');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -121,7 +120,6 @@ if (curl_errno($ch) || $product_http_code !== 200) {
 $product_data      = json_decode($stripe_product_response, true);
 $stripe_product_id = $product_data['id'] ?? null;
 
-// 2. Create Price in Stripe
 $amount_in_pence = (int) round($price_gbp * 100);
 
 curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/prices');
