@@ -1,6 +1,21 @@
 <?php
 require_once 'session_config.php';
 
+$config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
+if ($config === false) {
+    error_log('Failed to parse .env file');
+    echo json_encode(['status' => 'error', 'message' => 'Server configuration error']);
+    exit;
+}
+
+$stripe_secret_key = $config['STRIPE_SECRET_KEY'] ?? '';
+
+if (empty($stripe_secret_key)) {
+    error_log('Stripe API credentials not found in .env file');
+    echo json_encode(['status' => 'error', 'message' => 'Server configuration error']);
+    exit;
+}
+
 $allowed_origins = [
     'http://localhost:3000',
 ];
@@ -96,8 +111,6 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         exit;
     }
 }
-
-$stripe_secret_key = 'sk_test_51U1QRBL7U4IZCYm4VXFV13qVvMJ3ivxIv7lmWHjeSTD5FmJUCycze7x5wFIFZvaArD11OkZ0MEW09YHewnWpar2H00M4P6biwi';
 
 $ch = curl_init('https://api.stripe.com/v1/products');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
