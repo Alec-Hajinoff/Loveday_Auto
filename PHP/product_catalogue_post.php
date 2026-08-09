@@ -48,6 +48,8 @@ if (empty($stripe_price_id) || $quantity === false || $quantity < 1) {
     exit;
 }
 
+$user_id = isset($_SESSION['id']) ? (string) $_SESSION['id'] : null;
+
 $checkout_data = [
     'line_items'  => [
         [
@@ -59,6 +61,9 @@ $checkout_data = [
     'success_url' => 'https://impulsive-spirits-overpay.ngrok-free.dev/Loveday_Auto/PHP/success_redirect.php',
     'cancel_url'  => 'https://impulsive-spirits-overpay.ngrok-free.dev/Loveday_Auto/PHP/cancel_redirect.php',
     'ui_mode'     => 'hosted_page',
+    'metadata'    => [
+        'user_id' => $user_id,
+    ],
 ];
 
 $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
