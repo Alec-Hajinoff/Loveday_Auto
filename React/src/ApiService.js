@@ -572,3 +572,30 @@ export const productCatalogueGet = async () => {
     throw new Error("An error occurred while loading the product catalogue.");
   }
 };
+
+// productCataloguePost() sends selected product price ID and quantity to the backend to initiate a Stripe Checkout Session
+
+export const productCataloguePost = async (stripePriceId, quantity) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Loveday_Auto/PHP/product_catalogue_post.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          stripe_price_id: stripePriceId,
+          quantity: quantity,
+        }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error creating checkout session:", error);
+    throw new Error("An error occurred while initiating payment.");
+  }
+};

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { productCatalogueGet } from "./ApiService";
+
+import { productCatalogueGet, productCataloguePost } from "./ApiService";
 import "./ProductCatalogue.css";
 
 function ProductCatalogue() {
@@ -7,6 +8,7 @@ function ProductCatalogue() {
   const [quantities, setQuantities] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [buyingProductId, setBuyingProductId] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -41,7 +43,34 @@ function ProductCatalogue() {
     });
   };
 
-  const handleBuy = (product) => {};
+  const handleBuy = async (product) => {
+    const quantity = quantities[product.id] || 1;
+
+    if (!product.stripe_price_id) {
+      alert("This product is not currently configured for online purchase.");
+      return;
+    }
+
+    try {
+      setBuyingProductId(product.id);
+      const response = await productCataloguePost(
+        product.stripe_price_id,
+        quantity,
+      );
+
+      if (response.status === "success" && response.url) {
+        window.location.href = response.url;
+      } else {
+        alert(
+          response.message || "Could not initiate payment. Please try again.",
+        );
+      }
+    } catch (err) {
+      alert(err.message || "An error occurred during checkout.");
+    } finally {
+      setBuyingProductId(null);
+    }
+  };
 
   const getImageSrc = (imagePath) => {
     if (!imagePath) return null;
@@ -73,6 +102,8 @@ function ProductCatalogue() {
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {products.map((product) => {
           const imageSrc = getImageSrc(product.image_url);
+          const isBuying = buyingProductId === product.id;
+
           return (
             <div className="col" key={product.id}>
               <div className="card product-card h-100">
@@ -107,6 +138,7 @@ function ProductCatalogue() {
                     <button
                       className="btn btn-outline-secondary quantity-btn"
                       type="button"
+                      disabled={isBuying}
                       onClick={() => handleQuantityChange(product.id, -1)}
                     >
                       -
@@ -117,6 +149,7 @@ function ProductCatalogue() {
                     <button
                       className="btn btn-outline-secondary quantity-btn"
                       type="button"
+                      disabled={isBuying}
                       onClick={() => handleQuantityChange(product.id, 1)}
                     >
                       +
@@ -125,9 +158,10 @@ function ProductCatalogue() {
 
                   <button
                     className="btn btn-primary buy-button"
+                    disabled={isBuying}
                     onClick={() => handleBuy(product)}
                   >
-                    Buy Now
+                    {isBuying ? "Redirecting..." : "Buy Now"}
                   </button>
                 </div>
               </div>
