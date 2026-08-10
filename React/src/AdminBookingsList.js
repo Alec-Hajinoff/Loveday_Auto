@@ -73,10 +73,7 @@ function AdminBookingsList() {
 
         {booking.service_name && (
           <div className="booking-detail-item">
-            <strong>Service:</strong> {booking.service_name}{" "}
-            {booking.service_price
-              ? `(£${parseFloat(booking.service_price).toFixed(2)})`
-              : ""}
+            <strong>Service:</strong> {booking.service_name}
           </div>
         )}
 

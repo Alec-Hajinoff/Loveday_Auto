@@ -43,11 +43,9 @@ try {
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 
-    /* Fetch garage services for the dropdown menu in the UI for the user's selection. */
-    $stmt     = $pdo->query('SELECT id, name, price, duration_minutes FROM services ORDER BY name ASC');
+    $stmt     = $pdo->query('SELECT id, name, duration_minutes FROM services ORDER BY name ASC');
     $services = $stmt->fetchAll();
 
-    /* Fetch existing profile data for the active session user. If the data exists, we prepopulate the fields, otherwsie fields are empty for the user to bill in. */
     $user_stmt = $pdo->prepare('SELECT first_name, surname, phone FROM users WHERE id = :user_id');
     $user_stmt->execute([':user_id' => $user_id]);
     $user_data = $user_stmt->fetch();
