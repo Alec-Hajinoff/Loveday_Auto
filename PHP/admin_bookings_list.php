@@ -74,7 +74,6 @@ try {
             s.start_time,
             s.end_time,
             srv.name AS service_name,
-            srv.price AS service_price,
             u.first_name,
             u.surname,
             u.email AS customer_email,

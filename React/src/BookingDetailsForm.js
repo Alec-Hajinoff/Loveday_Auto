@@ -109,10 +109,7 @@ function BookingDetailsForm({ onConfirm, submitting }) {
           </option>
           {services.map((service) => (
             <option key={service.id} value={service.id}>
-              {service.name}{" "}
-              {service.price
-                ? `(£${parseFloat(service.price).toFixed(2)})`
-                : ""}
+              {service.name}
             </option>
           ))}
         </select>

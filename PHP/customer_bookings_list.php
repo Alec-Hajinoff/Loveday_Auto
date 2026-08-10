@@ -53,8 +53,7 @@ try {
             s.date,
             s.start_time,
             s.end_time,
-            srv.name AS service_name,
-            srv.price AS service_price
+            srv.name AS service_name
         FROM appointments a
         JOIN availability_slots s ON a.slot_id = s.id
         LEFT JOIN services srv ON a.service_id = srv.id
