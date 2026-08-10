@@ -52,7 +52,7 @@ function ServiceManager() {
       const response = await serviceManager(services);
       if (response.status === "success") {
         setMessage("Services saved successfully.");
-        /* Reset form after successful submission */
+        
         setServices([
           { name: "", description: "", duration_minutes: "", price: "" },
         ]);
