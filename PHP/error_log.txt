@@ -8,3 +8,5 @@ Stripe Checkout Error (400):
   }
 }
 
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'srv.price' in 'field list'
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'srv.price' in 'field list'
