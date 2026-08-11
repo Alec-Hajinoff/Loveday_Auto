@@ -52,15 +52,14 @@ try {
 
     $pdo->beginTransaction();
 
-    $sql = 'INSERT INTO services (name, description, duration_minutes, created_at, updated_at)
-            VALUES (:name, :description, :duration_minutes, NOW(), NOW())';
+    $sql = 'INSERT INTO services (name, duration_minutes, created_at, updated_at)
+            VALUES (:name, :duration_minutes, NOW(), NOW())';
 
     $stmt = $pdo->prepare($sql);
 
     foreach ($input['services'] as $service) {
-        $name        = trim($service['name'] ?? '');
-        $duration    = (int) ($service['duration_minutes'] ?? 0);
-        $description = ! empty($service['description']) ? trim($service['description']) : null;
+        $name     = trim($service['name'] ?? '');
+        $duration = (int) ($service['duration_minutes'] ?? 0);
 
         if (empty($name) || $duration <= 0) {
             $pdo->rollBack();
@@ -70,7 +69,6 @@ try {
 
         $stmt->execute([
             ':name'             => $name,
-            ':description'      => $description,
             ':duration_minutes' => $duration,
         ]);
     }

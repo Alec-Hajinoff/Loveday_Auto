@@ -4,18 +4,14 @@ import { serviceManager } from "./ApiService";
 
 function ServiceManager() {
   const [services, setServices] = useState([
-    { name: "", description: "", duration_minutes: "" },
+    { name: "", duration_minutes: "" },
   ]);
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleAddService = () => {
-    setServices((prev) => [
-      ...prev,
-
-      { name: "", description: "", duration_minutes: "" },
-    ]);
+    setServices((prev) => [...prev, { name: "", duration_minutes: "" }]);
   };
 
   const handleRemoveService = (index) => {
@@ -54,7 +50,7 @@ function ServiceManager() {
       if (response.status === "success") {
         setMessage("Services saved successfully.");
 
-        setServices([{ name: "", description: "", duration_minutes: "" }]);
+        setServices([{ name: "", duration_minutes: "" }]);
       } else {
         setMessage(response.message || "Failed to save services.");
       }
@@ -113,18 +109,6 @@ function ServiceManager() {
                   }
                 />
               </div>
-            </div>
-
-            <div className="mb-2">
-              <label className="form-label">Description</label>
-              <textarea
-                className="form-control"
-                rows="2"
-                value={service.description}
-                onChange={(e) =>
-                  handleChange(index, "description", e.target.value)
-                }
-              />
             </div>
           </div>
         ))}
