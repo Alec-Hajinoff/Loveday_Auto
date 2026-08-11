@@ -77,6 +77,7 @@ function BusinessHoursManager() {
       const response = await businessHoursManager(selectedDays);
       if (response.status === "success") {
         setMessage("Business hours saved successfully.");
+        window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setMessage(response.message || "Failed to save business hours.");
       }
