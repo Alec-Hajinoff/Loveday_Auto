@@ -10,6 +10,8 @@ import AvailabilityHorizonExtender from "./AvailabilityHorizonExtender";
 import AdminProductEntry from "./AdminProductEntry";
 
 function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState("bookings");
+
   const [refreshProducts, setRefreshProducts] = useState(0);
 
   const handleProductAdded = () => {
@@ -27,26 +29,57 @@ function AdminDashboard() {
             </p>
           </div>
 
-          <AdminBookingsList />
+          <ul className="nav nav-tabs mb-4">
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "bookings" ? "active" : ""}`}
+                onClick={() => setActiveTab("bookings")}
+              >
+                Bookings & Calendar
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "products" ? "active" : ""}`}
+                onClick={() => setActiveTab("products")}
+              >
+                Products & Services
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "availability" ? "active" : ""}`}
+                onClick={() => setActiveTab("availability")}
+              >
+                Appointment Availability
+              </button>
+            </li>
+          </ul>
 
-          <AdminBookingCalendar />
-
-          <hr />
-
-          <div className="row">
-            <div className="col-12 col-md-6 mb-4">
-              <BusinessHoursManager />
+          {activeTab === "bookings" && (
+            <div className="tab-pane-content">
+              <AdminBookingsList />
+              <AdminBookingCalendar />
             </div>
-            <div className="col-12 col-md-6 mb-4">
+          )}
+
+          {activeTab === "products" && (
+            <div className="tab-pane-content">
               <ServiceManager />
+              <div className="mt-4">
+                <AdminProductEntry onProductAdded={handleProductAdded} />
+              </div>
             </div>
-          </div>
+          )}
 
-          <AvailabilityHorizonExtender />
-
-          <hr />
-
-          <AdminProductEntry onProductAdded={handleProductAdded} />
+          {activeTab === "availability" && (
+            <div className="tab-pane-content">
+              <BusinessHoursManager />
+              <div className="mt-4">
+                <AvailabilityHorizonExtender />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
