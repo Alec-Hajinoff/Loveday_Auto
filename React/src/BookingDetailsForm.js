@@ -75,6 +75,10 @@ function BookingDetailsForm({ onConfirm, submitting }) {
     });
   };
 
+  const selectedService = services.find(
+    (s) => s.id === parseInt(serviceId, 10),
+  );
+
   return (
     <form className="booking-details-form" onSubmit={handleSubmit}>
       <h5 className="mb-3">Appointment Details</h5>
@@ -109,10 +113,19 @@ function BookingDetailsForm({ onConfirm, submitting }) {
           </option>
           {services.map((service) => (
             <option key={service.id} value={service.id}>
-              {service.name}
+              {service.name}{" "}
+              {service.duration_minutes
+                ? `(${service.duration_minutes} mins)`
+                : ""}
             </option>
           ))}
         </select>
+
+        {selectedService && selectedService.duration_minutes && (
+          <small className="text-muted mt-1 d-block">
+            Estimated duration: {selectedService.duration_minutes} minutes
+          </small>
+        )}
       </div>
 
       <div className="booking-form-group">
