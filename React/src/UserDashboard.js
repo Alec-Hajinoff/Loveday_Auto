@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import BookingCalendar from "./BookingCalendar";
@@ -7,6 +7,8 @@ import CustomerProfile from "./CustomerProfile";
 import CustomerDeleteAccount from "./CustomerDeleteAccount";
 
 function UserDashboard() {
+  const [activeTab, setActiveTab] = useState("book-service");
+
   return (
     <div className="user-dashboard-container container">
       <div className="row justify-content-center">
@@ -18,17 +20,53 @@ function UserDashboard() {
             </p>
           </div>
 
-          <CustomerProfile />
+          <ul className="nav nav-tabs mb-4">
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "book-service" ? "active" : ""}`}
+                onClick={() => setActiveTab("book-service")} // Switch to Book a Service tab
+              >
+                Book a Service
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "my-bookings" ? "active" : ""}`}
+                onClick={() => setActiveTab("my-bookings")}
+              >
+                My Bookings
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "account" ? "active" : ""}`}
+                onClick={() => setActiveTab("account")}
+              >
+                Account
+              </button>
+            </li>
+          </ul>
 
-          <hr />
-          <CustomerBookingsList />
+          {activeTab === "book-service" && (
+            <div className="tab-pane-content">
+              <BookingCalendar />
+            </div>
+          )}
 
-          <hr />
-          <BookingCalendar />
+          {activeTab === "my-bookings" && (
+            <div className="tab-pane-content">
+              <CustomerBookingsList />
+            </div>
+          )}
 
-          <hr />
-
-          <CustomerDeleteAccount />
+          {activeTab === "account" && (
+            <div className="tab-pane-content">
+              <CustomerProfile />
+              <div className="mt-4">
+                <CustomerDeleteAccount />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
