@@ -55,8 +55,7 @@ function BasketWidget() {
                   <div>
                     <div className="fw-bold small">{item.name}</div>
                     <div className="text-muted small">
-                      {item.quantity} x £
-                      {parseFloat(item.price_gbp).toFixed(2)}
+                      {item.quantity} x £{parseFloat(item.price_gbp).toFixed(2)}
                     </div>
                   </div>
                   <button

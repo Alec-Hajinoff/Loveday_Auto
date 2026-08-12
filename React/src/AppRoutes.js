@@ -10,7 +10,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserLogin from "./UserLogin";
 import UserRegistration from "./UserRegistration";
 
-// ADDED: Ecommerce Routes
 import ShopPage from "./ShopPage";
 import ProductDetailPage from "./ProductDetailPage";
 import BasketPage from "./BasketPage";
@@ -30,7 +29,6 @@ export default function AppRoutes() {
       <Route path="/VerifyEmail" element={<VerifyEmail />} />
       <Route path="/PasswordReset" element={<PasswordReset />} />
 
-      {/* ADDED: Ecommerce Routes */}
       <Route path="/shop" element={<ShopPage />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/basket" element={<BasketPage />} />

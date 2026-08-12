@@ -21,7 +21,7 @@ function ProductDetailPage() {
         const response = await productCatalogueGet();
         if (response.status === "success") {
           const found = response.products.find(
-            (p) => p.id.toString() === id.toString()
+            (p) => p.id.toString() === id.toString(),
           );
           if (found) {
             setProduct(found);

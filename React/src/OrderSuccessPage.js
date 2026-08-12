@@ -6,7 +6,7 @@ function OrderSuccessPage() {
   const { clearBasket } = useBasket();
 
   useEffect(() => {
-    clearBasket(); // Clear local storage basket upon successful transaction redirect
+    clearBasket();
   }, []);
 
   return (

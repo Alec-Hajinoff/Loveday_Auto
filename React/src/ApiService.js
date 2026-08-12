@@ -600,7 +600,8 @@ export const productCataloguePost = async (stripePriceId, quantity) => {
   }
 };
 
-// ADDED: Helper to support multi-item cart sessions in product_catalogue_post.php
+// checkoutSessionCreate() is a helper to support multi-item cart sessions in product_catalogue_post.php
+
 export const checkoutSessionCreate = async (checkoutPayload) => {
   try {
     const response = await fetch(
@@ -612,7 +613,7 @@ export const checkoutSessionCreate = async (checkoutPayload) => {
         },
         credentials: "include",
         body: JSON.stringify(checkoutPayload),
-      }
+      },
     );
 
     const data = await response.json();

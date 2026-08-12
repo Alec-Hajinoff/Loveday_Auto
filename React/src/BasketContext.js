@@ -15,22 +15,22 @@ export const BasketProvider = ({ children }) => {
   }, [basket]);
 
   const addToBasket = (product, quantity = 1, openDrawer = true) => {
-  setBasket((prev) => {
-    const existingIndex = prev.findIndex((item) => item.id === product.id);
-    if (existingIndex > -1) {
-      return prev.map((item, index) =>
-        index === existingIndex
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    }
-    return [...prev, { ...product, quantity }];
-  });
+    setBasket((prev) => {
+      const existingIndex = prev.findIndex((item) => item.id === product.id);
+      if (existingIndex > -1) {
+        return prev.map((item, index) =>
+          index === existingIndex
+            ? { ...item, quantity: item.quantity + quantity }
+            : item,
+        );
+      }
+      return [...prev, { ...product, quantity }];
+    });
 
-  if (openDrawer) {
-    setIsDrawerOpen(true);
-  }
-};
+    if (openDrawer) {
+      setIsDrawerOpen(true);
+    }
+  };
 
   const removeFromBasket = (productId) => {
     setBasket((prev) => prev.filter((item) => item.id !== productId));
@@ -43,8 +43,8 @@ export const BasketProvider = ({ children }) => {
     }
     setBasket((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      )
+        item.id === productId ? { ...item, quantity } : item,
+      ),
     );
   };
 
@@ -53,7 +53,7 @@ export const BasketProvider = ({ children }) => {
   const basketCount = basket.reduce((acc, item) => acc + item.quantity, 0);
   const basketSubtotal = basket.reduce(
     (acc, item) => acc + parseFloat(item.price_gbp) * item.quantity,
-    0
+    0,
   );
 
   return (

@@ -11,7 +11,7 @@ function ProductCard({ product }) {
   };
 
   const handleAddClick = (e) => {
-    e.stopPropagation(); // Prevents navigating to product detail page when clicking Add to Basket
+    e.stopPropagation();
     addToBasket(product, 1, true);
   };
 

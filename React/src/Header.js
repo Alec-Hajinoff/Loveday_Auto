@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import blue from "./Images/Hertford_Standard_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
-import BasketWidget from "./BasketWidget"; // ADDED: Import BasketWidget
+import BasketWidget from "./BasketWidget";
 import "./Header.css";
 
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
@@ -22,7 +22,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           </div>
 
           <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-end gap-3">
-            <BasketWidget /> {/* ADDED: BasketWidget display in header */}
+            <BasketWidget />
             {!isLoading &&
               (isAuthenticated ? (
                 <LogoutComponent onLogoutComplete={onLogoutComplete} />

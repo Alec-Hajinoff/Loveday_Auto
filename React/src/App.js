@@ -5,7 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
 import { checkSession } from "./ApiService";
-import { BasketProvider } from "./BasketContext"; // ADDED: BasketProvider import
+import { BasketProvider } from "./BasketContext";
 
 function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,7 +47,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BasketProvider> {/* ADDED: BasketProvider wrap */}
+    <BasketProvider>
       <Router>
         <ScrollToTop />
         <AppContent />
