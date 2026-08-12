@@ -15,19 +15,22 @@ export const BasketProvider = ({ children }) => {
   }, [basket]);
 
   const addToBasket = (product, quantity = 1, openDrawer = true) => {
-    setBasket((prev) => {
-      const existingIndex = prev.findIndex((item) => item.id === product.id);
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity += quantity;
-        return updated;
-      }
-      return [...prev, { ...product, quantity }];
-    });
-    if (openDrawer) {
-      setIsDrawerOpen(true);
+  setBasket((prev) => {
+    const existingIndex = prev.findIndex((item) => item.id === product.id);
+    if (existingIndex > -1) {
+      return prev.map((item, index) =>
+        index === existingIndex
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
     }
-  };
+    return [...prev, { ...product, quantity }];
+  });
+
+  if (openDrawer) {
+    setIsDrawerOpen(true);
+  }
+};
 
   const removeFromBasket = (productId) => {
     setBasket((prev) => prev.filter((item) => item.id !== productId));
