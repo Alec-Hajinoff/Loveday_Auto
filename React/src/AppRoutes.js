@@ -10,6 +10,13 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserLogin from "./UserLogin";
 import UserRegistration from "./UserRegistration";
 
+// ADDED: Ecommerce Routes
+import ShopPage from "./ShopPage";
+import ProductDetailPage from "./ProductDetailPage";
+import BasketPage from "./BasketPage";
+import CheckoutPage from "./CheckoutPage";
+import OrderSuccessPage from "./OrderSuccessPage";
+
 import React from "react";
 
 export default function AppRoutes() {
@@ -18,11 +25,18 @@ export default function AppRoutes() {
       <Route path="/" element={<MainRegLog />} />
       <Route path="/UserLogin" element={<UserLogin />} />
       <Route path="/UserRegistration" element={<UserRegistration />} />
-
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
       <Route path="/LogoutComponent" element={<LogoutComponent />} />
       <Route path="/VerifyEmail" element={<VerifyEmail />} />
       <Route path="/PasswordReset" element={<PasswordReset />} />
+
+      {/* ADDED: Ecommerce Routes */}
+      <Route path="/shop" element={<ShopPage />} />
+      <Route path="/product/:id" element={<ProductDetailPage />} />
+      <Route path="/basket" element={<BasketPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/order/success" element={<OrderSuccessPage />} />
+
       <Route
         path="/UserDashboard"
         element={

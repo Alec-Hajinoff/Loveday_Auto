@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
         'samesite' => 'Lax'
     ]);
 
-    session_name('hertford_standard');
+    session_name('PHPSESSID');
     session_start();
 }
 

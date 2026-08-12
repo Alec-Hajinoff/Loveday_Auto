@@ -1,5 +1,6 @@
+// React\src\Main.js
 import React from "react";
-import ProductCatalogue from "./ProductCatalogue";
+import ShopPage from "./ShopPage";
 import "./Main.css";
 
 function Main() {
@@ -10,7 +11,8 @@ function Main() {
       </section>
 
       <div className="intro-section">
-        <ProductCatalogue />
+        {/* Render ShopPage instead of ProductCatalogue */}
+        <ShopPage />
       </div>
     </div>
   );

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 import Header from "./Header";
-
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
 import { checkSession } from "./ApiService";
+import { BasketProvider } from "./BasketContext"; // ADDED: BasketProvider import
 
 function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,7 +39,6 @@ function AppContent() {
         isLoading={isLoading}
         onLogoutComplete={verifySession}
       />
-
       <AppRoutes />
       <Footer />
     </div>
@@ -48,10 +47,12 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <AppContent />
-    </Router>
+    <BasketProvider> {/* ADDED: BasketProvider wrap */}
+      <Router>
+        <ScrollToTop />
+        <AppContent />
+      </Router>
+    </BasketProvider>
   );
 }
 
