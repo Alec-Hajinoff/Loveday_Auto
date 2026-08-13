@@ -11,29 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 86400,
-        'path'     => '/',
-        'secure'   => false,
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ]);
+require_once __DIR__ . '/session_config.php';
 
-    session_name('PHPSESSID');
-    session_start();
-}
-
-if (! isset($_SESSION['id'])) {
-    http_response_code(401);
-    echo json_encode([
-        'status'  => 'error',
-        'message' => 'Unauthorized. Please log in to complete checkout.',
-    ]);
-    exit();
-}
-
-$user_id = $_SESSION['id'];
+$user_id = $_SESSION['id'] ?? 'guest';
 
 $envPath = __DIR__ . '/../.env';
 
@@ -115,15 +95,24 @@ if (isset($input['fulfillment']) && $input['fulfillment'] === 'delivery') {
 
 $ngrok_domain = 'https://impulsive-spirits-overpay.ngrok-free.dev';
 
+$customerDetails = $input['customer_details'] ?? [];
+
 $postData = http_build_query([
     'mode'        => 'payment',
     'success_url' => $ngrok_domain . '/Loveday_Auto/PHP/success_redirect.php?session_id={CHECKOUT_SESSION_ID}',
     'cancel_url'  => $ngrok_domain . '/Loveday_Auto/PHP/cancel_redirect.php',
     'ui_mode'     => 'hosted_page',
     'metadata'    => [
-        'user_id' => $user_id,
+        'user_id'    => $user_id,
+        'first_name' => $customerDetails['firstName'] ?? '',
+        'last_name'  => $customerDetails['lastName'] ?? '',
+        'phone'      => $customerDetails['phone'] ?? '',
     ],
 ]);
+
+if (! empty($customerDetails['email'])) {
+    $postData .= '&' . urlencode('customer_email') . '=' . urlencode($customerDetails['email']);
+}
 
 foreach ($line_items as $index => $item) {
     if (isset($item['price'])) {
