@@ -38,6 +38,7 @@ function AppContent() {
         isAuthenticated={isAuthenticated}
         isLoading={isLoading}
         onLogoutComplete={verifySession}
+        userRole={userRole}
       />
       <AppRoutes />
       <Footer />
