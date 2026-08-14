@@ -97,16 +97,23 @@ $ngrok_domain = 'https://impulsive-spirits-overpay.ngrok-free.dev';
 
 $customerDetails = $input['customer_details'] ?? [];
 
+$fulfillment = $input['fulfillment'] ?? 'collection';
+
 $postData = http_build_query([
     'mode'        => 'payment',
     'success_url' => $ngrok_domain . '/Loveday_Auto/PHP/success_redirect.php?session_id={CHECKOUT_SESSION_ID}',
     'cancel_url'  => $ngrok_domain . '/Loveday_Auto/PHP/cancel_redirect.php',
     'ui_mode'     => 'hosted_page',
     'metadata'    => [
-        'user_id'    => $user_id,
-        'first_name' => $customerDetails['firstName'] ?? '',
-        'last_name'  => $customerDetails['lastName'] ?? '',
-        'phone'      => $customerDetails['phone'] ?? '',
+        'user_id'              => $user_id,
+        'fulfillment_type'     => $fulfillment,
+        'recipient_first_name' => $customerDetails['firstName'] ?? '',
+        'recipient_surname'    => $customerDetails['lastName'] ?? '',
+        'recipient_email'      => $customerDetails['email'] ?? '',
+        'recipient_phone'      => $customerDetails['phone'] ?? '',
+        'address_line1'        => $customerDetails['addressLine1'] ?? '',
+        'city'                 => $customerDetails['city'] ?? '',
+        'postcode'             => $customerDetails['postcode'] ?? '',
     ],
 ]);
 

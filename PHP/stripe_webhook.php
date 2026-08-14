@@ -70,6 +70,17 @@ if ($event_type === 'checkout.session.completed') {
     $raw_user_id = $session['metadata']['user_id'] ?? null;
     $user_id     = (is_numeric($raw_user_id) && (int) $raw_user_id > 0) ? (int) $raw_user_id : null;
 
+    $metadata             = $session['metadata'] ?? [];
+    $fulfillment_type     = ! empty($metadata['fulfillment_type']) ? $metadata['fulfillment_type'] : 'collection';
+    $recipient_first_name = ! empty($metadata['recipient_first_name']) ? $metadata['recipient_first_name'] : null;
+    $recipient_surname    = ! empty($metadata['recipient_surname']) ? $metadata['recipient_surname'] : null;
+    $recipient_email      = ! empty($metadata['recipient_email']) ? $metadata['recipient_email'] : ($session['customer_details']['email'] ?? null);
+    $recipient_phone      = ! empty($metadata['recipient_phone']) ? $metadata['recipient_phone'] : null;
+
+    $address_line1 = ($fulfillment_type === 'delivery' && ! empty($metadata['address_line1'])) ? $metadata['address_line1'] : null;
+    $city          = ($fulfillment_type === 'delivery' && ! empty($metadata['city'])) ? $metadata['city'] : null;
+    $postcode      = ($fulfillment_type === 'delivery' && ! empty($metadata['postcode'])) ? $metadata['postcode'] : null;
+
     try {
 
         $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
@@ -115,9 +126,17 @@ if ($event_type === 'checkout.session.completed') {
                 amount_total,
                 currency,
                 status,
+                fulfillment_type,
+                recipient_first_name,
+                recipient_surname,
+                recipient_email,
+                recipient_phone,
+                address_line1,
+                city,
+                postcode,
                 created_at,
                 updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ');
 
         $trx_stmt->execute([
@@ -127,6 +146,14 @@ if ($event_type === 'checkout.session.completed') {
             $amount_total,
             $currency,
             $payment_status,
+            $fulfillment_type,
+            $recipient_first_name,
+            $recipient_surname,
+            $recipient_email,
+            $recipient_phone,
+            $address_line1,
+            $city,
+            $postcode,
             $now,
             $now,
         ]);
