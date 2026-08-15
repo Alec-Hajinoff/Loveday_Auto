@@ -18,29 +18,22 @@ const formatUKDate = (date) => {
   });
 };
 
-const getMonday = (d) => {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-  return new Date(date.setDate(diff));
-};
-
 function BookingCalendar() {
-  const [currentMonday, setCurrentMonday] = useState(getMonday(new Date()));
+  const [startDate, setStartDate] = useState(new Date());
   const [slotsData, setSlotsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
-  const weekDays = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(currentMonday);
+  const rawWeekDays = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(startDate);
     day.setDate(day.getDate() + i);
     return day;
   });
 
-  const startDateStr = formatISO(weekDays[0]);
-  const endDateStr = formatISO(weekDays[6]);
+  const startDateStr = formatISO(rawWeekDays[0]);
+  const endDateStr = formatISO(rawWeekDays[6]);
 
   const loadCalendarSlots = useCallback(async () => {
     setLoading(true);
@@ -61,10 +54,6 @@ function BookingCalendar() {
 
   useEffect(() => {
     loadCalendarSlots();
-  }, [loadCalendarSlots]);
-
-  useEffect(() => {
-    loadCalendarSlots();
 
     const handleBookingUpdate = () => {
       loadCalendarSlots();
@@ -78,21 +67,26 @@ function BookingCalendar() {
 
   const handlePrevWeek = () => {
     setSelectedSlots([]);
-    const prev = new Date(currentMonday);
+    const prev = new Date(startDate);
     prev.setDate(prev.getDate() - 7);
-    setCurrentMonday(prev);
+
+    if (prev < new Date().setHours(0, 0, 0, 0)) {
+      setStartDate(new Date());
+    } else {
+      setStartDate(prev);
+    }
   };
 
   const handleNextWeek = () => {
     setSelectedSlots([]);
-    const next = new Date(currentMonday);
+    const next = new Date(startDate);
     next.setDate(next.getDate() + 7);
-    setCurrentMonday(next);
+    setStartDate(next);
   };
 
   const handleToday = () => {
     setSelectedSlots([]);
-    setCurrentMonday(getMonday(new Date()));
+    setStartDate(new Date());
   };
 
   const handleSelectSlot = (slot) => {
@@ -142,6 +136,11 @@ function BookingCalendar() {
     }
   };
 
+  const workingDays = rawWeekDays.filter((day) => {
+    const dateIso = formatISO(day);
+    return slotsData.some((slot) => slot.date === dateIso);
+  });
+
   const timeRows = Array.from(
     new Set(slotsData.map((s) => s.start_time)),
   ).sort();
@@ -155,6 +154,7 @@ function BookingCalendar() {
             type="button"
             className="btn btn-outline-secondary btn-sm"
             onClick={handlePrevWeek}
+            disabled={formatISO(startDate) <= formatISO(new Date())}
           >
             &lt; Prev
           </button>
@@ -176,7 +176,8 @@ function BookingCalendar() {
       </div>
 
       <p className="fw-bold">
-        Week of {formatUKDate(weekDays[0])} - {formatUKDate(weekDays[6])}
+        Schedule for {formatUKDate(rawWeekDays[0])} -{" "}
+        {formatUKDate(rawWeekDays[6])}
       </p>
 
       {loading && <div>Loading schedule...</div>}
@@ -187,7 +188,7 @@ function BookingCalendar() {
           <table className="table table-bordered calendar-table">
             <thead>
               <tr>
-                {weekDays.map((day) => (
+                {workingDays.map((day) => (
                   <th key={day.toISOString()}>
                     <div>
                       {day.toLocaleDateString("en-GB", { weekday: "short" })}
@@ -198,16 +199,16 @@ function BookingCalendar() {
               </tr>
             </thead>
             <tbody>
-              {timeRows.length === 0 ? (
+              {workingDays.length === 0 || timeRows.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-muted">
-                    No available hours scheduled for this week.
+                  <td colSpan={workingDays.length || 1} className="text-muted">
+                    No available working hours scheduled for this period.
                   </td>
                 </tr>
               ) : (
                 timeRows.map((time) => (
                   <tr key={time}>
-                    {weekDays.map((day) => {
+                    {workingDays.map((day) => {
                       const dateIso = formatISO(day);
                       const slot = slotsData.find(
                         (s) => s.date === dateIso && s.start_time === time,
