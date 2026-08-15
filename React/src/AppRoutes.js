@@ -18,10 +18,19 @@ import OrderSuccessPage from "./OrderSuccessPage";
 
 import React from "react";
 
-export default function AppRoutes() {
+export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
   return (
     <Routes>
-      <Route path="/" element={<MainRegLog />} />
+      <Route
+        path="/"
+        element={
+          <MainRegLog
+            isAuthenticated={isAuthenticated}
+            userRole={userRole}
+            isLoading={isLoading}
+          />
+        }
+      />
       <Route path="/UserLogin" element={<UserLogin />} />
       <Route path="/UserRegistration" element={<UserRegistration />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />

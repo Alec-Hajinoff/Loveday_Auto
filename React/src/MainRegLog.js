@@ -4,7 +4,7 @@ import Main from "./Main.js";
 import UserRegistration from "./UserRegistration.js";
 import UserLogin from "./UserLogin.js";
 
-function MainRegLog() {
+function MainRegLog({ isAuthenticated, userRole, isLoading }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef(null);
 
@@ -33,7 +33,11 @@ function MainRegLog() {
     <div className="container text-center">
       <div className="row">
         <div className="col-12">
-          <Main />
+          <Main
+            isAuthenticated={isAuthenticated}
+            userRole={userRole}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>

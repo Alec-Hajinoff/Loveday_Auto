@@ -1,3 +1,4 @@
+// React\src\App.js
 import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
@@ -18,7 +19,8 @@ function AppContent() {
     try {
       const result = await checkSession();
       setIsAuthenticated(result.authenticated);
-      setUserRole(result.is_admin ? "admin" : "user");
+
+      setUserRole(result.role || null);
     } catch (error) {
       console.error("Session check failed:", error);
       setIsAuthenticated(false);
@@ -40,7 +42,11 @@ function AppContent() {
         onLogoutComplete={verifySession}
         userRole={userRole}
       />
-      <AppRoutes />
+      <AppRoutes
+        isAuthenticated={isAuthenticated}
+        userRole={userRole}
+        isLoading={isLoading}
+      />
       <Footer />
     </div>
   );
