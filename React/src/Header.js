@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import blue from "./Images/Hertford_Standard_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
 import BasketWidget from "./BasketWidget";
-import NavigationBar from "./NavigationBar";
+
 import "./Header.css";
 
-function Header({ isAuthenticated, isLoading, onLogoutComplete, userRole }) {
+function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
   return (
     <div className="header-wrapper">
       <div className="container">
@@ -20,11 +20,6 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete, userRole }) {
                 title="A company logo"
               />
             </Link>
-
-            <NavigationBar
-              isAuthenticated={isAuthenticated}
-              userRole={userRole}
-            />
           </div>
 
           <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-end gap-3">

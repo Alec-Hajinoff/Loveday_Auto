@@ -15,19 +15,25 @@ function NavigationBar({ isAuthenticated, userRole }) {
     location.pathname === "/AdminDashboard";
 
   return (
-    <nav className="navigation-bar">
-      {!isHomePage && (
-        <Link to="/" className="nav-bar-link">
-          Home
-        </Link>
-      )}
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <nav className="navigation-bar">
+            {!isHomePage && (
+              <Link to="/" className="nav-bar-link">
+                Home
+              </Link>
+            )}
 
-      {isAuthenticated && !isOnDashboard && (
-        <Link to={dashboardPath} className="nav-bar-link">
-          Dashboard
-        </Link>
-      )}
-    </nav>
+            {isAuthenticated && !isOnDashboard && (
+              <Link to={dashboardPath} className="nav-bar-link">
+                Dashboard
+              </Link>
+            )}
+          </nav>
+        </div>
+      </div>
+    </div>
   );
 }
 

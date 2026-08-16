@@ -1,10 +1,10 @@
-// React\src\App.js
 import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
+import NavigationBar from "./NavigationBar";
 import { checkSession } from "./ApiService";
 import { BasketProvider } from "./BasketContext";
 
@@ -40,8 +40,9 @@ function AppContent() {
         isAuthenticated={isAuthenticated}
         isLoading={isLoading}
         onLogoutComplete={verifySession}
-        userRole={userRole}
       />
+
+      <NavigationBar isAuthenticated={isAuthenticated} userRole={userRole} />
       <AppRoutes
         isAuthenticated={isAuthenticated}
         userRole={userRole}
