@@ -5,12 +5,14 @@ import "./NavigationBar.css";
 function NavigationBar({ isAuthenticated, userRole }) {
   const location = useLocation();
 
-  const dashboardPath =
-    userRole === "customer" ? "/UserDashboard" : "/AdminDashboard";
+  const getDashboardPath = () => {
+    if (!isAuthenticated) return "/UserLogin";
+    return userRole === "customer" ? "/UserDashboard" : "/AdminDashboard";
+  };
 
-  const isHomePage = location.pathname === "/";
+  const targetDashboardPath = getDashboardPath();
 
-  const isOnDashboard =
+  const isDashboardActive =
     location.pathname === "/UserDashboard" ||
     location.pathname === "/AdminDashboard";
 
@@ -19,17 +21,21 @@ function NavigationBar({ isAuthenticated, userRole }) {
       <div className="row">
         <div className="col-12">
           <nav className="navigation-bar">
-            {!isHomePage && (
-              <Link to="/" className="nav-bar-link">
-                Home
-              </Link>
-            )}
+            <Link
+              to="/"
+              className={`nav-bar-link ${
+                location.pathname === "/" ? "active" : ""
+              }`}
+            >
+              Home
+            </Link>
 
-            {isAuthenticated && !isOnDashboard && (
-              <Link to={dashboardPath} className="nav-bar-link">
-                Dashboard
-              </Link>
-            )}
+            <Link
+              to={targetDashboardPath}
+              className={`nav-bar-link ${isDashboardActive ? "active" : ""}`}
+            >
+              Dashboard
+            </Link>
           </nav>
         </div>
       </div>
