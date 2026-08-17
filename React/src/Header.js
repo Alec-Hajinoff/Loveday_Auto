@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import blue from "./Images/Hertford_Standard_Logo.svg";
+import blue from "./Images/Loveday_Auto_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
 import BasketWidget from "./BasketWidget";
 
