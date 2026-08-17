@@ -86,16 +86,7 @@ function ProductDetailPage() {
 
   return (
     <div className="container my-5">
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to="/shop">Shop</Link>
-          </li>
-          <li className="breadcrumb-item active">{product.name}</li>
-        </ol>
-      </nav>
-
-      <div className="row g-5 mt-2">
+      <div className="row g-5">
         <div className="col-md-6">
           <div className="p-4 bg-light text-center border rounded">
             <h5>{product.name} Image</h5>
