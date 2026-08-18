@@ -8,7 +8,7 @@ import "./Header.css";
 
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
   return (
-    <div className="header-wrapper">
+    <header className="header-wrapper">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-12 col-md-6">
@@ -16,8 +16,8 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
               <img
                 id="logo"
                 src={blue}
-                alt="A company logo"
-                title="A company logo"
+                alt="Loveday Auto Repairs Logo"
+                title="Loveday Auto Repairs"
               />
             </Link>
           </div>
@@ -40,7 +40,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

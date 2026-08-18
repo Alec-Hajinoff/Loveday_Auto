@@ -4,6 +4,20 @@
 }
 
 .header-wrapper {
-  margin-top: 1.2rem;
-  margin-bottom: 2rem;
+  background-color: var(--color-complementary);
+
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.header-wrapper .btn-text,
+.header-wrapper a {
+  color: var(--color-text-inverse);
+  text-decoration: none;
+}
+
+.header-wrapper .btn-text:hover,
+.header-wrapper a:hover {
+  color: var(--color-text-inverse);
+  text-decoration: underline;
 }
