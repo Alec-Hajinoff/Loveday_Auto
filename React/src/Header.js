@@ -23,7 +23,6 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           </div>
 
           <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-end gap-3">
-            <BasketWidget />
             {!isLoading &&
               (isAuthenticated ? (
                 <LogoutComponent onLogoutComplete={onLogoutComplete} />
@@ -37,6 +36,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
                   </Link>
                 </div>
               ))}
+            <BasketWidget />
           </div>
         </div>
       </div>
