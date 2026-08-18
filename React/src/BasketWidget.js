@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useBasket } from "./BasketContext";
+import "./BasketWidget.css";
 
 function BasketWidget() {
   const {
@@ -15,7 +16,7 @@ function BasketWidget() {
   return (
     <div className="position-relative">
       <button
-        className="btn btn-outline-dark position-relative"
+        className="basket-btn position-relative"
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
       >
         🛒 Basket
