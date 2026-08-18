@@ -7,6 +7,9 @@
   background-color: var(--color-complementary);
 
   padding: 1rem 0;
+
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .header-wrapper .btn-text,

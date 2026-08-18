@@ -1,7 +1,12 @@
 .navigation-bar-wrapper {
   background-color: var(--color-complementary);
   padding: 1rem 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+
+  box-shadow: 0 4px 12px -2px rgba(11, 98, 245, 0.25);
+
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .navigation-bar {
@@ -21,7 +26,6 @@
 }
 
 .nav-bar-link.active {
-  /*font-weight: 700;*/
   text-decoration: underline;
   color: var(--color-text-inverse);
 }
