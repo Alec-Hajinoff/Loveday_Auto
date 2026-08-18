@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
+import { Link, useLocation } from "react-router-dom";
 import blue from "./Images/Loveday_Auto_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
 import BasketWidget from "./BasketWidget";
@@ -7,6 +8,8 @@ import BasketWidget from "./BasketWidget";
 import "./Header.css";
 
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
+  const location = useLocation();
+
   return (
     <header className="header-wrapper">
       <div className="container">
@@ -28,10 +31,21 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
                 <LogoutComponent onLogoutComplete={onLogoutComplete} />
               ) : (
                 <div className="d-flex align-items-center justify-content-end gap-3">
-                  <Link to="/UserLogin" className="btn-text">
+                  <Link
+                    to="/UserLogin"
+                    className={`btn-text ${
+                      location.pathname === "/UserLogin" ? "active" : ""
+                    }`}
+                  >
                     Log in
                   </Link>
-                  <Link to="/UserRegistration" className="btn-text">
+
+                  <Link
+                    to="/UserRegistration"
+                    className={`btn-text ${
+                      location.pathname === "/UserRegistration" ? "active" : ""
+                    }`}
+                  >
                     Sign up
                   </Link>
                 </div>

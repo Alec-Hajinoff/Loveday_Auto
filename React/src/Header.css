@@ -23,3 +23,9 @@
   color: var(--color-text-inverse);
   text-decoration: underline;
 }
+
+.header-wrapper .btn-text.active,
+.header-wrapper a.active {
+  color: var(--color-text-inverse);
+  text-decoration: underline;
+}
