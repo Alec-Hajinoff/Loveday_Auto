@@ -17,35 +17,37 @@ function NavigationBar({ isAuthenticated, userRole }) {
     location.pathname === "/AdminDashboard";
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-12">
-          <nav className="navigation-bar">
-            <Link
-              to="/"
-              className={`nav-bar-link ${
-                location.pathname === "/" ? "active" : ""
-              }`}
-            >
-              Home
-            </Link>
+    <div className="navigation-bar-wrapper">
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <nav className="navigation-bar">
+              <Link
+                to="/"
+                className={`nav-bar-link ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
+              >
+                Home
+              </Link>
 
-            <Link
-              to="/shop"
-              className={`nav-bar-link ${
-                location.pathname === "/shop" ? "active" : ""
-              }`}
-            >
-              Shop
-            </Link>
+              <Link
+                to="/shop"
+                className={`nav-bar-link ${
+                  location.pathname === "/shop" ? "active" : ""
+                }`}
+              >
+                Shop
+              </Link>
 
-            <Link
-              to={targetDashboardPath}
-              className={`nav-bar-link ${isDashboardActive ? "active" : ""}`}
-            >
-              Dashboard
-            </Link>
-          </nav>
+              <Link
+                to={targetDashboardPath}
+                className={`nav-bar-link ${isDashboardActive ? "active" : ""}`}
+              >
+                Dashboard
+              </Link>
+            </nav>
+          </div>
         </div>
       </div>
     </div>

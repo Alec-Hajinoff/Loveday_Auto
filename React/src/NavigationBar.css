@@ -1,22 +1,27 @@
+.navigation-bar-wrapper {
+  background-color: var(--color-complementary);
+  padding: 0.75rem 0;
+  margin-bottom: 1rem;
+}
+
 .navigation-bar {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  gap: 1.5rem;
 }
 
 .nav-bar-link {
-  color: #0d6efd;
+  color: var(--color-text-inverse);
   text-decoration: none;
-  font-weight: 500;
 }
 
 .nav-bar-link:hover {
+  color: var(--color-text-inverse);
   text-decoration: underline;
 }
 
 .nav-bar-link.active {
-  font-weight: 700;
+  /*font-weight: 700;*/
   text-decoration: underline;
-  color: #0a58ca;
+  color: var(--color-text-inverse);
 }
