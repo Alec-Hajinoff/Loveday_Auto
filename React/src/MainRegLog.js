@@ -30,17 +30,11 @@ function MainRegLog({ isAuthenticated, userRole, isLoading }) {
   }, []);
 
   return (
-    <div className="container text-center">
-      <div className="row">
-        <div className="col-12">
-          <Main
-            isAuthenticated={isAuthenticated}
-            userRole={userRole}
-            isLoading={isLoading}
-          />
-        </div>
-      </div>
-    </div>
+    <Main
+      isAuthenticated={isAuthenticated}
+      userRole={userRole}
+      isLoading={isLoading}
+    />
   );
 }
 

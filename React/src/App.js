@@ -5,7 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
 import NavigationBar from "./NavigationBar";
-import HeroSection from "./HeroSection";
+
 import { checkSession } from "./ApiService";
 import { BasketProvider } from "./BasketContext";
 
@@ -44,8 +44,6 @@ function AppContent() {
       />
 
       <NavigationBar isAuthenticated={isAuthenticated} userRole={userRole} />
-
-      <HeroSection />
 
       <AppRoutes
         isAuthenticated={isAuthenticated}
