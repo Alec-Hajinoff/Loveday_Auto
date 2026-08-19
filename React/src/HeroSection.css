@@ -1,55 +1,33 @@
-.hero-section {
-  background-color: var(
-    --color-complementary-tint
-  ); /* Uses design token from index.css[cite: 1] */
-  border: 1px solid var(--color-border); /* Uses design token from index.css[cite: 1] */
-  border-radius: var(
-    --radius-lg
-  ); /* Uses design token from index.css[cite: 1] */
-  padding: var(--spacing-xl); /* Uses design token from index.css[cite: 1] */
-  margin-bottom: var(
-    --spacing-lg
-  ); /* Uses design token from index.css[cite: 1] */
-  box-shadow: var(--shadow-sm); /* Uses design token from index.css[cite: 1] */
+.hero-section-wrapper {
+  background-color: var(--color-complementary-tint);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+}
+
+.hero-content {
+  max-width: 850px;
+  margin: 0 auto;
 }
 
 .hero-heading {
-  font-size: var(
-    --font-size-2xl
-  ); /* Uses design token from index.css[cite: 1] */
-  color: var(--color-text-main); /* Uses design token from index.css[cite: 1] */
-  font-weight: var(
-    --font-weight-bold
-  ); /* Uses design token from index.css[cite: 1] */
-  margin-bottom: var(
-    --spacing-sm
-  ); /* Uses design token from index.css[cite: 1] */
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-main);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
 }
 
 .hero-subheading {
-  font-size: var(
-    --font-size-lg
-  ); /* Uses design token from index.css[cite: 1] */
-  color: var(
-    --color-complementary-shade
-  ); /* Uses design token from index.css[cite: 1] */
-  font-weight: var(
-    --font-weight-medium
-  ); /* Uses design token from index.css[cite: 1] */
-  margin-bottom: var(
-    --spacing-md
-  ); /* Uses design token from index.css[cite: 1] */
+  font-size: var(--font-size-lg);
+  color: var(--color-complementary-shade);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-md);
 }
 
 .hero-description {
-  font-size: var(
-    --font-size-md
-  ); /* Uses design token from index.css[cite: 1] */
-  color: var(
-    --color-text-muted
-  ); /* Uses design token from index.css[cite: 1] */
-  line-height: var(
-    --line-height-base
-  ); /* Uses design token from index.css[cite: 1] */
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-base);
   margin-bottom: 0;
 }
