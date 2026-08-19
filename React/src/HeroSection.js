@@ -8,16 +8,13 @@ function HeroSection() {
         <div className="row">
           <div className="col-12">
             <div className="hero-content">
-              <h1 className="hero-heading">Reliable Vehicle Care.</h1>
-              <p className="hero-subheading">
+              <h1 className="hero-heading">
                 Professional vehicle servicing and repairs from a trusted local
                 garage.
-              </p>
-              <p className="hero-description">
+              </h1>
+              <p className="hero-subheading">
                 From routine servicing and maintenance to repairs and essential
-                vehicle checks, Loveday Auto makes it easy to look after your
-                vehicle. Check availability, book a convenient time and manage
-                your appointment online.
+                vehicle checks, we make it easy to look after your vehicle.
               </p>
             </div>
           </div>

@@ -24,10 +24,3 @@
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-md);
 }
-
-.hero-description {
-  font-size: var(--font-size-md);
-  color: var(--color-text-muted);
-  line-height: var(--line-height-base);
-  margin-bottom: 0;
-}
