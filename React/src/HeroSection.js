@@ -12,10 +12,6 @@ function HeroSection() {
                 Professional vehicle servicing and repairs from a trusted local
                 garage.
               </h1>
-              <p className="hero-subheading">
-                From routine servicing and maintenance to repairs and essential
-                vehicle checks, we make it easy to look after your vehicle.
-              </p>
             </div>
           </div>
         </div>
