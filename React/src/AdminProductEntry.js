@@ -7,7 +7,6 @@ function AdminProductEntry({ onProductAdded }) {
     name: "",
     description: "",
     price_gbp: "",
-    type: "product",
   });
   const [imageFile, setImageFile] = useState(null);
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -34,7 +33,7 @@ function AdminProductEntry({ onProductAdded }) {
       dataToSend.append("name", formData.name);
       dataToSend.append("description", formData.description);
       dataToSend.append("price_gbp", formData.price_gbp);
-      dataToSend.append("type", formData.type);
+
       if (imageFile) {
         dataToSend.append("image", imageFile);
       }
@@ -47,7 +46,6 @@ function AdminProductEntry({ onProductAdded }) {
           name: "",
           description: "",
           price_gbp: "",
-          type: "product",
         });
         setImageFile(null);
         e.target.reset();
@@ -82,7 +80,7 @@ function AdminProductEntry({ onProductAdded }) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} me>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Product Name *
@@ -113,7 +111,7 @@ function AdminProductEntry({ onProductAdded }) {
         </div>
 
         <div className="row">
-          <div className="col-12 col-md-6 mb-3">
+          <div className="col-12 mb-3">
             <label htmlFor="price_gbp" className="form-label">
               Price (£ GBP) *
             </label>
@@ -128,23 +126,6 @@ function AdminProductEntry({ onProductAdded }) {
               onChange={handleInputChange}
               required
             />
-          </div>
-
-          <div className="col-12 col-md-6 mb-3">
-            <label htmlFor="type" className="form-label">
-              Item Type *
-            </label>
-            <select
-              className="form-select"
-              id="type"
-              name="type"
-              value={formData.type}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="product">Product (e.g. Tyres, Parts)</option>
-              <option value="service">Service (e.g. Repair, MOT)</option>
-            </select>
           </div>
         </div>
 

@@ -69,9 +69,9 @@ if (! $is_staff) {
 $name        = trim($_POST['name'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $price_gbp   = filter_var($_POST['price_gbp'] ?? '', FILTER_VALIDATE_FLOAT);
-$type        = trim($_POST['type'] ?? '');
 
-if (empty($name) || $price_gbp === false || $price_gbp < 0 || ! in_array($type, ['product', 'service'], true)) {
+if (empty($name) || $price_gbp === false || $price_gbp < 0) {
+
     echo json_encode(['status' => 'error', 'message' => 'Invalid product input values provided.']);
     exit;
 }
@@ -171,7 +171,6 @@ try {
             name,
             description,
             price_gbp,
-            type,
             image_url,
             is_active,
             stripe_product_id,
@@ -182,7 +181,6 @@ try {
             :name,
             :description,
             :price_gbp,
-            :type,
             :image_url,
             1,
             :stripe_product_id,
@@ -196,7 +194,6 @@ try {
         ':name'              => $name,
         ':description'       => $description,
         ':price_gbp'         => $price_gbp,
-        ':type'              => $type,
         ':image_url'         => $image_url,
         ':stripe_product_id' => $stripe_product_id,
         ':stripe_price_id'   => $stripe_price_id,
