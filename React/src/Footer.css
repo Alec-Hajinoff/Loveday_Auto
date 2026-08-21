@@ -1,27 +1,29 @@
-.footer {
-  background-color: var(--color-primary-50);
-  border-radius: 5px;
-  padding: 15px;
-  font-weight: 500;
-  margin-top: 35px;
+.footer-wrapper {
+  background-color: var(--color-complementary);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-md) 0;
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  margin-top: var(--spacing-xl);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
 }
 
-.footer-links {
-  margin-top: 10px;
-  margin-bottom: 15px;
+.footer-content {
+  margin: 0;
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
 }
 
-.footer-link {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.footer-link:hover {
+.footer-wrapper a {
+  color: var(--color-text-inverse);
   text-decoration: underline;
+  transition: color var(--transition-fast);
 }
 
-.footer-separator {
-  margin: 0 10px;
-  color: inherit;
+.footer-wrapper a:hover {
+  color: var(--color-primary-tint);
 }
