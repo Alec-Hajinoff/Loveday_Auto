@@ -45,15 +45,15 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
           </div>
           <h3 className="card-title fw-bold">Need a Garage Appointment?</h3>
           <p className="card-text text-muted mb-4">
-            Book your slot online for MOT, servicing, or repairs at Loveday Auto
-            Repairs.
+            Book your slot online for MOT, servicing, or repairs at Loveday
+            Auto.
           </p>
           <button
             onClick={handleBookingClick}
             className="btn btn-primary btn-lg px-4"
             disabled={isLoading}
           >
-            {isLoading ? "Checking session..." : "Book an Appointment Now"}
+            {isLoading ? "Checking session..." : "Book an Appointment"}
           </button>
         </div>
       </div>
