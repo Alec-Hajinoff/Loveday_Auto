@@ -4,8 +4,8 @@ import "./Footer.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
-  const user = ["a", "l", "e", "c"].join("");
-  const domain = ["hertfordstandard", "com"].join(".");
+  const user = ["i", "n", "f", "o"].join("");
+  const domain = ["lovedayauto", "com"].join(".");
   const email = `${user}@${domain}`;
   return (
     <div className="container text-center">
@@ -13,8 +13,8 @@ function Footer() {
         <div className="col-12">
           <p className="footer">
             <em>
-              &copy; Copyright 2025 - {currentYear}. Office address: 4 Bridge
-              Gate, London, N21 2AH, United Kingdom. Email address:{" "}
+              &copy; Copyright 2025 - {currentYear}. Address: 50A Southbury Rd,
+              Enfield, EN1 1YB. Phone: 020 8367 5888. Email:{" "}
               <a href={`mailto:${email}`}>{email}</a>
             </em>
           </p>
