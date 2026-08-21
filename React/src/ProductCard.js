@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useBasket } from "./BasketContext";
+import "./ProductCard.css";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
@@ -29,36 +30,30 @@ function ProductCard({ product }) {
 
   return (
     <div
-      className="card h-100 shadow-sm cursor-pointer"
+      className="card h-100 shadow-sm product-card"
       onClick={handleCardClick}
-      style={{ cursor: "pointer" }}
     >
-      <div
-        className="card-img-top bg-light d-flex align-items-center justify-content-center"
-        style={{ height: "180px", overflow: "hidden" }}
-      >
+      <div className="card-img-top d-flex align-items-center justify-content-center product-card-img-container">
         {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={product.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+          <img src={imageSrc} alt={product.name} className="product-card-img" />
         ) : (
-          <span className="text-muted">No image</span>
+          <span className="product-card-no-image">No image</span>
         )}
       </div>
       <div className="card-body d-flex flex-column">
-        <h5 className="card-title h6 mb-2">{product.name}</h5>
+        <h5 className="card-title h6 mb-2 product-card-title">
+          {product.name}
+        </h5>
 
-        <p className="card-text text-muted small flex-grow-1">
+        <p className="card-text small flex-grow-1 product-card-description">
           {product.description}
         </p>
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <span className="fw-bold text-success fs-5">
+          <span className="product-card-price">
             £{parseFloat(product.price_gbp).toFixed(2)}
           </span>
           <button
-            className="btn btn-outline-primary btn-sm"
+            className="btn btn-sm product-card-add-btn"
             onClick={handleAddClick}
           >
             Add to basket
