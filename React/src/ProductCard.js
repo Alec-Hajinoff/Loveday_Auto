@@ -48,12 +48,8 @@ function ProductCard({ product }) {
         )}
       </div>
       <div className="card-body d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-start mb-2">
-          <h5 className="card-title h6 mb-0">{product.name}</h5>
-          <span className="badge bg-secondary text-capitalize">
-            {product.type}
-          </span>
-        </div>
+        <h5 className="card-title h6 mb-2">{product.name}</h5>
+
         <p className="card-text text-muted small flex-grow-1">
           {product.description}
         </p>

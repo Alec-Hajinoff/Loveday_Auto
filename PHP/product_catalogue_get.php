@@ -36,7 +36,6 @@ try {
             name,
             description,
             price_gbp,
-            type,
             image_url,
             stripe_product_id,
             stripe_price_id
