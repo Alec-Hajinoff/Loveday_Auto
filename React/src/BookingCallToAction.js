@@ -28,7 +28,7 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
 
   return (
     <div className="booking-cta-container my-4">
-      <div className="card shadow-sm border-0">
+      <div className="card shadow-sm">
         <div className="card-body p-4 text-center">
           <div className="booking-cta-calendar-placeholder mb-3">
             <svg

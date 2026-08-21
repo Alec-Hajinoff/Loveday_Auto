@@ -4,6 +4,10 @@
   margin-right: auto;
 }
 
+.booking-cta-container .card {
+  border: 5px solid var(--color-primary);
+}
+
 .booking-cta-calendar-placeholder {
   display: inline-block;
   padding: 12px;
