@@ -1,13 +1,10 @@
 #logo {
   width: 250px;
-  height: auto;
 }
 
 .header-wrapper {
   background-color: var(--color-complementary);
-
   padding: 1rem 0;
-
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -19,13 +16,8 @@
 }
 
 .header-wrapper .btn-text:hover,
-.header-wrapper a:hover {
-  color: var(--color-text-inverse);
-  text-decoration: underline;
-}
-
+.header-wrapper a:hover,
 .header-wrapper .btn-text.active,
 .header-wrapper a.active {
-  color: var(--color-text-inverse);
   text-decoration: underline;
 }
