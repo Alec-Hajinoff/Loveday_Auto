@@ -20,12 +20,7 @@
   text-decoration: none;
 }
 
-.nav-bar-link:hover {
-  color: var(--color-text-inverse);
-  text-decoration: underline;
-}
-
+.nav-bar-link:hover,
 .nav-bar-link.active {
   text-decoration: underline;
-  color: var(--color-text-inverse);
 }
