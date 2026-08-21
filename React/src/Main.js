@@ -21,9 +21,7 @@ function Main({ isAuthenticated, userRole, isLoading }) {
               />
 
               <section className="hero">
-                <h2 className="hero-title">
-                  Loveday Auto Repairs — Services & Parts
-                </h2>
+                <h2 className="hero-title">Our Products</h2>
               </section>
 
               <div className="intro-section">
