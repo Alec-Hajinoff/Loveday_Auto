@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { productCatalogueGet, checkoutSessionCreate } from "./ApiService";
 import { useBasket } from "./BasketContext";
 import QuantityStepper from "./QuantityStepper";
+import "./ProductDetailPage.css";
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -40,6 +41,16 @@ function ProductDetailPage() {
 
     fetchProduct();
   }, [id]);
+
+  const getImageSrc = (imagePath) => {
+    if (!imagePath) return null;
+    try {
+      const filename = imagePath.split("\\").pop().split("/").pop();
+      return require(`./Images/${filename}`);
+    } catch (e) {
+      return null;
+    }
+  };
 
   const handleBuyNow = async () => {
     if (!product || !product.stripe_price_id) {
@@ -84,21 +95,37 @@ function ProductDetailPage() {
     );
   }
 
+  const imageSrc = getImageSrc(product.image_url);
+
   return (
     <div className="container my-5">
-      <div className="row g-5">
+      <div className="row g-5 align-items-center">
         <div className="col-md-6">
-          <div className="p-4 bg-light text-center border rounded">
-            <h5>{product.name} Image</h5>
+          <div className="d-flex align-items-center justify-content-center product-detail-image-wrapper">
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={product.name}
+                className="product-detail-img"
+              />
+            ) : (
+              <span className="product-detail-no-image">
+                No image available
+              </span>
+            )}
           </div>
         </div>
         <div className="col-md-6">
-          <h2>{product.name}</h2>
-          <p className="badge bg-secondary text-capitalize">{product.type}</p>
-          <h3 className="text-success my-3">
+          <h2 className="product-detail-title">{product.name}</h2>
+          {product.type && (
+            <span className="badge text-capitalize product-detail-badge mb-2">
+              {product.type}
+            </span>
+          )}
+          <h3 className="product-detail-price my-3">
             £{parseFloat(product.price_gbp).toFixed(2)}
           </h3>
-          <p className="lead">{product.description}</p>
+          <p className="product-detail-description">{product.description}</p>
 
           <div className="my-4">
             <label className="form-label fw-bold">Quantity:</label>
@@ -111,13 +138,13 @@ function ProductDetailPage() {
 
           <div className="d-flex gap-3">
             <button
-              className="btn btn-outline-primary btn-lg"
+              className="btn btn-lg product-detail-btn-basket"
               onClick={() => addToBasket(product, quantity, true)}
             >
               Add to basket
             </button>
             <button
-              className="btn btn-primary btn-lg"
+              className="btn btn-lg product-detail-btn-buy"
               disabled={isBuyingNow}
               onClick={handleBuyNow}
             >
