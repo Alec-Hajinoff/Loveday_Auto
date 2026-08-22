@@ -44,12 +44,8 @@ function ProductDetailPage() {
 
   const getImageSrc = (imagePath) => {
     if (!imagePath) return null;
-    try {
-      const filename = imagePath.split("\\").pop().split("/").pop();
-      return require(`./Images/${filename}`);
-    } catch (e) {
-      return null;
-    }
+    const filename = imagePath.split("\\").pop().split("/").pop();
+    return `http://localhost/Loveday_Auto/PHP/Images/${filename}`;
   };
 
   const handleBuyNow = async () => {

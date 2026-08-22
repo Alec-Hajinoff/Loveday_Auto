@@ -96,7 +96,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         exit;
     }
 
-    $target_dir = __DIR__ . '/../React/src/Images/';
+    $target_dir = __DIR__ . '/Images/';
     if (! file_exists($target_dir)) {
         mkdir($target_dir, 0755, true);
     }
