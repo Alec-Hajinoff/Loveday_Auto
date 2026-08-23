@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "./AppRoutes";
 import NavigationBar from "./NavigationBar";
+import "./App.css";
 
 import { checkSession } from "./ApiService";
 import { BasketProvider } from "./BasketContext";
@@ -20,7 +21,6 @@ function AppContent() {
     try {
       const result = await checkSession();
       setIsAuthenticated(result.authenticated);
-
       setUserRole(result.role || null);
     } catch (error) {
       console.error("Session check failed:", error);
@@ -36,7 +36,7 @@ function AppContent() {
   }, [location.pathname, verifySession]);
 
   return (
-    <div>
+    <div className="app-layout">
       <Header
         isAuthenticated={isAuthenticated}
         isLoading={isLoading}
@@ -45,11 +45,14 @@ function AppContent() {
 
       <NavigationBar isAuthenticated={isAuthenticated} userRole={userRole} />
 
-      <AppRoutes
-        isAuthenticated={isAuthenticated}
-        userRole={userRole}
-        isLoading={isLoading}
-      />
+      <main className="app-main-content">
+        <AppRoutes
+          isAuthenticated={isAuthenticated}
+          userRole={userRole}
+          isLoading={isLoading}
+        />
+      </main>
+
       <Footer />
     </div>
   );

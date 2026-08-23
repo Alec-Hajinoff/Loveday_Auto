@@ -84,12 +84,11 @@ function UserRegistration() {
   };
 
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <div className="auth-page-container container">
+      <div className="row justify-content-center w-100">
         <div className="col-12 col-lg-3">
           <div className="user-registration-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
-              {" "}
               <div className="form-group">
                 <input
                   autoComplete="off"
@@ -119,7 +118,7 @@ function UserRegistration() {
               {successMessage && (
                 <div id="success-message">{successMessage}</div>
               )}
-              <div id="error-message">{errorMessage}</div>
+              {errorMessage && <div id="error-message">{errorMessage}</div>}
               <button type="submit" className="btn btn-secondary">
                 {loading ? "Registering" : "Register"}
                 <span

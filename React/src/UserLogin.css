@@ -1,3 +1,15 @@
+.auth-page-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.user-login-wrapper {
+  width: 100%;
+}
+
 .user-login-wrapper .btn-secondary {
   background-color: var(--btn-bg-secondary);
   border: 1px solid transparent;
@@ -6,7 +18,6 @@
   border-radius: var(--btn-radius);
   cursor: pointer;
   transition: background-color var(--transition-fast);
-
   width: 100%;
   display: flex;
   align-items: center;

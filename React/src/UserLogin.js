@@ -130,8 +130,8 @@ function UserLogin() {
   };
 
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <div className="auth-page-container container">
+      <div className="row justify-content-center w-100">
         <div className="col-12 col-lg-3">
           <div className="user-login-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
