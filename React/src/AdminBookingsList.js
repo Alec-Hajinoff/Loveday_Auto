@@ -101,8 +101,6 @@ function AdminBookingsList() {
 
   return (
     <div className="admin-bookings-container">
-      <h3>All Garage Appointments</h3>
-
       <div className="bookings-section">
         <h5 className="text-primary mb-3">Future Appointments</h5>
         {upcoming.length === 0 ? (

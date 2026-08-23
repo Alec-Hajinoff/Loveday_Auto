@@ -1,5 +1,7 @@
 .admin-bookings-container {
   margin-bottom: 2rem;
+  border: 5px solid var(--color-primary, #f59e0b);
+  padding: 0.5rem;
 }
 
 .bookings-section {
