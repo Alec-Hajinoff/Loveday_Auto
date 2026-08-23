@@ -8,7 +8,7 @@ import "./Main.css";
 function Main({ isAuthenticated, userRole, isLoading }) {
   return (
     <div className="overflow-hidden">
-      <div className="slide-in-left">
+      <div>
         <HeroSection />
       </div>
 
@@ -16,7 +16,7 @@ function Main({ isAuthenticated, userRole, isLoading }) {
         <div className="row">
           <div className="col-12">
             <div className="main-container">
-              <div className="slide-in-right">
+              <div>
                 <BookingCallToAction
                   isAuthenticated={isAuthenticated}
                   userRole={userRole}
@@ -28,7 +28,7 @@ function Main({ isAuthenticated, userRole, isLoading }) {
                 <h2 className="hero-title">Our Products</h2>
               </section>
 
-              <div className="intro-section slide-in-left">
+              <div className="intro-section">
                 <ShopPage />
               </div>
             </div>
