@@ -1,15 +1,20 @@
 .user-login-wrapper .btn-secondary {
-  background-color: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  color: var(--btn-text);
+  background-color: var(--btn-bg-secondary);
+  border: 1px solid transparent;
+  color: var(--btn-text-secondary);
   padding: var(--btn-padding-y) var(--btn-padding-x);
   border-radius: var(--btn-radius);
   cursor: pointer;
-  transition: var(--btn-transition);
+  transition: background-color var(--transition-fast);
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-secondary:hover {
-  background-color: var(--btn-bg-hover);
+  background-color: var(--btn-bg-secondary-hover);
 }
 
 .forgot-password-link-container {
@@ -20,16 +25,15 @@
 .forgot-password-link {
   background: none;
   border: none;
-
   text-decoration: underline;
   cursor: pointer;
-
   font-weight: 500;
   padding: 5px;
+  color: var(--color-text-main);
 }
 
 .forgot-password-link:hover {
-  color: var(--btn-bg-hover);
+  color: var(--btn-bg-secondary-hover);
   text-decoration: none;
 }
 
@@ -41,5 +45,5 @@
 
 #spinnerReset {
   margin-left: 8px;
-  color: #1b3e73;
+  color: var(--color-complementary);
 }
