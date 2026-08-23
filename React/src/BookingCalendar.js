@@ -229,8 +229,8 @@ function BookingCalendar() {
                               type="button"
                               className={`btn slot-btn ${
                                 isSelected
-                                  ? "btn-success"
-                                  : "btn-outline-success"
+                                  ? "slot-btn-selected"
+                                  : "slot-btn-available"
                               }`}
                               onClick={() => handleSelectSlot(slot)}
                             >

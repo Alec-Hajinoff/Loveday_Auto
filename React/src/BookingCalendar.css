@@ -33,6 +33,33 @@
   width: 100%;
   font-size: 0.85rem;
   padding: 0.25rem;
+  transition:
+    background-color var(--transition-fast, 150ms ease),
+    border-color var(--transition-fast, 150ms ease);
+}
+
+.slot-btn-available {
+  background-color: transparent;
+  color: var(--color-complementary, #0b62f5);
+  border: 1px solid var(--color-complementary, #0b62f5);
+}
+
+.slot-btn-available:hover {
+  background-color: var(--color-complementary-shade, #1d4ed8);
+  border-color: var(--color-complementary-shade, #1d4ed8);
+  color: var(--color-text-inverse, #ffffff);
+}
+
+.slot-btn-selected {
+  background-color: var(--color-complementary, #0b62f5);
+  border: 1px solid var(--color-complementary, #0b62f5);
+  color: var(--color-text-inverse, #ffffff);
+}
+
+.slot-btn-selected:hover {
+  background-color: var(--color-complementary-shade, #1d4ed8);
+  border-color: var(--color-complementary-shade, #1d4ed8);
+  color: var(--color-text-inverse, #ffffff);
 }
 
 .slot-booked {
