@@ -33,6 +33,7 @@
   font-size: var(--font-size-sm);
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .reset-message {
@@ -40,6 +41,7 @@
   font-size: var(--font-size-sm);
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .forgot-password-link-container {
