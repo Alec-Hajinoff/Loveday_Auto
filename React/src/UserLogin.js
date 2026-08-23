@@ -130,16 +130,12 @@ function UserLogin() {
   };
 
   return (
-    /* BOOTSTRAP: Added container to center content horizontally on the page */
     <div className="container my-5">
-      {/* BOOTSTRAP: Added row with justify-content-center to align the column in the middle */}
       <div className="row justify-content-center">
-        {/* BOOTSTRAP: Retained col-12 col-lg-3 width so the form matches the 3-column span from MainRegLog */}
         <div className="col-12 col-lg-3">
           <div className="user-login-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
               {" "}
-              {/* noValidate disables browser validation */}
               <div className="form-group">
                 <input
                   autoComplete="off"
