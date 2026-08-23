@@ -198,10 +198,10 @@ function AdminBookingCalendar() {
                               type="button"
                               className={`btn admin-slot-btn ${
                                 isSelected
-                                  ? "btn-info"
+                                  ? "admin-slot-selected"
                                   : slot.status === "blocked"
-                                    ? "btn-danger"
-                                    : "btn-outline-success"
+                                    ? "admin-slot-blocked"
+                                    : "admin-slot-available"
                               }`}
                               onClick={() => handleSelectSlot(slot)}
                             >
