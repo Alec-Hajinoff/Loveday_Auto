@@ -84,16 +84,12 @@ function UserRegistration() {
   };
 
   return (
-    /* BOOTSTRAP: Container maintains vertical spacing and horizontal centering */
     <div className="container my-5">
-      {/* BOOTSTRAP: Row centering the form on the page */}
       <div className="row justify-content-center">
-        {/* BOOTSTRAP: Keeps 3-column span width for consistent appearance */}
         <div className="col-12 col-lg-3">
           <div className="user-registration-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
               {" "}
-              {/* noValidate disables standard browser validation */}
               <div className="form-group">
                 <input
                   autoComplete="off"
