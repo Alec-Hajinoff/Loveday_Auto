@@ -70,7 +70,7 @@ function AdminProductEntry({ onProductAdded }) {
 
   return (
     <div className="admin-product-entry-card">
-      <h3 className="admin-product-entry-title">Add New Product / Service</h3>
+      <h5 className="admin-product-entry-title">Add New Products</h5>
 
       {status.message && (
         <div
@@ -150,9 +150,7 @@ function AdminProductEntry({ onProductAdded }) {
           className="btn btn-primary w-100"
           disabled={isSubmitting}
         >
-          {isSubmitting
-            ? "Processing..."
-            : "Create Product in Stripe & Database"}
+          {isSubmitting ? "Processing..." : "Create Product"}
         </button>
       </form>
     </div>
