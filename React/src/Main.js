@@ -28,7 +28,6 @@ function Main({ isAuthenticated, userRole, isLoading }) {
                 <h2 className="hero-title">Our Products</h2>
               </section>
 
-              {/* 3. ShopPage slides in from the LEFT */}
               <div className="intro-section slide-in-left">
                 <ShopPage />
               </div>
