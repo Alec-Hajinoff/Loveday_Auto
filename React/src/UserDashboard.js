@@ -15,8 +15,8 @@ function UserDashboard() {
         <div className="col-12 col-lg-9">
           <div className="admin-header">
             <p>
-              Welcome to your dashboard. Here you can track your appointments
-              and book new slots.
+              Welcome to your dashboard. Here you can book and track your
+              appointments and manage your account.
             </p>
           </div>
 
@@ -24,7 +24,7 @@ function UserDashboard() {
             <li className="nav-item">
               <button
                 className={`nav-link ${activeTab === "book-service" ? "active" : ""}`}
-                onClick={() => setActiveTab("book-service")} // Switch to Book a Service tab
+                onClick={() => setActiveTab("book-service")}
               >
                 Book a Service
               </button>
