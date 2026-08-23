@@ -69,10 +69,7 @@
 }
 
 .selected-slots-alert {
-  background-color: var(
-    --color-complementary-tint,
-    #eff6ff
-  ); /* Tint background */
-  color: var(--color-text-main, #0f172a); /* Main dark slate body font color */
-  border: 2px solid var(--color-complementary, #0b62f5); /* Complementary royal blue border */
+  background-color: var(--color-complementary-tint, #eff6ff);
+  color: var(--color-text-main, #0f172a);
+  border: 2px solid var(--color-complementary, #0b62f5);
 }
