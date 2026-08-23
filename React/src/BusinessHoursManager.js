@@ -90,7 +90,7 @@ function BusinessHoursManager() {
 
   return (
     <div className="business-hours-container">
-      <h3>Business Hours</h3>
+      <h5>Business Hours</h5>
       <form onSubmit={handleSubmit}>
         {DAYS.map((day) => {
           const currentSlot = schedule.find(

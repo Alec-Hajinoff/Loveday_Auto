@@ -1,5 +1,6 @@
 .business-hours-container {
-  padding: 1rem 0;
+  border: 5px solid var(--color-primary, #f59e0b);
+  padding: 0.5rem;
 }
 
 .day-row {
