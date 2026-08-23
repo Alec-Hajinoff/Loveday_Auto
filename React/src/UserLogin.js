@@ -135,7 +135,6 @@ function UserLogin() {
         <div className="col-12 col-lg-3">
           <div className="user-login-wrapper">
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
-              {" "}
               <div className="form-group">
                 <input
                   autoComplete="off"
@@ -164,18 +163,26 @@ function UserLogin() {
                   onChange={handleChange}
                 />
               </div>
+
               {unverifiedMessage && (
                 <div
                   id="unverified-message"
-                  className="error"
+                  className="error-message"
                   aria-live="polite"
                 >
                   {unverifiedMessage}
                 </div>
               )}
-              <div id="error-message-one" className="error" aria-live="polite">
-                {errorMessage}
-              </div>
+
+              {errorMessage && (
+                <div
+                  id="error-message-one"
+                  className="error-message"
+                  aria-live="polite"
+                >
+                  {errorMessage}
+                </div>
+              )}
               {resetMessage && (
                 <div
                   id="reset-message"
@@ -213,7 +220,6 @@ function UserLogin() {
                   )}
                 </button>
               </div>
-              <div id="liveAlertPlaceholder"></div>
             </form>
           </div>
         </div>
