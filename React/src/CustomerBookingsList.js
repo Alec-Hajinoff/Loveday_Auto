@@ -95,10 +95,8 @@ function CustomerBookingsList() {
 
   return (
     <div className="customer-bookings-container">
-      <h3>Your Appointments</h3>
-
       <div className="bookings-section">
-        <h5 className="text-primary mb-3">Future Appointments</h5>
+        <h5 className="text-primary mb-3">Your Future Appointments</h5>
         {upcoming.length === 0 ? (
           <p className="text-muted small">
             No upcoming appointments scheduled.
@@ -109,7 +107,7 @@ function CustomerBookingsList() {
       </div>
 
       <div className="bookings-section">
-        <h5 className="text-secondary mb-3">Past Appointments</h5>
+        <h5 className="text-secondary mb-3">You Past Appointments</h5>
         {past.length === 0 ? (
           <p className="text-muted small">No past appointments found.</p>
         ) : (
