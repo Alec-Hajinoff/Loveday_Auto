@@ -252,7 +252,7 @@ function BookingCalendar() {
 
       {selectedSlots.length > 0 && (
         <div className="mt-3">
-          <div className="alert alert-info">
+          <div className="alert selected-slots-alert">
             <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
             {selectedSlots
               .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
