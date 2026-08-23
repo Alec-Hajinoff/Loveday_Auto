@@ -64,8 +64,8 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
             className="booking-cta-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-header border-bottom-0 pb-0">
-              <h5 className="modal-title fw-bold">Sign In Required</h5>
+            <div className="modal-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+              <h5 className="modal-title fw-bold mb-0">Sign In Required</h5>
               <button
                 type="button"
                 className="btn-close"
