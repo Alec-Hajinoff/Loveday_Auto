@@ -35,22 +35,25 @@ function BookingCalendar() {
   const startDateStr = formatISO(rawWeekDays[0]);
   const endDateStr = formatISO(rawWeekDays[6]);
 
-  const loadCalendarSlots = useCallback(async () => {
-    setLoading(true);
-    setMessage("");
-    try {
-      const response = await bookingCalendar(startDateStr, endDateStr);
-      if (response.status === "success") {
-        setSlotsData(response.slots);
-      } else {
-        setMessage(response.message || "Failed to load slots.");
+  const loadCalendarSlots = useCallback(
+    async (clearMessage = true) => {
+      setLoading(true);
+      if (clearMessage) setMessage("");
+      try {
+        const response = await bookingCalendar(startDateStr, endDateStr);
+        if (response.status === "success") {
+          setSlotsData(response.slots);
+        } else {
+          setMessage(response.message || "Failed to load slots.");
+        }
+      } catch (err) {
+        setMessage(err.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setMessage(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [startDateStr, endDateStr]);
+    },
+    [startDateStr, endDateStr],
+  );
 
   useEffect(() => {
     loadCalendarSlots();
@@ -108,23 +111,17 @@ function BookingCalendar() {
 
     try {
       const slotIds = selectedSlots.map((s) => s.id);
-
       const payload = {
+        ...details,
         slot_ids: slotIds,
-        service_id: details.service_id,
-        vehicle_reg: details.vehicle_reg,
-        notes: details.notes,
-        first_name: details.first_name,
-        surname: details.surname,
-        phone: details.phone,
       };
 
       const response = await selectedAppointmentSlot(payload);
 
       if (response.status === "success") {
-        setMessage("Booking confirmed!");
         setSelectedSlots([]);
-        await loadCalendarSlots();
+        await loadCalendarSlots(false);
+        setMessage("Booking confirmed!");
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setMessage(response.message || "Booking failed.");
