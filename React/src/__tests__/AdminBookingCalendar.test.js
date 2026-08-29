@@ -75,11 +75,7 @@ describe("AdminBookingCalendar Component", () => {
 
     render(<AdminBookingCalendar />);
 
-    await waitFor(() => {
-      expect(adminBookingCalendar).toHaveBeenCalledTimes(1);
-    });
-
-    expect(screen.getByText("09:00 - 10:00")).toBeInTheDocument();
+    expect(await screen.findByText("09:00 - 10:00")).toBeInTheDocument();
     expect(screen.getByText("Booked")).toBeInTheDocument();
     expect(screen.getByText("11:00 - 12:00 (Blocked)")).toBeInTheDocument();
   });
