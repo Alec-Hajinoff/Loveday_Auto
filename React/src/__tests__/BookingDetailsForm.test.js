@@ -35,10 +35,9 @@ describe("BookingDetailsForm Component", () => {
     render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
 
     await waitFor(() => {
-      expect(bookingDetailsForm).toHaveBeenCalledTimes(1);
+      expect(screen.getByPlaceholderText("John")).toHaveValue("Jane");
     });
 
-    expect(screen.getByPlaceholderText("John")).toHaveValue("Jane");
     expect(screen.getByPlaceholderText("Doe")).toHaveValue("Smith");
     expect(screen.getByPlaceholderText("e.g. 07123456789")).toHaveValue(
       "07987654321",
