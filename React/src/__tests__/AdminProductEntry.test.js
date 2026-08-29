@@ -86,10 +86,10 @@ describe("AdminProductEntry Component", () => {
     expect(sentFormData.get("image")).toBe(file);
 
     expect(
-      screen.getByText("Product created successfully!"),
+      await screen.findByText("Product created successfully!"),
     ).toBeInTheDocument();
-    expect(mockOnProductAdded).toHaveBeenCalledTimes(1);
 
+    expect(mockOnProductAdded).toHaveBeenCalledTimes(1);
     expect(screen.getByLabelText(/Product Name \*/i).value).toBe("");
   });
 
