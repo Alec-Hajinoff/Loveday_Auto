@@ -82,11 +82,9 @@ describe("AdminBookingsList Component", () => {
     render(<AdminBookingsList />);
 
     await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Future Appointments")).toBeInTheDocument();
+      expect(screen.getByText("Past Appointments")).toBeInTheDocument();
     });
-
-    expect(screen.getByText("Future Appointments")).toBeInTheDocument();
-    expect(screen.getByText("Past Appointments")).toBeInTheDocument();
 
     expect(
       screen.getByText(/2026-09-01 \(09:00 - 10:00\)/),
@@ -149,15 +147,11 @@ describe("AdminBookingsList Component", () => {
 
     render(<AdminBookingsList />);
 
-    await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(1);
-    });
-
-    const cancelBtn = screen.getByTestId("cancel-btn-101");
+    const cancelBtn = await screen.findByTestId("cancel-btn-101");
     fireEvent.click(cancelBtn);
 
     await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(3); // Updated from 2 to 3
+      expect(adminBookingsList).toHaveBeenCalledTimes(3);
     });
 
     expect(dispatchEventSpy).toHaveBeenCalledWith(
@@ -176,9 +170,8 @@ describe("AdminBookingsList Component", () => {
 
     render(<AdminBookingsList />);
 
-    await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(1);
-    });
+    await screen.findByText("Future Appointments");
+    expect(adminBookingsList).toHaveBeenCalledTimes(1);
 
     fireEvent(window, new CustomEvent("bookingUpdated"));
 
