@@ -308,7 +308,7 @@ export const customerBookingsList = async () => {
     const response = await fetch(
       "http://localhost:8001/Loveday_Auto/PHP/customer_bookings_list.php",
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
