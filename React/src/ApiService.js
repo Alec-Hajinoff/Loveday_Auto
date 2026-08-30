@@ -422,7 +422,7 @@ export const adminBookingsList = async () => {
     const response = await fetch(
       "http://localhost:8001/Loveday_Auto/PHP/admin_bookings_list.php",
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
