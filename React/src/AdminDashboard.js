@@ -7,16 +7,9 @@ import ServiceManager from "./ServiceManager";
 import AdminBookingsList from "./AdminBookingsList";
 import AdminBookingCalendar from "./AdminBookingCalendar";
 import AvailabilityHorizonExtender from "./AvailabilityHorizonExtender";
-import AdminProductEntry from "./AdminProductEntry";
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("bookings");
-
-  const [refreshProducts, setRefreshProducts] = useState(0);
-
-  const handleProductAdded = () => {
-    setRefreshProducts((prev) => prev + 1);
-  };
 
   return (
     <div className="admin-container container">
@@ -25,7 +18,7 @@ function AdminDashboard() {
           <div className="admin-header">
             <p>
               Welcome to your admin dashboard. Here you can manage bookings,
-              business hours, services, and inventory.
+              business hours, services, and inventory.[cite: 1]
             </p>
           </div>
 
@@ -35,7 +28,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "bookings" ? "active" : ""}`}
                 onClick={() => setActiveTab("bookings")}
               >
-                Bookings & Calendar
+                Bookings & Calendar[cite: 1]
               </button>
             </li>
             <li className="nav-item">
@@ -43,7 +36,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "products" ? "active" : ""}`}
                 onClick={() => setActiveTab("products")}
               >
-                Products & Services
+                Products & Services[cite: 1]
               </button>
             </li>
             <li className="nav-item">
@@ -51,7 +44,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "availability" ? "active" : ""}`}
                 onClick={() => setActiveTab("availability")}
               >
-                Appointment Availability
+                Appointment Availability[cite: 1]
               </button>
             </li>
           </ul>
@@ -66,9 +59,6 @@ function AdminDashboard() {
           {activeTab === "products" && (
             <div className="tab-pane-content">
               <ServiceManager />
-              <div className="mt-4">
-                <AdminProductEntry onProductAdded={handleProductAdded} />
-              </div>
             </div>
           )}
 
