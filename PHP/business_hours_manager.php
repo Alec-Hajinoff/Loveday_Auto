@@ -52,12 +52,12 @@ try {
 
     $pdo->beginTransaction();
 
+    $pdo->exec('DELETE FROM business_hours');
+
+    $pdo->exec("DELETE FROM availability_slots WHERE status = 'available'");
+
     $sql = 'INSERT INTO business_hours (day_of_week, open_time, close_time, created_at, updated_at)
-            VALUES (:day_of_week, :open_time, :close_time, NOW(), NOW())
-            ON DUPLICATE KEY UPDATE
-                open_time = VALUES(open_time),
-                close_time = VALUES(close_time),
-                updated_at = NOW()';
+            VALUES (:day_of_week, :open_time, :close_time, NOW(), NOW())';
 
     $stmt = $pdo->prepare($sql);
 
@@ -117,7 +117,7 @@ try {
     }
 
     $pdo->commit();
-    echo json_encode(['status' => 'success', 'message' => 'Business hours and 3-month availability slots saved successfully.']);
+    echo json_encode(['status' => 'success', 'message' => 'Business hours and 3-month availability slots reset and saved successfully.']);
 
 } catch (PDOException $e) {
     if (isset($pdo) && $pdo->inTransaction()) {
