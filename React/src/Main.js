@@ -26,6 +26,15 @@ function Main({ isAuthenticated, userRole, isLoading }) {
 
               <section className="hero">
                 <h2 className="hero-title">Our Services:</h2>
+
+                <ul className="list-unstyled mt-3">
+                  <li>MOT</li>
+                  <li>Servicing</li>
+                  <li>Brakes</li>
+                  <li>Tyres</li>
+                  <li>Diagnostics</li>
+                  <li>Repairs</li>
+                </ul>
               </section>
             </div>
           </div>
