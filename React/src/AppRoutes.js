@@ -10,6 +10,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserLogin from "./UserLogin";
 import UserRegistration from "./UserRegistration";
 
+import Services from "./Services";
+
 import React from "react";
 
 export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
@@ -25,6 +27,9 @@ export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
           />
         }
       />
+
+      <Route path="/Services" element={<Services />} />
+
       <Route path="/UserLogin" element={<UserLogin />} />
       <Route path="/UserRegistration" element={<UserRegistration />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />

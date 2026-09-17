@@ -32,6 +32,15 @@ function NavigationBar({ isAuthenticated, userRole }) {
               </Link>
 
               <Link
+                to="/Services"
+                className={`nav-bar-link ${
+                  location.pathname === "/services" ? "active" : ""
+                }`}
+              >
+                Services
+              </Link>
+
+              <Link
                 to={targetDashboardPath}
                 className={`nav-bar-link ${isDashboardActive ? "active" : ""}`}
               >
