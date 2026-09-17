@@ -32,7 +32,7 @@ $user_role    = $_SESSION['role'] ?? null;
 $user_role_id = $_SESSION['role_id'] ?? null;
 
 $is_authorized = false;
-if ($user_role !== null && in_array(strtolower($user_role), ['owner', 'admin'], true)) {
+if ($user_role !== null && in_array(strtolower($user_role), ['admin'], true)) {
     $is_authorized = true;
 }
 if ($user_role_id !== null && in_array((int) $user_role_id, [1, 2], true)) {

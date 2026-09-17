@@ -31,7 +31,7 @@ if (! isset($_SESSION['id'])) {
 $user_id   = $_SESSION['id'];
 $user_role = $_SESSION['role'] ?? 'customer';
 
-if (! in_array(strtolower($user_role), ['owner', 'admin'])) {
+if (! in_array(strtolower($user_role), ['admin'])) {
     echo json_encode(['status' => 'error', 'message' => 'Forbidden: Admin access required.']);
     exit;
 }
