@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./AdminDashboard.css";
-import LogoutComponent from "./LogoutComponent";
 import BusinessHoursManager from "./BusinessHoursManager";
 import ServiceManager from "./ServiceManager";
 
