@@ -18,7 +18,7 @@ function AdminDashboard() {
           <div className="admin-header">
             <p>
               Welcome to your admin dashboard. Here you can manage bookings,
-              business hours, services, and inventory.[cite: 1]
+              business hours, services, and inventory.
             </p>
           </div>
 
@@ -28,7 +28,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "bookings" ? "active" : ""}`}
                 onClick={() => setActiveTab("bookings")}
               >
-                Bookings & Calendar[cite: 1]
+                Bookings & Calendar
               </button>
             </li>
             <li className="nav-item">
@@ -36,7 +36,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "products" ? "active" : ""}`}
                 onClick={() => setActiveTab("products")}
               >
-                Products & Services[cite: 1]
+                Products & Services
               </button>
             </li>
             <li className="nav-item">
@@ -44,7 +44,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "availability" ? "active" : ""}`}
                 onClick={() => setActiveTab("availability")}
               >
-                Appointment Availability[cite: 1]
+                Appointment Availability
               </button>
             </li>
           </ul>
