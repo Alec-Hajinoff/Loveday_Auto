@@ -25,7 +25,7 @@ function Main({ isAuthenticated, userRole, isLoading }) {
               </div>
 
               <section className="hero">
-                <h2 className="hero-title">Our Products</h2>
+                <h2 className="hero-title">Our Services:</h2>
               </section>
             </div>
           </div>
