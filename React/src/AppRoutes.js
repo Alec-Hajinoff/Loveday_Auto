@@ -12,6 +12,8 @@ import UserRegistration from "./UserRegistration";
 
 import Services from "./Services";
 
+import AboutUs from "./AboutUs";
+
 import React from "react";
 
 export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
@@ -29,6 +31,8 @@ export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
       />
 
       <Route path="/Services" element={<Services />} />
+
+      <Route path="/AboutUs" element={<AboutUs />} />
 
       <Route path="/UserLogin" element={<UserLogin />} />
       <Route path="/UserRegistration" element={<UserRegistration />} />

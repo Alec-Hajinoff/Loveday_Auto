@@ -1,0 +1,24 @@
+.about-us-container {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.about-us-title {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.about-us-subtitle {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.about-us-placeholder-box {
+  background-color: #f8f9fa;
+  border: 1px dashed #ced4da;
+  border-radius: 6px;
+  padding: 3rem;
+  text-align: center;
+  color: #6c757d;
+}
