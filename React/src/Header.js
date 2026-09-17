@@ -3,7 +3,6 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import blue from "./Images/Loveday_Auto_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
-import BasketWidget from "./BasketWidget";
 
 import "./Header.css";
 
@@ -50,7 +49,6 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
                   </Link>
                 </div>
               ))}
-            <BasketWidget />
           </div>
         </div>
       </div>
