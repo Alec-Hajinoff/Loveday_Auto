@@ -8,7 +8,6 @@ import NavigationBar from "./NavigationBar";
 import "./App.css";
 
 import { checkSession } from "./ApiService";
-import { BasketProvider } from "./BasketContext";
 
 function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,12 +59,10 @@ function AppContent() {
 
 function App() {
   return (
-    <BasketProvider>
-      <Router>
-        <ScrollToTop />
-        <AppContent />
-      </Router>
-    </BasketProvider>
+    <Router>
+      <ScrollToTop />
+      <AppContent />
+    </Router>
   );
 }
 
