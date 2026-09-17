@@ -9,7 +9,6 @@ import AdminDashboard from "./AdminDashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import UserLogin from "./UserLogin";
 import UserRegistration from "./UserRegistration";
-import BasketPage from "./BasketPage";
 import CheckoutPage from "./CheckoutPage";
 import OrderSuccessPage from "./OrderSuccessPage";
 
@@ -34,7 +33,6 @@ export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
       <Route path="/LogoutComponent" element={<LogoutComponent />} />
       <Route path="/VerifyEmail" element={<VerifyEmail />} />
       <Route path="/PasswordReset" element={<PasswordReset />} />
-      <Route path="/basket" element={<BasketPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order/success" element={<OrderSuccessPage />} />
 
