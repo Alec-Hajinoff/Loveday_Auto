@@ -92,59 +92,88 @@ function BusinessHoursManager() {
     <div className="business-hours-container">
       <h5>Business Hours</h5>
       <form onSubmit={handleSubmit}>
-        {DAYS.map((day) => {
-          const currentSlot = schedule.find(
-            (item) => item.day_of_week === day.day_of_week,
-          );
+        <div className="business-hours-layout">
+          <div className="business-hours-form-side">
+            {DAYS.map((day) => {
+              const currentSlot = schedule.find(
+                (item) => item.day_of_week === day.day_of_week,
+              );
 
-          return (
-            <div key={day.day_of_week} className="day-row">
-              <div className="day-checkbox">
-                <input
-                  type="checkbox"
-                  id={`day-${day.day_of_week}`}
-                  checked={currentSlot.selected}
-                  onChange={() => handleToggleDay(day.day_of_week)}
-                />
-                <label htmlFor={`day-${day.day_of_week}`}>{day.label}</label>
-              </div>
+              return (
+                <div key={day.day_of_week} className="day-row">
+                  <div className="day-checkbox">
+                    <input
+                      type="checkbox"
+                      id={`day-${day.day_of_week}`}
+                      checked={currentSlot.selected}
+                      onChange={() => handleToggleDay(day.day_of_week)}
+                    />
+                    <label htmlFor={`day-${day.day_of_week}`}>
+                      {day.label}
+                    </label>
+                  </div>
 
-              <div className="time-inputs">
-                <input
-                  type="time"
-                  className="form-control"
-                  value={currentSlot.open_time}
-                  disabled={!currentSlot.selected}
-                  required={currentSlot.selected}
-                  onChange={(e) =>
-                    handleTimeChange(
-                      day.day_of_week,
-                      "open_time",
-                      e.target.value,
-                    )
-                  }
-                />
-                <span>to</span>
-                <input
-                  type="time"
-                  className="form-control"
-                  value={currentSlot.close_time}
-                  disabled={!currentSlot.selected}
-                  required={currentSlot.selected}
-                  onChange={(e) =>
-                    handleTimeChange(
-                      day.day_of_week,
-                      "close_time",
-                      e.target.value,
-                    )
-                  }
-                />
-              </div>
-            </div>
-          );
-        })}
+                  <div className="time-inputs">
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={currentSlot.open_time}
+                      disabled={!currentSlot.selected}
+                      required={currentSlot.selected}
+                      onChange={(e) =>
+                        handleTimeChange(
+                          day.day_of_week,
+                          "open_time",
+                          e.target.value,
+                        )
+                      }
+                    />
+                    <span>to</span>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={currentSlot.close_time}
+                      disabled={!currentSlot.selected}
+                      required={currentSlot.selected}
+                      onChange={(e) =>
+                        handleTimeChange(
+                          day.day_of_week,
+                          "close_time",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-        {message && <div className="mt-2 text-info">{message}</div>}
+          <div className="business-hours-info-side">
+            <p>
+              When updating your opening days or hours, please enter the
+              complete weekly schedule. Your current opening days and hours will
+              be replaced with the information you enter.
+            </p>
+            <p>For example, if your current opening days and hours are:</p>
+            <ul>
+              <li>Monday: 08:00–17:00</li>
+              <li>Tuesday: 08:00–17:00</li>
+            </ul>
+            <p>and you want to add Wednesday, enter:</p>
+            <ul>
+              <li>Monday: 08:00–17:00</li>
+              <li>Tuesday: 08:00–17:00</li>
+              <li>Wednesday: 08:00–17:00</li>
+            </ul>
+            <p className="mb-0">
+              Do not enter only the day you want to change or add. Any days not
+              included will be removed from the new schedule.
+            </p>
+          </div>
+        </div>
+
+        {message && <div className="mt-3 text-info">{message}</div>}
 
         <button
           type="submit"
