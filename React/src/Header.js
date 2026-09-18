@@ -1,9 +1,7 @@
 import React from "react";
-
 import { Link, useLocation } from "react-router-dom";
 import blue from "./Images/Loveday_Auto_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
-
 import "./Header.css";
 
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
@@ -13,7 +11,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
     <header className="header-wrapper">
       <div className="container">
         <div className="row align-items-center">
-          <div className="col-12 col-md-6">
+          <div className="col-12 col-md-6 mb-3 mb-md-0">
             <Link to="/">
               <img
                 id="logo"
@@ -24,15 +22,15 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
             </Link>
           </div>
 
-          <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-end gap-3">
+          <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-md-end justify-content-start gap-3">
             {!isLoading &&
               (isAuthenticated ? (
                 <LogoutComponent onLogoutComplete={onLogoutComplete} />
               ) : (
-                <div className="d-flex align-items-center justify-content-end gap-3">
+                <div className="d-flex align-items-center justify-content-end gap-3 w-100">
                   <Link
                     to="/UserLogin"
-                    className={`btn-text ${
+                    className={`header-btn-ghost ${
                       location.pathname === "/UserLogin" ? "active" : ""
                     }`}
                   >
@@ -41,7 +39,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
 
                   <Link
                     to="/UserRegistration"
-                    className={`btn-text ${
+                    className={`header-btn-signup ${
                       location.pathname === "/UserRegistration" ? "active" : ""
                     }`}
                   >
