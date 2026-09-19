@@ -3,6 +3,7 @@ import HeroSection from "./HeroSection";
 import ServicesSection from "./ServicesSection";
 import BookingCallToAction from "./BookingCallToAction";
 import WhyChooseUs from "./WhyChooseUs";
+import TestimonialCarousel from "./TestimonialCarousel";
 
 import "./Main.css";
 
@@ -29,6 +30,10 @@ function Main({ isAuthenticated, userRole, isLoading }) {
 
               <div>
                 <WhyChooseUs />
+              </div>
+
+              <div>
+                <TestimonialCarousel />
               </div>
             </div>
           </div>
