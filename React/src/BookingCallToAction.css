@@ -4,6 +4,7 @@
   padding: 3rem 1rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  border-radius: var(--radius-lg);
 }
 
 .booking-cta-container {
