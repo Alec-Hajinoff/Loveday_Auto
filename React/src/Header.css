@@ -9,8 +9,7 @@
   border-top-right-radius: 6px;
 }
 
-.header-wrapper .header-btn-ghost,
-.header-wrapper .btn-text {
+.header-wrapper .header-btn-ghost {
   background: transparent;
   color: var(--color-text-inverse);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -30,9 +29,7 @@
 }
 
 .header-wrapper .header-btn-ghost:hover,
-.header-wrapper .btn-text:hover,
-.header-wrapper .header-btn-ghost.active,
-.header-wrapper .btn-text.active {
+.header-wrapper .header-btn-ghost.active {
   background-color: rgba(255, 255, 255, 0.15);
   border-color: var(--color-text-inverse);
   color: var(--color-text-inverse);
