@@ -59,13 +59,6 @@
   margin: 0;
 }
 
-.testimonial-author-vehicle {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .carousel-control-prev,
 .carousel-control-next {
   width: 6%;
