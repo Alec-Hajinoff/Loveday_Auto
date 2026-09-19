@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import wheelIcon from "./Images/wheel_icon.svg";
 import "./ServicesSection.css";
 
 function ServicesSection() {
@@ -15,6 +16,7 @@ function ServicesSection() {
       title: "Brakes & Tyres",
       description:
         "Expert brake inspections, pad and disc replacements, alongside professional tyre fitting, balancing, and puncture repairs.",
+      icon: wheelIcon,
     },
     {
       id: 3,
@@ -31,19 +33,27 @@ function ServicesSection() {
         {servicesData.map((service) => (
           <div key={service.id} className="service-card">
             <div className="service-icon-wrapper">
-              <svg
-                className="service-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+              {service.icon ? (
+                <img
+                  src={service.icon}
+                  alt={service.title}
+                  className="service-icon"
                 />
-              </svg>
+              ) : (
+                <svg
+                  className="service-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                  />
+                </svg>
+              )}
             </div>
             <h3 className="service-title">{service.title}</h3>
             <p className="service-description">{service.description}</p>
