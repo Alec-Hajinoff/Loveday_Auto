@@ -13,8 +13,8 @@ function Footer() {
         <div className="row">
           <div className="col-12">
             <p className="footer-content">
-              &copy; Copyright 2025 - {currentYear}. Address: 50a Southbury Rd,
-              Enfield, EN1 1YB. Phone: 020 8367 5888. Email:{" "}
+              &copy; Copyright 2025 - {currentYear}. Garage address: 50a
+              Southbury Rd, Enfield, EN1 1YB. Phone: 020 8367 5888. Email:{" "}
               <a href={`mailto:${email}`}>{email}</a>
             </p>
           </div>

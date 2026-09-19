@@ -8,7 +8,7 @@
   border-top-right-radius: var(--radius-md);
   margin-top: var(--spacing-xs);
   font-family: var(--font-family-base);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
 }
 
 .footer-content {
