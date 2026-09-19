@@ -11,6 +11,8 @@
   width: 100%;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   margin-bottom: var(--spacing-lg);
   position: relative;
 }
