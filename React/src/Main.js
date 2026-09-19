@@ -1,6 +1,6 @@
 import React from "react";
 import HeroSection from "./HeroSection";
-
+import ServicesSection from "./ServicesSection";
 import BookingCallToAction from "./BookingCallToAction";
 
 import "./Main.css";
@@ -12,10 +12,12 @@ function Main({ isAuthenticated, userRole, isLoading }) {
         <HeroSection />
       </div>
 
-      <div className="container text-center">
+      <div className="container">
         <div className="row">
           <div className="col-12">
             <div className="main-container">
+              <ServicesSection />
+
               <div>
                 <BookingCallToAction
                   isAuthenticated={isAuthenticated}
@@ -23,19 +25,6 @@ function Main({ isAuthenticated, userRole, isLoading }) {
                   isLoading={isLoading}
                 />
               </div>
-
-              <section className="hero">
-                <h2 className="hero-title">Our Services:</h2>
-
-                <ul className="list-unstyled mt-3">
-                  <li>MOT</li>
-                  <li>Servicing</li>
-                  <li>Brakes</li>
-                  <li>Tyres</li>
-                  <li>Diagnostics</li>
-                  <li>Repairs</li>
-                </ul>
-              </section>
             </div>
           </div>
         </div>
