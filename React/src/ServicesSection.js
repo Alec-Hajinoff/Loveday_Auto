@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import motIcon from "./Images/mot_icon.svg";
 import wheelIcon from "./Images/wheel_icon.svg";
+import diagnosticsIcon from "./Images/diagnostics_icon.svg";
 import "./ServicesSection.css";
 
 function ServicesSection() {
@@ -25,6 +26,7 @@ function ServicesSection() {
       title: "Diagnostics & Repairs",
       description:
         "Advanced computerised engine diagnostics to pinpoint fault codes quickly, backed by high-quality mechanical repairs.",
+      icon: diagnosticsIcon,
     },
   ];
 
