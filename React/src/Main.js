@@ -2,6 +2,7 @@ import React from "react";
 import HeroSection from "./HeroSection";
 import ServicesSection from "./ServicesSection";
 import BookingCallToAction from "./BookingCallToAction";
+import WhyChooseUs from "./WhyChooseUs";
 
 import "./Main.css";
 
@@ -24,6 +25,10 @@ function Main({ isAuthenticated, userRole, isLoading }) {
                   userRole={userRole}
                   isLoading={isLoading}
                 />
+              </div>
+
+              <div>
+                <WhyChooseUs />
               </div>
             </div>
           </div>
