@@ -27,3 +27,17 @@
 .footer-wrapper a:hover {
   color: var(--color-primary-tint);
 }
+
+.footer-builder-wrapper {
+  margin-top: 0.25rem;
+}
+
+.footer-builder-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-inverse);
+}
+
+.footer-builder-link {
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+}
