@@ -70,7 +70,6 @@
 
 .booking-cta-btn:hover {
   background-color: var(--btn-bg-secondary-hover);
-  color: var(--btn-text-inverse);
 }
 
 .booking-cta-btn:disabled {
