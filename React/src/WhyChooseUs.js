@@ -13,13 +13,14 @@ function WhyChooseUs() {
     <section className="why-choose-section">
       <div className="container">
         <div className="row g-4 align-items-stretch">
-          <div className="col-lg-6">
+          <div className="col-12 col-md-6 col-lg-6 col-xl-6">
             <div className="why-choose-container">
               <div className="why-choose-card">
                 <h2 className="why-choose-heading">Why Choose Us?</h2>
-                <ul className="why-choose-list">
+
+                <ul className="why-choose-list gap-3">
                   {reasons.map((reason, index) => (
-                    <li key={index} className="why-choose-item">
+                    <li key={index} className="why-choose-item mb-2 mb-md-0">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -38,7 +39,7 @@ function WhyChooseUs() {
             </div>
           </div>
 
-          <div className="col-lg-6">
+          <div className="col-12 col-md-6 col-lg-6 col-xl-6">
             <div className="contact-us-container">
               <div className="contact-us-card">
                 <h2 className="why-choose-heading">Contact Us</h2>
