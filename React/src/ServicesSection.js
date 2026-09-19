@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import motIcon from "./Images/mot_icon.svg";
 import wheelIcon from "./Images/wheel_icon.svg";
 import "./ServicesSection.css";
 
@@ -10,6 +11,7 @@ function ServicesSection() {
       title: "MOT & Servicing",
       description:
         "Comprehensive statutory MOT testing and routine multi-point vehicle servicing designed to keep your car running safely and efficiently.",
+      icon: motIcon,
     },
     {
       id: 2,
