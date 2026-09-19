@@ -55,13 +55,12 @@ function WhyChooseUs() {
                       <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                     </svg>
                     <div className="contact-us-content">
-                      <span className="contact-us-label">Address</span>
                       <span className="contact-us-value">
                         50a Southbury Rd, Enfield, EN1 1YB
                       </span>
                     </div>
                   </div>
-
+                  <br></br>
                   <div className="contact-us-row">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -77,12 +76,12 @@ function WhyChooseUs() {
                       />
                     </svg>
                     <div className="contact-us-content">
-                      <span className="contact-us-label">Phone</span>
                       <a href="tel:02083675888" className="contact-us-value">
                         020 8367 5888
                       </a>
                     </div>
                   </div>
+                  <br></br>
 
                   <div className="contact-us-row">
                     <svg
@@ -96,7 +95,6 @@ function WhyChooseUs() {
                       <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.756z" />
                     </svg>
                     <div className="contact-us-content">
-                      <span className="contact-us-label">Email</span>
                       <a
                         href="mailto:info@lovedayauto.com"
                         className="contact-us-value"
@@ -105,6 +103,7 @@ function WhyChooseUs() {
                       </a>
                     </div>
                   </div>
+                  <br></br>
 
                   <div className="contact-us-row">
                     <svg
@@ -118,9 +117,8 @@ function WhyChooseUs() {
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.75.75 0 0 0-1.5 0v4.25c0 .276.11.528.293.71l3 3a.75.75 0 0 0 1.06-1.06L8.5 7.44V3.5z" />
                     </svg>
                     <div className="contact-us-content">
-                      <span className="contact-us-label">Opening Hours</span>
                       <span className="contact-us-value">
-                        Mon–Fri 8am–4:30pm
+                        Mon - Fri | 8am - 4:30pm
                       </span>
                     </div>
                   </div>
