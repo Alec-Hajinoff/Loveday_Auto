@@ -55,7 +55,7 @@
 
 .booking-cta-btn {
   background-color: var(--btn-bg-secondary);
-  color: var(--btn-text-inverse);
+  color: var(--color-text-inverse);
   font-weight: var(--font-weight-medium);
   border: none;
   border-radius: var(--radius-md);

@@ -45,8 +45,7 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
           </div>
           <h3 className="booking-cta-title">Need a Garage Appointment?</h3>
           <p className="booking-cta-text">
-            Book your slot online for MOT, servicing, or repairs at Loveday
-            Auto.
+            Book your slot online for MOT, servicing, or repairs.
           </p>
           <button
             onClick={handleBookingClick}
