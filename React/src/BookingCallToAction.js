@@ -27,14 +27,14 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
   };
 
   return (
-    <div className="booking-cta-container">
-      <div className="booking-cta-card">
-        <div className="booking-cta-card-body">
+    <section className="booking-cta-section">
+      <div className="booking-cta-container">
+        <div className="booking-cta-card">
           <div className="booking-cta-calendar-placeholder">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="48"
-              height="48"
+              width="28"
+              height="28"
               fill="currentColor"
               className="bi bi-calendar-check booking-cta-icon"
               viewBox="0 0 16 16"
@@ -50,56 +50,56 @@ function BookingCallToAction({ isAuthenticated, userRole, isLoading }) {
           </p>
           <button
             onClick={handleBookingClick}
-            className="btn btn-primary btn-lg booking-cta-btn"
+            className="booking-cta-btn"
             disabled={isLoading}
           >
             {isLoading ? "Checking session..." : "Book an Appointment"}
           </button>
         </div>
-      </div>
 
-      {showModal && (
-        <div className="booking-cta-modal-backdrop" onClick={closeModal}>
-          <div
-            className="booking-cta-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="booking-cta-modal-header">
-              <h5 className="booking-cta-modal-title">Sign In Required</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={closeModal}
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="booking-cta-modal-body">
-              <p>
-                Please log in or sign up for an account to schedule your
-                appointment slot.
-              </p>
-            </div>
+        {showModal && (
+          <div className="booking-cta-modal-backdrop" onClick={closeModal}>
+            <div
+              className="booking-cta-modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="booking-cta-modal-header">
+                <h5 className="booking-cta-modal-title">Sign In Required</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={closeModal}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="booking-cta-modal-body">
+                <p>
+                  Please log in or sign up for an account to schedule your
+                  appointment slot.
+                </p>
+              </div>
 
-            <div className="booking-cta-modal-footer flex-column flex-sm-row">
-              <Link
-                to="/UserLogin"
-                className="btn btn-primary"
-                onClick={closeModal}
-              >
-                Log In
-              </Link>
-              <Link
-                to="/UserRegistration"
-                className="btn btn-outline-secondary"
-                onClick={closeModal}
-              >
-                Sign Up
-              </Link>
+              <div className="booking-cta-modal-footer flex-column flex-sm-row">
+                <Link
+                  to="/UserLogin"
+                  className="btn btn-primary"
+                  onClick={closeModal}
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/UserRegistration"
+                  className="btn btn-outline-secondary"
+                  onClick={closeModal}
+                >
+                  Sign Up
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </section>
   );
 }
 
