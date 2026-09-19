@@ -6,7 +6,7 @@
   border-bottom-right-radius: var(--radius-md);
   border-top-left-radius: var(--radius-md);
   border-top-right-radius: var(--radius-md);
-  margin-top: var(--spacing-xl);
+  margin-top: var(--spacing-xs);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
 }
