@@ -15,8 +15,8 @@ function Main({ isAuthenticated, userRole, isLoading }) {
       </div>
 
       <div className="container">
-        <div className="row">
-          <div className="col-12">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-11 col-lg-10 mx-auto">
             <div className="main-container">
               <ServicesSection />
 
