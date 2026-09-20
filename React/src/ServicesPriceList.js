@@ -1,5 +1,6 @@
 import React from "react";
 import "./ServicesPriceList.css";
+import BookingCallToAction from "./BookingCallToAction";
 
 const servicesData = [
   {
@@ -86,29 +87,43 @@ const servicesData = [
   },
 ];
 
-function ServicesPriceList() {
+function ServicesPriceList({ isAuthenticated, userRole, isLoading }) {
   return (
-    <div className="container services-price-card">
-      <div className="services-list">
-        {servicesData.map((service, index) => (
-          <div
-            key={index}
-            className="row services-list-item align-items-center py-3"
-          >
-            <div className="col-12 col-md-7 service-info mb-2 mb-md-0">
-              <span className="service-name">{service.name}</span>
-              <span className="service-description">{service.description}</span>
-            </div>
+    <div>
+      <div className="container services-price-card">
+        <div className="services-list">
+          {servicesData.map((service, index) => (
+            <div
+              key={index}
+              className="row services-list-item align-items-center py-3"
+            >
+              <div className="col-12 col-md-7 service-info mb-2 mb-md-0">
+                <span className="service-name">{service.name}</span>
+                <span className="service-description">
+                  {service.description}
+                </span>
+              </div>
 
-            <div className="col-6 col-md-2 text-start text-md-center service-duration-wrapper">
-              <span className="service-duration-badge">{service.duration}</span>
-            </div>
+              <div className="col-6 col-md-2 text-start text-md-center service-duration-wrapper">
+                <span className="service-duration-badge">
+                  {service.duration}
+                </span>
+              </div>
 
-            <div className="col-6 col-md-3 text-end service-price-wrapper">
-              <span className="service-price">{service.price}</span>
+              <div className="col-6 col-md-3 text-end service-price-wrapper">
+                <span className="service-price">{service.price}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <BookingCallToAction
+          isAuthenticated={isAuthenticated}
+          userRole={userRole}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
