@@ -52,7 +52,7 @@
 .service-price {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  color: var(--color-primary-shade);
 }
 
 @media (max-width: 767.98px) {
