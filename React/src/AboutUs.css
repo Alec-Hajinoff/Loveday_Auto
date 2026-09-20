@@ -27,6 +27,14 @@
   margin-bottom: 0;
 }
 
+.services-hero-subheadline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-inverse);
+
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 .about-us-container {
   margin-top: 2rem;
   margin-bottom: 3rem;

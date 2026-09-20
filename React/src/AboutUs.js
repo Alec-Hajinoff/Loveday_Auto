@@ -8,9 +8,11 @@ function AboutUs() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
-              <h1 className="about-us-hero-headline">
-                Roots in the Community: A Century of Motoring Heritage
-              </h1>
+              <h1 className="about-us-hero-headline">Roots in the Community</h1>
+
+              <p className="services-hero-subheadline">
+                A Century of Motoring Heritage
+              </p>
             </div>
           </div>
         </div>
