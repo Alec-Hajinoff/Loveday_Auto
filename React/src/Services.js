@@ -8,7 +8,7 @@ function Services() {
       <section className="services-hero-wrapper">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-12 col-md-10 col-lg-8">
+            <div>
               <h1 className="services-hero-headline">Our Services & Pricing</h1>
               <p className="services-hero-subheadline">
                 Expert repairs, routine maintenance and MOT testing to keep you
