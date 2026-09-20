@@ -1,6 +1,5 @@
 .services-price-card {
-  max-width: 1000px;
-  margin: 0.5rem auto;
+  margin: 0.5rem 0;
   padding: 2rem;
   background-color: var(--color-surface-card);
   border-radius: var(--radius-lg);
