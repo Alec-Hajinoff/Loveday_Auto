@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import "./UserRegistration.css";
-import { useNavigate } from "react-router-dom";
+
 import { registerUser } from "./ApiService";
 
 function UserRegistration() {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
