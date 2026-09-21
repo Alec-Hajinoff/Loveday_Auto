@@ -4,11 +4,20 @@ import { adminBookingsList } from "./ApiService";
 
 import AdminCancelBooking from "./AdminCancelBooking";
 
+const formatISO = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
 function AdminBookingsList() {
   const [upcoming, setUpcoming] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 5;
 
   const fetchBookings = useCallback(async () => {
     try {
@@ -60,6 +69,29 @@ function AdminBookingsList() {
     return <div className="alert alert-danger my-3">{error}</div>;
   }
 
+  const todayStr = formatISO(new Date());
+  const filteredUpcoming = upcoming.filter(
+    (booking) => booking.date >= todayStr,
+  );
+
+  const totalPages = Math.ceil(filteredUpcoming.length / pageSize) || 1;
+  const paginatedBookings = filteredUpcoming.slice(
+    currentPage * pageSize,
+    (currentPage + 1) * pageSize,
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => (prev + 1 < totalPages ? prev + 1 : prev));
+  };
+
+  const handleTodayPage = () => {
+    setCurrentPage(0);
+  };
+
   const renderBookingCard = (booking) => (
     <div key={booking.appointment_id} className="booking-card">
       <div className="booking-card-header">
@@ -107,12 +139,45 @@ function AdminBookingsList() {
     <div className="admin-bookings-container">
       <div className="bookings-section mb-0">
         <h6 className="text-primary mb-3">Upcoming Appointments</h6>
-        {upcoming.length === 0 ? (
+        {filteredUpcoming.length === 0 ? (
           <p className="text-muted small">
-            No upcoming appointments scheduled.
+            No upcoming appointments scheduled from today onwards.
           </p>
         ) : (
-          upcoming.map((b) => renderBookingCard(b))
+          <>
+            {paginatedBookings.map((b) => renderBookingCard(b))}
+
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <span className="text-muted small">
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              <div className="admin-calendar-nav">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 0}
+                >
+                  &lt; Prev
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={handleTodayPage}
+                >
+                  Today
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={handleNextPage}
+                  disabled={currentPage + 1 >= totalPages}
+                >
+                  Next &gt;
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
