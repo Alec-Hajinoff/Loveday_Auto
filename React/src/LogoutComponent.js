@@ -19,7 +19,7 @@ const LogoutComponent = ({ onLogoutComplete }) => {
   };
 
   return (
-    <button onClick={handleLogout} className="btn-text">
+    <button onClick={handleLogout} className="header-btn-ghost">
       Logout
     </button>
   );
