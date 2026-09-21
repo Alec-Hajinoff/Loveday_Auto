@@ -11,7 +11,11 @@ function Main({ isAuthenticated, userRole, isLoading }) {
   return (
     <div className="overflow-hidden">
       <div>
-        <HeroSection />
+        <HeroSection
+          isAuthenticated={isAuthenticated}
+          userRole={userRole}
+          isLoading={isLoading}
+        />
       </div>
 
       <div className="container">
