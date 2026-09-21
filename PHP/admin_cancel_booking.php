@@ -146,20 +146,20 @@ try {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom($mailUsername, 'Hertford Standard Booking System');
+        $mail->setFrom($mailUsername, 'Loveday Auto Repairs');
         $mail->addAddress($customer_email);
 
         $mail->isHTML(false);
         $mail->Subject = 'Appointment Cancellation Notice - ' . $formatted_date;
         $mail->Body    = "Dear {$appointment['first_name']} {$appointment['surname']},\n\n"
-            . "Please be advised that your booking at Hertford Standard has been cancelled by the garage.\n\n"
+            . "Please be advised that your booking at Loveday Auto Repairs has been cancelled.\n\n"
             . "--- CANCELLED APPOINTMENT DETAILS ---\n"
             . "Service: {$service_name}\n"
             . "Vehicle Registration: {$appointment['vehicle_reg']}\n"
             . "Date: {$formatted_date}\n"
             . "Time: {$formatted_start} - {$formatted_end}\n\n"
             . "If you have any questions or wish to reschedule, please contact us or visit our booking portal.\n\n"
-            . "Kind regards,\nHertford Standard Team\n";
+            . "Kind regards,\nLoveday Auto Repairs Team\n";
 
         $mail->send();
 
