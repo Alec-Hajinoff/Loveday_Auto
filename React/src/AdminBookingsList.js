@@ -138,19 +138,10 @@ function AdminBookingsList() {
   return (
     <div className="admin-bookings-container">
       <div className="bookings-section mb-0">
-        <h6 className="text-primary mb-3">Upcoming Appointments</h6>
-        {filteredUpcoming.length === 0 ? (
-          <p className="text-muted">
-            No upcoming appointments scheduled from today onwards.
-          </p>
-        ) : (
-          <>
-            {paginatedBookings.map((b) => renderBookingCard(b))}
-
-            <div className="d-flex justify-content-between align-items-center mt-3">
-              <span className="text-muted small">
-                Page {currentPage + 1} of {totalPages}
-              </span>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h6 className="text-primary mb-0">Upcoming Appointments</h6>
+          {filteredUpcoming.length > 0 && (
+            <div className="d-flex align-items-center gap-3">
               <div className="admin-calendar-nav">
                 <button
                   type="button"
@@ -177,7 +168,15 @@ function AdminBookingsList() {
                 </button>
               </div>
             </div>
-          </>
+          )}
+        </div>
+
+        {filteredUpcoming.length === 0 ? (
+          <p className="text-muted small">
+            No upcoming appointments scheduled from today onwards.
+          </p>
+        ) : (
+          <>{paginatedBookings.map((b) => renderBookingCard(b))}</>
         )}
       </div>
     </div>
