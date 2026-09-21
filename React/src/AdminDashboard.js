@@ -27,7 +27,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "bookings" ? "active" : ""}`}
                 onClick={() => setActiveTab("bookings")}
               >
-                Bookings & Calendar
+                Bookings
               </button>
             </li>
             <li className="nav-item">
@@ -35,7 +35,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "products" ? "active" : ""}`}
                 onClick={() => setActiveTab("products")}
               >
-                Products & Services
+                Services
               </button>
             </li>
             <li className="nav-item">
@@ -43,7 +43,7 @@ function AdminDashboard() {
                 className={`nav-link ${activeTab === "availability" ? "active" : ""}`}
                 onClick={() => setActiveTab("availability")}
               >
-                Appointment Availability
+                Opening Hours
               </button>
             </li>
           </ul>
