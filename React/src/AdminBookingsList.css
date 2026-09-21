@@ -39,13 +39,7 @@
 }
 
 .booking-detail-item {
-  font-size: 0.9rem;
   margin-bottom: 0.25rem;
-  color: #495057;
-}
-
-.booking-detail-item strong {
-  color: #212529;
 }
 
 .admin-cancel-placeholder {
