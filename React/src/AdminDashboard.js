@@ -21,7 +21,7 @@ function AdminDashboard() {
             </p>
           </div>
 
-          <ul className="nav nav-tabs mb-4">
+          <ul className="nav nav-tabs mb-4 mt-4">
             <li className="nav-item">
               <button
                 className={`nav-link ${activeTab === "bookings" ? "active" : ""}`}
