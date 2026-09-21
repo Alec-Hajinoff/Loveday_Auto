@@ -115,7 +115,7 @@ function AdminBookingCalendar() {
   return (
     <div className="admin-booking-calendar-container">
       <div className="admin-calendar-header">
-        <h4>Garage Schedule Overview</h4>
+        <h4>Availability Overview</h4>
         <div className="admin-calendar-nav">
           <button
             type="button"
@@ -143,8 +143,7 @@ function AdminBookingCalendar() {
       </div>
 
       <p className="fw-bold">
-        Schedule for {formatUKDate(rawWeekDays[0])} -{" "}
-        {formatUKDate(rawWeekDays[6])}
+        {formatUKDate(rawWeekDays[0])} - {formatUKDate(rawWeekDays[6])}
       </p>
 
       {loading && <div>Loading schedule...</div>}
