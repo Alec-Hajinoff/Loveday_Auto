@@ -84,7 +84,7 @@ function UserLogin() {
       } else {
         setErrorMessage(
           data.message ||
-            "We couldn’t sign you in at the moment. Please check your details and try again.",
+            "We couldn't sign you in at the moment. Please check your details and try again.",
         );
         clearErrorMessageAfterDelay();
         setFormData({ password: "" });
