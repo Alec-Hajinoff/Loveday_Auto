@@ -40,4 +40,8 @@
 
 .booking-detail-item {
   margin-bottom: 0.25rem;
+
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--color-text-main);
 }
