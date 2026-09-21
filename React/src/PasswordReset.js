@@ -132,8 +132,8 @@ function PasswordReset() {
     }
   };
 
-  const handleReturnHome = () => {
-    navigate("/");
+  const handleReturnToLogin = () => {
+    navigate("/UserLogin");
   };
 
   if (tokenStatus.checking) {
@@ -160,8 +160,8 @@ function PasswordReset() {
             {tokenStatus.message}
           </div>
           <div className="return-home-container">
-            <button onClick={handleReturnHome} className="btn btn-secondary">
-              Return to home page
+            <button onClick={handleReturnToLogin} className="btn btn-secondary">
+              Return to login
             </button>
           </div>
         </div>
@@ -228,10 +228,10 @@ function PasswordReset() {
                   {successMessage}
                   <div className="return-home-button-container">
                     <button
-                      onClick={handleReturnHome}
+                      onClick={handleReturnToLogin}
                       className="btn btn-secondary return-home-button"
                     >
-                      Return to home page
+                      Return to login
                     </button>
                   </div>
                 </div>
