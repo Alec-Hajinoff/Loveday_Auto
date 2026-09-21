@@ -6,7 +6,7 @@ import AdminCancelBooking from "./AdminCancelBooking";
 
 function AdminBookingsList() {
   const [upcoming, setUpcoming] = useState([]);
-  const [past, setPast] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -15,7 +15,6 @@ function AdminBookingsList() {
       const response = await adminBookingsList();
       if (response.status === "success") {
         setUpcoming(response.upcoming);
-        setPast(response.past);
       } else {
         setError(response.message || "Could not load bookings.");
       }
@@ -52,16 +51,14 @@ function AdminBookingsList() {
     return <div className="alert alert-danger my-3">{error}</div>;
   }
 
-  const renderBookingCard = (booking, isUpcoming) => (
+  const renderBookingCard = (booking) => (
     <div key={booking.appointment_id} className="booking-card">
       <div className="booking-card-header">
         <span className="booking-date">
           {booking.date} ({booking.start_time.slice(0, 5)} -{" "}
           {booking.end_time.slice(0, 5)})
         </span>
-        <span className={isUpcoming ? "badge-upcoming" : "badge-past"}>
-          {isUpcoming ? "Upcoming" : "Past"}
-        </span>
+        <span className="badge-upcoming">Upcoming</span>
       </div>
 
       <div className="booking-card-body">
@@ -89,35 +86,24 @@ function AdminBookingsList() {
           </div>
         )}
 
-        {isUpcoming && (
-          <AdminCancelBooking
-            appointmentId={booking.appointment_id}
-            onBookingCancelled={handleBookingCancelled}
-          />
-        )}
+        <AdminCancelBooking
+          appointment_id={booking.appointment_id}
+          onBookingCancelled={handleBookingCancelled}
+        />
       </div>
     </div>
   );
 
   return (
     <div className="admin-bookings-container">
-      <div className="bookings-section">
+      <div className="bookings-section mb-0">
         <h5 className="text-primary mb-3">Upcoming Appointments</h5>
         {upcoming.length === 0 ? (
           <p className="text-muted small">
             No upcoming appointments scheduled.
           </p>
         ) : (
-          upcoming.map((b) => renderBookingCard(b, true))
-        )}
-      </div>
-
-      <div className="bookings-section">
-        <h5 className="text-secondary mb-3">Past Appointments</h5>
-        {past.length === 0 ? (
-          <p className="text-muted small">No past appointments found.</p>
-        ) : (
-          past.map((b) => renderBookingCard(b, false))
+          upcoming.map((b) => renderBookingCard(b))
         )}
       </div>
     </div>
