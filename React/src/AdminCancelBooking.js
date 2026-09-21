@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./AdminCancelBooking.css";
 import { adminCancelBooking } from "./ApiService";
 
-function AdminCancelBooking({ appointmentId, onBookingCancelled }) {
+function AdminCancelBooking({ appointment_id, onBookingCancelled }) {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,7 @@ function AdminCancelBooking({ appointmentId, onBookingCancelled }) {
   const handleSecondClick = async () => {
     setLoading(true);
     try {
-      const response = await adminCancelBooking(appointmentId);
+      const response = await adminCancelBooking(appointment_id);
       if (response.status === "success") {
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
 
