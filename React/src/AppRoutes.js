@@ -30,7 +30,16 @@ export default function AppRoutes({ isAuthenticated, userRole, isLoading }) {
         }
       />
 
-      <Route path="/Services" element={<Services />} />
+      <Route
+        path="/Services"
+        element={
+          <Services
+            isAuthenticated={isAuthenticated}
+            userRole={userRole}
+            isLoading={isLoading}
+          />
+        }
+      />
 
       <Route path="/AboutUs" element={<AboutUs />} />
 
