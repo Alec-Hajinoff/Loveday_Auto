@@ -3,11 +3,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
 }
 
 .user-registration-wrapper {
   width: 100%;
+}
+
+.user-registration-divider {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+
+  font-weight: 500;
+
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .user-registration-divider {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 14px;
+  }
 }
 
 .user-registration-wrapper .btn-secondary {

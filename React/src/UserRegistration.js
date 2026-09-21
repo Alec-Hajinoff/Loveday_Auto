@@ -88,6 +88,9 @@ function UserRegistration() {
       <div className="row justify-content-center w-100">
         <div className="col-12 col-lg-3">
           <div className="user-registration-wrapper">
+            <p className="user-registration-divider">
+              Please enter your details below to create your account.
+            </p>
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
               <div className="form-group">
                 <input
