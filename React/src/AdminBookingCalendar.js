@@ -115,7 +115,7 @@ function AdminBookingCalendar() {
   return (
     <div className="admin-booking-calendar-container">
       <div className="admin-calendar-header">
-        <h4>Availability Overview</h4>
+        <h6 className="text-primary mb-0">Availability Overview</h6>
         <div className="admin-calendar-nav">
           <button
             type="button"
