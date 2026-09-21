@@ -174,7 +174,9 @@ function PasswordReset() {
       <div className="row justify-content-center">
         <div className="col-12 col-lg-3">
           <div className="password-reset-wrapper">
-            <p className="password-reset-divider">Please reset your password</p>
+            <p className="password-reset-divider">
+              Please enter your new password and confirm it below.
+            </p>
 
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-group">
