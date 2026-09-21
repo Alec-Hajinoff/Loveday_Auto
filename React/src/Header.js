@@ -25,7 +25,9 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           <div className="col-12 col-md-6 text-end d-flex align-items-center justify-content-md-end justify-content-start gap-3">
             {!isLoading &&
               (isAuthenticated ? (
-                <LogoutComponent onLogoutComplete={onLogoutComplete} />
+                <div className="d-flex align-items-center justify-content-end w-100">
+                  <LogoutComponent onLogoutComplete={onLogoutComplete} />
+                </div>
               ) : (
                 <div className="d-flex align-items-center justify-content-end gap-3 w-100">
                   <Link
