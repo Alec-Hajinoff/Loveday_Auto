@@ -134,6 +134,10 @@ function UserLogin() {
       <div className="row justify-content-center w-100">
         <div className="col-12 col-lg-3">
           <div className="user-login-wrapper">
+            <p className="user-login-divider">
+              Please enter your login details below to access your account.
+            </p>
+
             <form className="row g-2" onSubmit={handleSubmit} noValidate>
               <div className="form-group">
                 <input

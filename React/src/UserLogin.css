@@ -10,6 +10,27 @@
   width: 100%;
 }
 
+.user-login-divider {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+  padding: 15px;
+  font-weight: 500;
+
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .user-login-divider {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
 .user-login-wrapper .btn-secondary {
   background-color: var(--btn-bg-secondary);
   border: 1px solid transparent;
