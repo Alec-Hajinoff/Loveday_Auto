@@ -142,10 +142,6 @@ function AdminBookingCalendar() {
         </div>
       </div>
 
-      <p className="fw-bold">
-        {formatUKDate(rawWeekDays[0])} - {formatUKDate(rawWeekDays[6])}
-      </p>
-
       {loading && <div>Loading schedule...</div>}
       {message && <div className="text-info mb-2">{message}</div>}
 
