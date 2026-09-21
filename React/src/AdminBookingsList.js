@@ -97,7 +97,7 @@ function AdminBookingsList() {
   return (
     <div className="admin-bookings-container">
       <div className="bookings-section mb-0">
-        <h5 className="text-primary mb-3">Upcoming Appointments</h5>
+        <h6 className="text-primary mb-3">Upcoming Appointments</h6>
         {upcoming.length === 0 ? (
           <p className="text-muted small">
             No upcoming appointments scheduled.
