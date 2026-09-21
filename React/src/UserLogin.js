@@ -80,19 +80,19 @@ function UserLogin() {
       } else if (data.status === "unverified") {
         setUnverifiedMessage(data.message);
         clearUnverifiedMessageAfterDelay();
-        setFormData({ password: "" });
+        setFormData((prev) => ({ ...prev, password: "" }));
       } else {
         setErrorMessage(
           data.message ||
             "We couldn't sign you in at the moment. Please check your details and try again.",
         );
         clearErrorMessageAfterDelay();
-        setFormData({ password: "" });
+        setFormData((prev) => ({ ...prev, password: "" }));
       }
     } catch (error) {
       setErrorMessage(error.message);
       clearErrorMessageAfterDelay();
-      setFormData({ password: "" });
+      setFormData((prev) => ({ ...prev, password: "" }));
     } finally {
       setLoading(false);
     }
