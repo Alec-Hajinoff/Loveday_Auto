@@ -47,7 +47,7 @@ function BlockUnblockActionBar({
         {(!hasBlocked || (hasBlocked && hasAvailable)) && (
           <button
             type="button"
-            className="btn btn-warning btn-sm"
+            className="btn btn-sm block-unblock-btn-primary"
             onClick={() => handleToggleSlots("block")}
             disabled={loading}
           >
@@ -57,16 +57,17 @@ function BlockUnblockActionBar({
         {(hasBlocked || (!hasBlocked && !hasAvailable)) && (
           <button
             type="button"
-            className="btn btn-success btn-sm"
+            className="btn btn-sm block-unblock-btn-primary"
             onClick={() => handleToggleSlots("unblock")}
             disabled={loading}
           >
             {loading ? "Updating..." : "Unblock Selected Slots"}
           </button>
         )}
+
         <button
           type="button"
-          className="btn btn-outline-light btn-sm"
+          className="btn btn-sm block-unblock-btn-secondary"
           onClick={onClearSelection}
           disabled={loading}
         >
