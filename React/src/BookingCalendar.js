@@ -177,7 +177,7 @@ function BookingCalendar() {
 
       {!loading && (
         <div className="table-responsive">
-          <table className="table table-bordered calendar-table">
+          <table className="table calendar-table">
             <thead>
               <tr>
                 {workingDays.map((day) => (
