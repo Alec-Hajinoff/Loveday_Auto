@@ -34,28 +34,31 @@ function AvailabilityHorizonExtender() {
   };
 
   return (
-    <div className="card availability-horizon-card mt-4 mb-4">
-      <div className="card-body">
-        <h6 className="text-primary mt-4 mb-4">Generate appointment slots</h6>
-        <p className="availability-horizon-text mb-3">
-          Generate 3 additional months of appointment slots starting from the
-          end of the existing schedule horizon.
-        </p>
+    <div className="mt-4 mb-4">
+      <h6 className="text-primary mb-3">Generate appointment slots</h6>
 
-        {message && (
-          <div className={`alert alert-${statusType} py-2 mb-3`} role="alert">
-            {message}
-          </div>
-        )}
+      <div className="card availability-horizon-card">
+        <div className="card-body">
+          <p className="availability-horizon-text mb-3">
+            Generate 3 additional months of appointment slots starting from the
+            end of the existing schedule horizon.
+          </p>
 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleExtendHorizon}
-          disabled={loading}
-        >
-          {loading ? "Generating Slots..." : "Generate Additional Slots"}
-        </button>
+          {message && (
+            <div className={`alert alert-${statusType} py-2 mb-3`} role="alert">
+              {message}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleExtendHorizon}
+            disabled={loading}
+          >
+            {loading ? "Generating Slots..." : "Generate Additional Slots"}
+          </button>
+        </div>
       </div>
     </div>
   );
