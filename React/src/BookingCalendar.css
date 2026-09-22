@@ -71,3 +71,10 @@
   color: var(--color-text-main, #0f172a);
   border: 2px solid var(--color-complementary, #0b62f5);
 }
+
+.booking-success-alert {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--color-success);
+  margin-top: 0.5rem;
+}

@@ -267,7 +267,7 @@ function BookingCalendar({ onBookingComplete }) {
       {selectedSlots.length > 0 && (
         <div className="mt-3" ref={formSectionRef}>
           {successMessage ? (
-            <div className="alert alert-success" role="alert">
+            <div className="booking-success-alert" role="alert">
               {successMessage}
             </div>
           ) : (
