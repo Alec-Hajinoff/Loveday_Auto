@@ -172,7 +172,7 @@ function AdminBookingsList() {
         </div>
 
         {filteredUpcoming.length === 0 ? (
-          <p className="text-muted small">
+          <p className="small">
             No upcoming appointments scheduled from today onwards.
           </p>
         ) : (
