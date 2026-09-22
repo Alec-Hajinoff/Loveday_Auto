@@ -92,6 +92,16 @@ function BusinessHoursManager() {
         setMessage("Business hours saved successfully.");
         setMessageType("success");
         clearMessageAfterDelay();
+
+        setSchedule(
+          DAYS.map((day) => ({
+            day_of_week: day.day_of_week,
+            open_time: "",
+            close_time: "",
+            selected: false,
+          })),
+        );
+
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setMessage(response.message || "Failed to save business hours.");
@@ -176,14 +186,14 @@ function BusinessHoursManager() {
             </p>
             <p>For example, if your current opening days and hours are:</p>
             <ul>
-              <li>Monday: 08:00–17:00</li>
-              <li>Tuesday: 08:00–17:00</li>
+              <li>Monday: 08:00 - 17:00</li>
+              <li>Tuesday: 08:00 - 17:00</li>
             </ul>
             <p>and you want to add Wednesday, enter:</p>
             <ul>
-              <li>Monday: 08:00–17:00</li>
-              <li>Tuesday: 08:00–17:00</li>
-              <li>Wednesday: 08:00–17:00</li>
+              <li>Monday: 08:00 - 17:00</li>
+              <li>Tuesday: 08:00 - 17:00</li>
+              <li>Wednesday: 08:00 - 17:00</li>
             </ul>
             <p className="mb-0">
               Do not enter only the day you want to change or add. Any days not
