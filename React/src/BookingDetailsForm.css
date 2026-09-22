@@ -21,3 +21,10 @@
   font-size: var(--font-size-md);
   color: var(--color-success);
 }
+
+.booking-message-notice {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--color-success);
+  margin-top: 0.5rem;
+}
