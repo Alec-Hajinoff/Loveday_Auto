@@ -8,3 +8,9 @@
   font-size: var(--font-size-md);
   color: var(--color-text-main);
 }
+
+.success-message-system {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--color-success);
+}

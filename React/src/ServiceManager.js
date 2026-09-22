@@ -10,6 +10,12 @@ function ServiceManager() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const clearSuccessMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+    }, 5000);
+  };
+
   const handleAddService = () => {
     setServices((prev) => [...prev, { name: "", duration_minutes: "" }]);
   };
@@ -49,6 +55,8 @@ function ServiceManager() {
       const response = await serviceManager(services);
       if (response.status === "success") {
         setMessage("Services saved successfully.");
+
+        clearSuccessMessageAfterDelay();
 
         setServices([{ name: "", duration_minutes: "" }]);
       } else {
@@ -126,7 +134,9 @@ function ServiceManager() {
           </button>
         </div>
 
-        {message && <div className="mt-3 text-info">{message}</div>}
+        {message && (
+          <div className="mt-3 success-message-system">{message}</div>
+        )}
       </form>
     </div>
   );
