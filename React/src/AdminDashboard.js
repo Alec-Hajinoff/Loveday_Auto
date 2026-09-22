@@ -13,7 +13,7 @@ function AdminDashboard() {
   return (
     <div className="admin-container container">
       <div className="row justify-content-center">
-        <div className="col-12 col-lg-9">
+        <div className="col-12 col-md-11 col-lg-10 mx-auto">
           <div className="admin-header">
             <p>
               Welcome to your admin dashboard. Manage your bookings, services,
