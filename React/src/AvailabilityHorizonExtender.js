@@ -7,6 +7,13 @@ function AvailabilityHorizonExtender() {
   const [message, setMessage] = useState("");
   const [statusType, setStatusType] = useState("info");
 
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+      setStatusType("");
+    }, 5000);
+  };
+
   const handleExtendHorizon = async () => {
     setLoading(true);
     setMessage("");
@@ -19,15 +26,18 @@ function AvailabilityHorizonExtender() {
           response.message ||
             "Extended availability slots by 3 additional months.",
         );
+        clearMessageAfterDelay();
 
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setStatusType("danger");
         setMessage(response.message || "Failed to extend availability slots.");
+        clearMessageAfterDelay();
       }
     } catch (err) {
       setStatusType("danger");
       setMessage(err.message);
+      clearMessageAfterDelay();
     } finally {
       setLoading(false);
     }
@@ -45,7 +55,7 @@ function AvailabilityHorizonExtender() {
           </p>
 
           {message && (
-            <div className={`alert alert-${statusType} py-2 mb-3`} role="alert">
+            <div className={`availability-message ${statusType}`}>
               {message}
             </div>
           )}
