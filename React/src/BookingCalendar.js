@@ -18,13 +18,14 @@ const formatUKDate = (date) => {
   });
 };
 
-function BookingCalendar() {
+function BookingCalendar({ onBookingComplete }) {
   const [startDate, setStartDate] = useState(new Date());
   const [slotsData, setSlotsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const rawWeekDays = Array.from({ length: 7 }, (_, i) => {
     const day = new Date(startDate);
@@ -130,10 +131,20 @@ function BookingCalendar() {
       const response = await selectedAppointmentSlot(payload);
 
       if (response.status === "success") {
-        setSelectedSlots([]);
         await loadCalendarSlots(false);
-        setMessage("Booking confirmed!");
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
+
+        setSuccessMessage(
+          "Thank you, we've got your booking, and we look forward to seeing you!",
+        );
+
+        setTimeout(() => {
+          setSelectedSlots([]);
+          setSuccessMessage("");
+          if (onBookingComplete) {
+            onBookingComplete();
+          }
+        }, 5000);
       } else {
         setMessage(response.message || "Booking failed.");
       }
@@ -255,16 +266,24 @@ function BookingCalendar() {
 
       {selectedSlots.length > 0 && (
         <div className="mt-3" ref={formSectionRef}>
-          <div className="alert selected-slots-alert">
-            <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
-            {selectedSlots
-              .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
-              .join(", ")}
-          </div>
-          <BookingDetailsForm
-            onConfirm={handleConfirmBooking}
-            submitting={submitting}
-          />
+          {successMessage ? (
+            <div className="alert alert-success" role="alert">
+              {successMessage}
+            </div>
+          ) : (
+            <>
+              <div className="alert selected-slots-alert">
+                <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
+                {selectedSlots
+                  .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
+                  .join(", ")}
+              </div>
+              <BookingDetailsForm
+                onConfirm={handleConfirmBooking}
+                submitting={submitting}
+              />
+            </>
+          )}
         </div>
       )}
     </div>

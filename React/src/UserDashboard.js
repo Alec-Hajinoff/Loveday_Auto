@@ -49,7 +49,9 @@ function UserDashboard() {
 
           {activeTab === "book-service" && (
             <div className="tab-pane-content">
-              <BookingCalendar />
+              <BookingCalendar
+                onBookingComplete={() => setActiveTab("my-bookings")}
+              />
             </div>
           )}
 
