@@ -90,7 +90,7 @@ function BusinessHoursManager() {
 
   return (
     <div className="business-hours-container">
-      <h5>Business Hours</h5>
+      <h5>Add Opening Hours</h5>
       <form onSubmit={handleSubmit}>
         <div className="business-hours-layout">
           <div className="business-hours-form-side">
