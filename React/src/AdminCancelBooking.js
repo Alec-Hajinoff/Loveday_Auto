@@ -47,7 +47,7 @@ function AdminCancelBooking({ appointment_id, onBookingCancelled }) {
       ) : (
         <div className="admin-cancel-confirm-box">
           <p className="admin-cancel-confirm-text">
-            Cancel this customer booking?
+            Cancel this booking?
           </p>
           <button
             type="button"
