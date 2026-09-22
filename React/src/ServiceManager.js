@@ -62,58 +62,58 @@ function ServiceManager() {
   };
 
   return (
-    <div className="service-manager-container">
-      <h5>Garage Services Manager</h5>
+    <div className="service-manager-container col-12 col-md-11 col-lg-10 mx-auto">
+      <h5 className="mb-4">Garage Services Manager</h5>
       <form onSubmit={handleSubmit}>
         {services.map((service, index) => (
-          <div key={index} className="service-card">
-            <div className="service-card-header">
-              <span className="fw-bold">Service #{index + 1}</span>
-              {services.length > 1 && (
+          <div
+            key={index}
+            className="row g-3 align-items-center mb-3 pb-3 border-bottom"
+          >
+            <div className="col-12 col-md-6">
+              <label className="form-label">
+                Service #{index + 1} Name <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={service.name}
+                required
+                onChange={(e) => handleChange(index, "name", e.target.value)}
+              />
+            </div>
+
+            <div className="col-12 col-md-4">
+              <label className="form-label">
+                Duration (Minutes) <span className="text-danger">*</span>
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                min="1"
+                value={service.duration_minutes}
+                required
+                onChange={(e) =>
+                  handleChange(index, "duration_minutes", e.target.value)
+                }
+              />
+            </div>
+
+            {services.length > 1 && (
+              <div className="col-12 col-md-2 d-flex align-items-end">
                 <button
                   type="button"
-                  className="btn btn-outline-danger btn-sm"
+                  className="btn btn-outline-danger w-100 mt-2 mt-md-0"
                   onClick={() => handleRemoveService(index)}
                 >
                   Remove
                 </button>
-              )}
-            </div>
-
-            <div className="service-form-row">
-              <div className="service-field-group">
-                <label className="form-label">
-                  Service Name <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={service.name}
-                  required
-                  onChange={(e) => handleChange(index, "name", e.target.value)}
-                />
               </div>
-
-              <div className="service-field-group">
-                <label className="form-label">
-                  Duration (Minutes) <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  min="1"
-                  value={service.duration_minutes}
-                  required
-                  onChange={(e) =>
-                    handleChange(index, "duration_minutes", e.target.value)
-                  }
-                />
-              </div>
-            </div>
+            )}
           </div>
         ))}
 
-        <div className="d-flex gap-2 align-items-center mt-3">
+        <div className="d-flex gap-2 align-items-center mt-4">
           <button
             type="button"
             className="btn btn-outline-secondary"
