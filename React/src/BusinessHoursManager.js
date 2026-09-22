@@ -23,7 +23,15 @@ function BusinessHoursManager() {
   );
 
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 5000);
+  };
 
   const handleToggleDay = (dayOfWeek) => {
     setSchedule((prev) =>
@@ -46,6 +54,7 @@ function BusinessHoursManager() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setMessageType("");
 
     const selectedDays = schedule
       .filter((item) => item.selected)
@@ -57,6 +66,8 @@ function BusinessHoursManager() {
 
     if (selectedDays.length === 0) {
       setMessage("Please select at least one day.");
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
@@ -68,6 +79,8 @@ function BusinessHoursManager() {
       setMessage(
         "Please enter both opening and closing times for all selected days.",
       );
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
@@ -77,12 +90,18 @@ function BusinessHoursManager() {
       const response = await businessHoursManager(selectedDays);
       if (response.status === "success") {
         setMessage("Business hours saved successfully.");
+        setMessageType("success");
+        clearMessageAfterDelay();
         window.dispatchEvent(new CustomEvent("bookingUpdated"));
       } else {
         setMessage(response.message || "Failed to save business hours.");
+        setMessageType("error");
+        clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage(error.message);
+      setMessageType("error");
+      clearMessageAfterDelay();
     } finally {
       setLoading(false);
     }
@@ -173,7 +192,17 @@ function BusinessHoursManager() {
           </div>
         </div>
 
-        {message && <div className="mt-3 text-info">{message}</div>}
+        {message && (
+          <div
+            className={`mt-3 ${
+              messageType === "success"
+                ? "success-message-system"
+                : "error-message-system"
+            }`}
+          >
+            {message}
+          </div>
+        )}
 
         <button
           type="submit"
