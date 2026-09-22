@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./UserDashboard.css";
-import LogoutComponent from "./LogoutComponent";
+
 import BookingCalendar from "./BookingCalendar";
 import CustomerBookingsList from "./CustomerBookingsList";
 import CustomerProfile from "./CustomerProfile";
@@ -12,7 +12,7 @@ function UserDashboard() {
   return (
     <div className="user-dashboard-container container">
       <div className="row justify-content-center">
-        <div className="col-12 col-lg-9">
+        <div className="col-12 col-md-11 col-lg-10 mx-auto">
           <div className="admin-header">
             <p>
               Welcome to your dashboard. Here you can book and track your
