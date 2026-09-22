@@ -63,7 +63,7 @@ function ServiceManager() {
 
   return (
     <div className="service-manager-container col-12 col-md-11 col-lg-10 mx-auto">
-      <h5 className="mb-4">Garage Services Manager</h5>
+      <h6 className="text-primary mt-4 mb-4">Add Garage Services</h6>
       <form onSubmit={handleSubmit}>
         {services.map((service, index) => (
           <div
