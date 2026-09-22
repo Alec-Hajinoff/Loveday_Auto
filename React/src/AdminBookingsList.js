@@ -99,7 +99,6 @@ function AdminBookingsList() {
           {formatUKDate(booking.date)} ({booking.start_time.slice(0, 5)} -{" "}
           {booking.end_time.slice(0, 5)})
         </span>
-        <span className="badge-upcoming">Upcoming</span>
       </div>
 
       <div className="booking-card-body">
