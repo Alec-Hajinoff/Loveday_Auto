@@ -71,7 +71,7 @@ function ServiceManager() {
             className="row g-3 align-items-center mb-3 pb-3 border-bottom"
           >
             <div className="col-12 col-md-6">
-              <label className="form-label">
+              <label className="form-label system-font-label">
                 Service #{index + 1} Name <span className="text-danger">*</span>
               </label>
               <input
@@ -84,7 +84,7 @@ function ServiceManager() {
             </div>
 
             <div className="col-12 col-md-4">
-              <label className="form-label">
+              <label className="form-label system-font-label">
                 Duration (Minutes) <span className="text-danger">*</span>
               </label>
               <input
