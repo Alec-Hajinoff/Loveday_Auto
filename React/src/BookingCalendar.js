@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./BookingCalendar.css";
 
 import { bookingCalendar, selectedAppointmentSlot } from "./ApiService";
@@ -92,6 +92,8 @@ function BookingCalendar() {
     setStartDate(new Date());
   };
 
+  const formSectionRef = useRef(null);
+
   const handleSelectSlot = (slot) => {
     setSelectedSlots((prev) => {
       const exists = prev.some((s) => s.id === slot.id);
@@ -102,6 +104,15 @@ function BookingCalendar() {
       }
     });
   };
+
+  useEffect(() => {
+    if (selectedSlots.length > 0 && formSectionRef.current) {
+      formSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedSlots]);
 
   const handleConfirmBooking = async (details) => {
     if (selectedSlots.length === 0) return;
@@ -243,7 +254,7 @@ function BookingCalendar() {
       )}
 
       {selectedSlots.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-3" ref={formSectionRef}>
           <div className="alert selected-slots-alert">
             <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
             {selectedSlots
