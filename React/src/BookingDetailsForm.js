@@ -12,7 +12,15 @@ function BookingDetailsForm({ onConfirm, submitting }) {
   const [surname, setSurname] = useState("");
   const [phone, setPhone] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 5000);
+  };
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -36,32 +44,45 @@ function BookingDetailsForm({ onConfirm, submitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrorMessage("");
+    setMessage("");
+    setMessageType("");
 
     if (!vehicleReg.trim()) {
-      setErrorMessage("Vehicle registration number is required.");
+      setMessage(
+        "Please enter a valid vehicle registration number to proceed.",
+      );
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
     if (!serviceId && !notes.trim()) {
-      setErrorMessage(
-        "Please either select a garage service or provide details in the notes section.",
+      setMessage(
+        "Please select a garage service or provide details in the notes section.",
       );
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
     if (!firstName.trim()) {
-      setErrorMessage("First name is required.");
+      setMessage("Please enter your first name.");
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
     if (!surname.trim()) {
-      setErrorMessage("Surname is required.");
+      setMessage("Please enter your surname.");
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
     if (!phone.trim()) {
-      setErrorMessage("Phone number is required.");
+      setMessage("Please enter a telephone number so we can reach you.");
+      setMessageType("error");
+      clearMessageAfterDelay();
       return;
     }
 
@@ -85,22 +106,34 @@ function BookingDetailsForm({ onConfirm, submitting }) {
 
       <div className="card">
         <div className="card-body">
-          <form className="booking-details-form" onSubmit={handleSubmit}>
-            {errorMessage && (
-              <div className="alert alert-danger py-2">{errorMessage}</div>
+          <form
+            className="booking-details-form"
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            {message && (
+              <div
+                className={`mb-3 ${
+                  messageType === "success"
+                    ? "booking-message-success"
+                    : "booking-message-error"
+                }`}
+              >
+                {message}
+              </div>
             )}
 
             <div className="booking-form-group">
               <label className="form-label fw-bold">
                 Vehicle Registration <span className="text-danger">*</span>
               </label>
+
               <input
                 type="text"
                 className="form-control"
                 placeholder="e.g. AB12CDE"
                 value={vehicleReg}
                 onChange={(e) => setVehicleReg(e.target.value)}
-                required
               />
             </div>
 
@@ -153,7 +186,6 @@ function BookingDetailsForm({ onConfirm, submitting }) {
                   placeholder="John"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  required
                 />
               </div>
               <div className="col-md-6 booking-form-group">
@@ -166,14 +198,13 @@ function BookingDetailsForm({ onConfirm, submitting }) {
                   placeholder="Doe"
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
-                  required
                 />
               </div>
             </div>
 
             <div className="booking-form-group">
               <label className="form-label fw-bold">
-                Phone Number <span className="text-danger">*</span>
+                Telephone Number <span className="text-danger">*</span>
               </label>
               <input
                 type="tel"
@@ -181,7 +212,6 @@ function BookingDetailsForm({ onConfirm, submitting }) {
                 placeholder="e.g. 07123456789"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
               />
             </div>
 
