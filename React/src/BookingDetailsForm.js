@@ -152,6 +152,12 @@ function BookingDetailsForm({ onConfirm, submitting }) {
                   </option>
                 ))}
               </select>
+              {serviceId && (
+                <div className="text-muted mt-1 small">
+                  Please make sure that the appointment duration you selected is
+                  long enough for the service you have chosen.
+                </div>
+              )}
             </div>
 
             <div className="booking-form-group">
