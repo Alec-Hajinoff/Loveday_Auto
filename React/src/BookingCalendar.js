@@ -145,7 +145,7 @@ function BookingCalendar() {
   return (
     <div className="booking-calendar-container">
       <div className="calendar-header">
-        <h4>Available Appointments</h4>
+        <h6 className="text-primary mb-0">Available Appointments</h6>
         <div className="calendar-nav">
           <button
             type="button"
@@ -171,11 +171,6 @@ function BookingCalendar() {
           </button>
         </div>
       </div>
-
-      <p className="fw-bold">
-        Schedule for {formatUKDate(rawWeekDays[0])} -{" "}
-        {formatUKDate(rawWeekDays[6])}
-      </p>
 
       {loading && <div>Loading schedule...</div>}
       {message && <div className="text-info mb-2">{message}</div>}
