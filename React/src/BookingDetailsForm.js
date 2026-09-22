@@ -81,7 +81,7 @@ function BookingDetailsForm({ onConfirm, submitting }) {
 
   return (
     <form className="booking-details-form" onSubmit={handleSubmit}>
-      <h5 className="mb-3">Appointment Details</h5>
+      <h6 className="text-primary mb-3">Enter Appointment Details</h6>
 
       {errorMessage && (
         <div className="alert alert-danger py-2">{errorMessage}</div>
@@ -94,7 +94,7 @@ function BookingDetailsForm({ onConfirm, submitting }) {
         <input
           type="text"
           className="form-control"
-          placeholder="e.g. AB12 CDE"
+          placeholder="e.g. AB12CDE"
           value={vehicleReg}
           onChange={(e) => setVehicleReg(e.target.value)}
           required
@@ -129,13 +129,11 @@ function BookingDetailsForm({ onConfirm, submitting }) {
       </div>
 
       <div className="booking-form-group">
-        <label className="form-label fw-bold">
-          Notes / Additional Requirements
-        </label>
+        <label className="form-label fw-bold">Notes</label>
         <textarea
           className="form-control"
           rows="2"
-          placeholder="Describe your issue or custom request..."
+          placeholder="Describe your requirements..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
