@@ -102,7 +102,7 @@ function BookingDetailsForm({ onConfirm, submitting }) {
 
   return (
     <div>
-      <h6 className="text-primary mb-3">Enter Appointment Details</h6>
+      <h6 className="text-primary mb-2">Enter Appointment Details</h6>
 
       <div className="card">
         <div className="card-body">
