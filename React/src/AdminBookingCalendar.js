@@ -201,7 +201,7 @@ function AdminBookingCalendar() {
                               onClick={() => handleSelectSlot(slot)}
                             >
                               {slot.start_time} - {slot.end_time}
-                              {slot.status === "blocked" && " (Blocked)"}
+                              {slot.status === "blocked"}
                             </button>
                           )}
                         </td>
