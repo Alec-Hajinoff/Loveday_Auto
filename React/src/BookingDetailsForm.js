@@ -83,114 +83,118 @@ function BookingDetailsForm({ onConfirm, submitting }) {
     <div>
       <h6 className="text-primary mb-3">Enter Appointment Details</h6>
 
-      <form className="booking-details-form" onSubmit={handleSubmit}>
-        {errorMessage && (
-          <div className="alert alert-danger py-2">{errorMessage}</div>
-        )}
+      <div className="card">
+        <div className="card-body">
+          <form className="booking-details-form" onSubmit={handleSubmit}>
+            {errorMessage && (
+              <div className="alert alert-danger py-2">{errorMessage}</div>
+            )}
 
-        <div className="booking-form-group">
-          <label className="form-label fw-bold">
-            Vehicle Registration <span className="text-danger">*</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="e.g. AB12CDE"
-            value={vehicleReg}
-            onChange={(e) => setVehicleReg(e.target.value)}
-            required
-          />
+            <div className="booking-form-group">
+              <label className="form-label fw-bold">
+                Vehicle Registration <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="e.g. AB12CDE"
+                value={vehicleReg}
+                onChange={(e) => setVehicleReg(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="booking-form-group">
+              <label className="form-label fw-bold">Select Service</label>
+              <select
+                className="form-select"
+                value={serviceId}
+                onChange={(e) => setServiceId(e.target.value)}
+              >
+                <option value="">
+                  -- Choose a Service (Optional if notes provided) --
+                </option>
+                {services.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.name}{" "}
+                    {service.duration_minutes
+                      ? `(${service.duration_minutes} mins)`
+                      : ""}
+                  </option>
+                ))}
+              </select>
+
+              {selectedService && selectedService.duration_minutes && (
+                <small className="text-muted mt-1 d-block">
+                  Estimated duration: {selectedService.duration_minutes} minutes
+                </small>
+              )}
+            </div>
+
+            <div className="booking-form-group">
+              <label className="form-label fw-bold">Notes</label>
+              <textarea
+                className="form-control"
+                rows="2"
+                placeholder="Describe your requirements..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+
+            <div className="row">
+              <div className="col-md-6 booking-form-group">
+                <label className="form-label fw-bold">
+                  First Name <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="John"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="col-md-6 booking-form-group">
+                <label className="form-label fw-bold">
+                  Surname <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Doe"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="booking-form-group">
+              <label className="form-label fw-bold">
+                Phone Number <span className="text-danger">*</span>
+              </label>
+              <input
+                type="tel"
+                className="form-control"
+                placeholder="e.g. 07123456789"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm mt-2"
+              disabled={submitting}
+            >
+              {submitting ? "Booking..." : "Confirm Booking"}
+            </button>
+          </form>
         </div>
-
-        <div className="booking-form-group">
-          <label className="form-label fw-bold">Select Service</label>
-          <select
-            className="form-select"
-            value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
-          >
-            <option value="">
-              -- Choose a Service (Optional if notes provided) --
-            </option>
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.name}{" "}
-                {service.duration_minutes
-                  ? `(${service.duration_minutes} mins)`
-                  : ""}
-              </option>
-            ))}
-          </select>
-
-          {selectedService && selectedService.duration_minutes && (
-            <small className="text-muted mt-1 d-block">
-              Estimated duration: {selectedService.duration_minutes} minutes
-            </small>
-          )}
-        </div>
-
-        <div className="booking-form-group">
-          <label className="form-label fw-bold">Notes</label>
-          <textarea
-            className="form-control"
-            rows="2"
-            placeholder="Describe your requirements..."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
-
-        <div className="row">
-          <div className="col-md-6 booking-form-group">
-            <label className="form-label fw-bold">
-              First Name <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="John"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="col-md-6 booking-form-group">
-            <label className="form-label fw-bold">
-              Surname <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Doe"
-              value={surname}
-              onChange={(e) => setSurname(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="booking-form-group">
-          <label className="form-label fw-bold">
-            Phone Number <span className="text-danger">*</span>
-          </label>
-          <input
-            type="tel"
-            className="form-control"
-            placeholder="e.g. 07123456789"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn btn-primary btn-sm mt-2"
-          disabled={submitting}
-        >
-          {submitting ? "Booking..." : "Confirm Booking"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
