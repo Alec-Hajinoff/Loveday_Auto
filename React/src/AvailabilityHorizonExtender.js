@@ -36,9 +36,7 @@ function AvailabilityHorizonExtender() {
   return (
     <div className="card availability-horizon-card mt-4 mb-4">
       <div className="card-body">
-        <h5 className="availability-horizon-title mb-2">
-          Generate appointment slots
-        </h5>
+        <h6 className="text-primary mt-4 mb-4">Generate appointment slots</h6>
         <p className="availability-horizon-text mb-3">
           Generate 3 additional months of appointment slots starting from the
           end of the existing schedule horizon.
