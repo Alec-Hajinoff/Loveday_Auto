@@ -189,14 +189,14 @@ try {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom($mailUsername, 'Hertford Standard Booking System');
+        $mail->setFrom($mailUsername, 'Loveday Auto Repairs');
 
         foreach ($staff_recipients as $recipient_email) {
             $mail->addAddress($recipient_email);
         }
 
         $mail->isHTML(false);
-        $mail->Subject = 'New Booking Alert - ' . $first_name . ' ' . $surname . ' (' . $vehicle_reg . ')';
+        $mail->Subject = 'New Booking - ' . $first_name . ' ' . $surname . ' (' . $vehicle_reg . ')';
         $mail->Body    = "Hello,\n\nA new customer appointment has been booked.\n\n"
             . "--- CUSTOMER DETAILS ---\n"
             . "Name: {$first_name} {$surname}\n"
