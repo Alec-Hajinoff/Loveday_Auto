@@ -37,12 +37,11 @@ function AvailabilityHorizonExtender() {
     <div className="card availability-horizon-card mt-4 mb-4">
       <div className="card-body">
         <h5 className="availability-horizon-title mb-2">
-          Extend Appointment Horizon
+          Generate appointment slots
         </h5>
         <p className="availability-horizon-text mb-3">
-          Generate 3 additional months of appointment slots based on current
-          business hours, starting from the end of the existing schedule
-          horizon.
+          Generate 3 additional months of appointment slots starting from the
+          end of the existing schedule horizon.
         </p>
 
         {message && (
@@ -57,9 +56,7 @@ function AvailabilityHorizonExtender() {
           onClick={handleExtendHorizon}
           disabled={loading}
         >
-          {loading
-            ? "Generating Slots..."
-            : "Generate 3 Additional Months of Slots"}
+          {loading ? "Generating Slots..." : "Generate Additional Slots"}
         </button>
       </div>
     </div>
