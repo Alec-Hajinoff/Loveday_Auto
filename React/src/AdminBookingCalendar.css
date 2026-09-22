@@ -72,6 +72,15 @@
   color: var(--color-text-inverse, #ffffff);
 }
 
+.admin-calendar-helper-text {
+  font-size: 0.9rem;
+}
+
+.admin-calendar-helper-danger {
+  color: var(--color-danger, #ef4444);
+  font-weight: 600;
+}
+
 .admin-slot-booked {
   color: #6c757d;
   font-style: italic;

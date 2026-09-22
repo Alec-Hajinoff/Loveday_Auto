@@ -145,6 +145,14 @@ function AdminBookingCalendar() {
       {loading && <div>Loading schedule...</div>}
       {message && <div className="text-info mb-2">{message}</div>}
 
+      {!loading && slotsData.some((s) => s.status === "blocked") && (
+        <p className="mb-2 admin-calendar-helper-text">
+          Slots highlighted in{" "}
+          <span className="admin-calendar-helper-danger">red</span> are blocked.
+          Click a slot to unblock it.
+        </p>
+      )}
+
       {!loading && (
         <div className="table-responsive">
           <table className="table table-bordered admin-calendar-table">
@@ -201,7 +209,6 @@ function AdminBookingCalendar() {
                               onClick={() => handleSelectSlot(slot)}
                             >
                               {slot.start_time} - {slot.end_time}
-                              {slot.status === "blocked"}
                             </button>
                           )}
                         </td>
