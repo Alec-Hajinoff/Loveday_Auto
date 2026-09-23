@@ -9,6 +9,9 @@ function CustomerBookingsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [currentPastPage, setCurrentPastPage] = useState(0);
+  const pageSize = 5;
+
   const fetchBookings = useCallback(async () => {
     try {
       const response = await customerBookingsList();
@@ -51,6 +54,24 @@ function CustomerBookingsList() {
   if (error) {
     return <div className="alert alert-danger my-3">{error}</div>;
   }
+
+  const totalPastPages = Math.ceil(past.length / pageSize) || 1;
+  const paginatedPast = past.slice(
+    currentPastPage * pageSize,
+    (currentPastPage + 1) * pageSize,
+  );
+
+  const handlePrevPastPage = () => {
+    setCurrentPastPage((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextPastPage = () => {
+    setCurrentPastPage((prev) => (prev + 1 < totalPastPages ? prev + 1 : prev));
+  };
+
+  const handleTodayPastPage = () => {
+    setCurrentPastPage(0);
+  };
 
   const renderBookingCard = (booking, isUpcoming) => (
     <div key={booking.appointment_id} className="booking-card">
@@ -98,9 +119,7 @@ function CustomerBookingsList() {
       <div className="bookings-section">
         <h6 className="text-primary mb-3">Your Upcoming Appointments</h6>
         {upcoming.length === 0 ? (
-          <p className="text-muted">
-            No upcoming appointments scheduled.
-          </p>
+          <p className="text-muted">No upcoming appointments scheduled.</p>
         ) : (
           upcoming.map((b) => renderBookingCard(b, true))
         )}
@@ -111,7 +130,39 @@ function CustomerBookingsList() {
         {past.length === 0 ? (
           <p className="text-muted">No previous appointments found.</p>
         ) : (
-          past.map((b) => renderBookingCard(b, false))
+          <>
+            {paginatedPast.map((b) => renderBookingCard(b, false))}
+
+            {past.length > 0 && (
+              <div className="d-flex justify-content-end align-items-center mt-3">
+                <div className="admin-calendar-nav">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm me-2"
+                    onClick={handlePrevPastPage}
+                    disabled={currentPastPage === 0}
+                  >
+                    &lt; Prev
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm me-2"
+                    onClick={handleTodayPastPage}
+                  >
+                    Today
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={handleNextPastPage}
+                    disabled={currentPastPage + 1 >= totalPastPages}
+                  >
+                    Next &gt;
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
