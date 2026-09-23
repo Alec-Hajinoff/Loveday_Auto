@@ -1,9 +1,10 @@
 .customer-profile-card {
-  background-color: #f8f9fa;
+  background-color: var(--color-text-inverse);
   border: 1px solid #e3e6f0;
   border-radius: 8px;
   padding: 1.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .profile-header-flex {
