@@ -98,7 +98,7 @@ function CustomerBookingsList() {
       <div className="bookings-section">
         <h6 className="text-primary mb-3">Your Upcoming Appointments</h6>
         {upcoming.length === 0 ? (
-          <p className="text-muted small">
+          <p className="text-muted">
             No upcoming appointments scheduled.
           </p>
         ) : (
@@ -109,7 +109,7 @@ function CustomerBookingsList() {
       <div className="bookings-section">
         <h6 className="text-secondary mb-3">Your Previous Appointments</h6>
         {past.length === 0 ? (
-          <p className="text-muted small">No previous appointments found.</p>
+          <p className="text-muted">No previous appointments found.</p>
         ) : (
           past.map((b) => renderBookingCard(b, false))
         )}
