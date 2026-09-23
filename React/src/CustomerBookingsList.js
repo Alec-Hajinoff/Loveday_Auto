@@ -47,6 +47,15 @@ function CustomerBookingsList() {
     window.dispatchEvent(new CustomEvent("bookingUpdated"));
   };
 
+  const formatUKDate = (dateString) => {
+    if (!dateString) return "";
+    const parts = dateString.split("-");
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+    return dateString;
+  };
+
   if (loading) {
     return <div className="text-muted my-3">Loading your bookings...</div>;
   }
@@ -77,7 +86,7 @@ function CustomerBookingsList() {
     <div key={booking.appointment_id} className="booking-card">
       <div className="booking-card-header">
         <span className="booking-date">
-          {booking.date} ({booking.start_time.slice(0, 5)} -{" "}
+          {formatUKDate(booking.date)} ({booking.start_time.slice(0, 5)} -{" "}
           {booking.end_time.slice(0, 5)})
         </span>
         <span className={isUpcoming ? "badge-upcoming" : "badge-past"}>
