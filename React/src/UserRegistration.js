@@ -130,7 +130,6 @@ function UserRegistration() {
                   style={{ display: loading ? "inline-block" : "none" }}
                 ></span>
               </button>
-              <div id="registerPlaceholder"></div>
             </form>
           </div>
         </div>

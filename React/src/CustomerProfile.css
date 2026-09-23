@@ -13,11 +13,6 @@
   margin-bottom: 1rem;
 }
 
-.profile-header-flex h4 {
-  margin: 0;
-  color: #333333;
-}
-
 .profile-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

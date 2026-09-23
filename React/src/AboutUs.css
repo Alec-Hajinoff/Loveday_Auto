@@ -39,23 +39,3 @@
   margin-top: 2rem;
   margin-bottom: 3rem;
 }
-
-.about-us-title {
-  font-weight: 600;
-  color: var(--color-text-main, #212529);
-  margin-bottom: 0.5rem;
-}
-
-.about-us-subtitle {
-  color: var(--color-text-muted, #6c757d);
-  margin-bottom: 1.5rem;
-}
-
-.about-us-placeholder-box {
-  background-color: var(--color-surface-bg, #f8f9fa);
-  border: 1px dashed var(--color-border-input, #ced4da);
-  border-radius: var(--radius-md, 6px);
-  padding: 3rem;
-  text-align: center;
-  color: var(--color-text-muted, #6c757d);
-}

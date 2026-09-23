@@ -39,23 +39,3 @@
   margin-top: 2rem;
   margin-bottom: 3rem;
 }
-
-.services-title {
-  font-weight: 600;
-  color: var(--color-text-main);
-  margin-bottom: 0.5rem;
-}
-
-.services-subtitle {
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-}
-
-.services-placeholder-box {
-  background-color: var(--color-surface-bg);
-  border: 1px dashed var(--color-border-input);
-  border-radius: var(--radius-md);
-  padding: 3rem;
-  text-align: center;
-  color: var(--color-text-muted);
-}
