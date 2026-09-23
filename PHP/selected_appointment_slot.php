@@ -197,7 +197,7 @@ try {
 
         $mail->isHTML(false);
         $mail->Subject = 'New Booking - ' . $first_name . ' ' . $surname . ' (' . $vehicle_reg . ')';
-        $mail->Body    = "Hello,\n\nA new customer appointment has been booked.\n\n"
+        $mail->Body    = "Hello team,\n\nA new customer appointment has been booked.\n\n"
             . "--- CUSTOMER DETAILS ---\n"
             . "Name: {$first_name} {$surname}\n"
             . "Phone: {$phone}\n\n"
