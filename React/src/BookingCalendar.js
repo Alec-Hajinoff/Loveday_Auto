@@ -271,12 +271,6 @@ function BookingCalendar({ onBookingComplete }) {
             </div>
           ) : (
             <>
-              <div className="alert selected-slots-alert">
-                <strong>Selected ({selectedSlots.length} slot/s):</strong>{" "}
-                {selectedSlots
-                  .map((s) => `${s.date} (${s.start_time}-${s.end_time})`)
-                  .join(", ")}
-              </div>
               <BookingDetailsForm
                 onConfirm={handleConfirmBooking}
                 submitting={submitting}
