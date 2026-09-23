@@ -60,7 +60,7 @@ function CustomerBookingsList() {
           {booking.end_time.slice(0, 5)})
         </span>
         <span className={isUpcoming ? "badge-upcoming" : "badge-past"}>
-          {isUpcoming ? "Upcoming" : "Past"}
+          {isUpcoming ? "Upcoming" : "Previous"}
         </span>
       </div>
 
@@ -96,7 +96,7 @@ function CustomerBookingsList() {
   return (
     <div className="customer-bookings-container">
       <div className="bookings-section">
-        <h6 className="text-primary mb-3">Your Future Appointments</h6>
+        <h6 className="text-primary mb-3">Your Upcoming Appointments</h6>
         {upcoming.length === 0 ? (
           <p className="text-muted small">
             No upcoming appointments scheduled.
@@ -107,9 +107,9 @@ function CustomerBookingsList() {
       </div>
 
       <div className="bookings-section">
-        <h6 className="text-secondary mb-3">Your Past Appointments</h6>
+        <h6 className="text-secondary mb-3">Your Previous Appointments</h6>
         {past.length === 0 ? (
-          <p className="text-muted small">No past appointments found.</p>
+          <p className="text-muted small">No previous appointments found.</p>
         ) : (
           past.map((b) => renderBookingCard(b, false))
         )}
