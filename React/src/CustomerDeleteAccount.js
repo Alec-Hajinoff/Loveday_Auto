@@ -58,7 +58,7 @@ function CustomerDeleteAccount() {
   return (
     <div className="delete-account-card">
       <div className="delete-account-header">
-        <h5>Delete Account</h5>
+        <h6 className="text-primary mb-3">Delete Your Account</h6>
         <p>
           Deleting your account will remove your personal information. This
           action cannot be undone.

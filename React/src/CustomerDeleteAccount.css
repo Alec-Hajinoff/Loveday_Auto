@@ -1,20 +1,15 @@
 .delete-account-card {
   margin-top: 2rem;
   padding: 1.25rem;
-  border: 1px solid #f5c6cb;
-  background-color: #f8d7da;
+  border: 1px solid #e3e6f0;
+  background-color: var(--color-text-inverse);
   border-radius: 8px;
-}
-
-.delete-account-header h5 {
-  margin: 0 0 0.5rem 0;
-  color: #721c24;
 }
 
 .delete-account-header p {
   margin: 0 0 1rem 0;
-  font-size: 0.875rem;
-  color: #842029;
+  font-size: var(--font-size-md);
+  color: var(--color-text-main);
 }
 
 .btn-delete-initial {
