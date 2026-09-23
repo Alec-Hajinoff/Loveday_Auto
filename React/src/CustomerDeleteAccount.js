@@ -75,7 +75,7 @@ function CustomerDeleteAccount() {
         </button>
       ) : (
         <div className="delete-confirm-box">
-          <span>Are you sure you want to permanently delete your account?</span>
+          <p className="cancel-confirm-text">Are you sure?</p>
           <button
             type="button"
             className="btn-confirm-delete"

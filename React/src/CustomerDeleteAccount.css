@@ -29,14 +29,11 @@
 .delete-confirm-box {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.delete-confirm-box span {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #842029;
+  gap: 0.5rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffe69c;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
 }
 
 .btn-confirm-delete {
