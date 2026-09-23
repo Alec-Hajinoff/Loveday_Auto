@@ -145,19 +145,10 @@ function BookingDetailsForm({ onConfirm, submitting }) {
                 </option>
                 {services.map((service) => (
                   <option key={service.id} value={service.id}>
-                    {service.name}{" "}
-                    {service.duration_minutes
-                      ? `(${service.duration_minutes} mins)`
-                      : ""}
+                    {service.name}
                   </option>
                 ))}
               </select>
-              {serviceId && (
-                <div className="booking-message-notice">
-                  Please make sure that the appointment duration you selected is
-                  long enough for the service you have chosen.
-                </div>
-              )}
             </div>
 
             <div className="booking-form-group">
