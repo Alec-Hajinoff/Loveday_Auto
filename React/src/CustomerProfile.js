@@ -95,7 +95,7 @@ function CustomerProfile() {
   return (
     <div className="customer-profile-card">
       <div className="profile-header-flex">
-        <h4>Personal Details</h4>
+        <h6 className="text-primary mb-0">Update Your Personal Details</h6>
         {!isEditing && (
           <button
             type="button"
