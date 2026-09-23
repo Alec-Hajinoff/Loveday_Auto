@@ -65,35 +65,37 @@ function CustomerDeleteAccount() {
         </p>
       </div>
 
-      {!confirming ? (
-        <button
-          type="button"
-          className="btn-delete-initial"
-          onClick={handleInitialClick}
-        >
-          Delete My Account
-        </button>
-      ) : (
-        <div className="delete-confirm-box">
-          <p className="cancel-confirm-text">Are you sure?</p>
+      <div className="delete-action-container">
+        {!confirming ? (
           <button
             type="button"
-            className="btn-confirm-delete"
-            onClick={handleConfirmDelete}
-            disabled={loading}
+            className="btn-delete-initial"
+            onClick={handleInitialClick}
           >
-            {loading ? "Deleting..." : "Yes, Delete Account"}
+            Delete My Account
           </button>
-          <button
-            type="button"
-            className="btn-abort-delete"
-            onClick={handleAbort}
-            disabled={loading}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
+        ) : (
+          <div className="delete-confirm-box">
+            <p className="cancel-confirm-text">Are you sure?</p>
+            <button
+              type="button"
+              className="btn-confirm-delete"
+              onClick={handleConfirmDelete}
+              disabled={loading}
+            >
+              {loading ? "Deleting..." : "Yes, Delete Account"}
+            </button>
+            <button
+              type="button"
+              className="btn-abort-delete"
+              onClick={handleAbort}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
 
       {message.text && (
         <p className={`delete-status-msg ${message.type}`}>{message.text}</p>

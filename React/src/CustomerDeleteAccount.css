@@ -26,6 +26,11 @@
   background-color: #b02a37;
 }
 
+.delete-action-container {
+  display: flex;
+  align-items: center;
+}
+
 .delete-confirm-box {
   display: flex;
   align-items: center;
