@@ -107,7 +107,7 @@ function CustomerBookingsList() {
       </div>
 
       <div className="bookings-section">
-        <h6 className="text-secondary mb-3">You Past Appointments</h6>
+        <h6 className="text-secondary mb-3">Your Past Appointments</h6>
         {past.length === 0 ? (
           <p className="text-muted small">No past appointments found.</p>
         ) : (
