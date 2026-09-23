@@ -6,27 +6,50 @@ import { customerDeleteAccount } from "./ApiService";
 function CustomerDeleteAccount() {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [message, setMessage] = useState({ text: "", type: "" });
   const navigate = useNavigate();
+
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage({ text: "", type: "" });
+    }, 5000);
+  };
 
   const handleInitialClick = () => {
     setConfirming(true);
+    setMessage({ text: "", type: "" });
   };
 
   const handleAbort = () => {
     setConfirming(false);
+    setMessage({ text: "", type: "" });
   };
 
   const handleConfirmDelete = async () => {
     setLoading(true);
+    setMessage({ text: "", type: "" });
     try {
       const response = await customerDeleteAccount();
       if (response.status === "success") {
         navigate("/");
       } else {
-        alert(response.message || "Could not delete account.");
+        setMessage({
+          text:
+            response.message ||
+            "We were unable to delete your account at this time. Please try again.",
+          type: "error",
+        });
+        clearMessageAfterDelay();
       }
     } catch (err) {
-      alert(err.message);
+      setMessage({
+        text:
+          err.message ||
+          "An unexpected error occurred while attempting to delete your account.",
+        type: "error",
+      });
+      clearMessageAfterDelay();
     } finally {
       setLoading(false);
     }
@@ -70,6 +93,10 @@ function CustomerDeleteAccount() {
             Cancel
           </button>
         </div>
+      )}
+
+      {message.text && (
+        <p className={`delete-status-msg ${message.type}`}>{message.text}</p>
       )}
     </div>
   );

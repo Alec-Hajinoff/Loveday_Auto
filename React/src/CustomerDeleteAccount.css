@@ -76,3 +76,18 @@
 .btn-abort-delete:hover {
   background-color: #5c636a;
 }
+
+.delete-status-msg {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.delete-status-msg.success {
+  color: var(--color-success);
+}
+
+.delete-status-msg.error {
+  color: var(--color-danger);
+}
