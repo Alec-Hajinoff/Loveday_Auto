@@ -66,12 +66,6 @@
   font-size: 0.85rem;
 }
 
-.selected-slots-alert {
-  background-color: var(--color-complementary-tint, #eff6ff);
-  color: var(--color-text-main, #0f172a);
-  border: 2px solid var(--color-complementary, #0b62f5);
-}
-
 .booking-success-alert {
   font-family: var(--font-family-base);
   font-size: var(--font-size-md);
