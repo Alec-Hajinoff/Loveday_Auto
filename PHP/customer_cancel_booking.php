@@ -151,7 +151,7 @@ try {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom($mailUsername, 'Hertford Standard Booking System');
+        $mail->setFrom($mailUsername, 'Loveday Auto Repairs');
 
         foreach ($staff_recipients as $recipient_email) {
             $mail->addAddress($recipient_email);
@@ -159,7 +159,7 @@ try {
 
         $mail->isHTML(false);
         $mail->Subject = 'Booking Cancelled - ' . $appointment['first_name'] . ' ' . $appointment['surname'] . ' (' . $appointment['vehicle_reg'] . ')';
-        $mail->Body    = "Hello,\n\nA customer has cancelled an appointment.\n\n"
+        $mail->Body    = "Hello team,\n\nA customer has cancelled an appointment.\n\n"
             . "--- CUSTOMER DETAILS ---\n"
             . "Name: {$appointment['first_name']} {$appointment['surname']}\n"
             . "Phone: {$appointment['phone']}\n\n"
