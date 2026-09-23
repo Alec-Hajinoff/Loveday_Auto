@@ -116,7 +116,7 @@ function CustomerBookingsList() {
 
   return (
     <div className="customer-bookings-container">
-      <div className="bookings-section">
+      <div className="bookings-section mb-5">
         <h6 className="text-primary mb-3">Your Upcoming Appointments</h6>
         {upcoming.length === 0 ? (
           <p className="text-muted">No upcoming appointments scheduled.</p>
