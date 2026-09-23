@@ -4,7 +4,6 @@
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 2rem;
-  margin-bottom: 2rem;
 }
 
 .profile-header-flex {
@@ -87,14 +86,15 @@
 }
 
 .profile-status-msg {
-  font-size: 0.85rem;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
   margin: 0;
 }
 
 .profile-status-msg.success {
-  color: #198754;
+  color: var(--color-success);
 }
 
 .profile-status-msg.error {
-  color: #dc3545;
+  color: var(--color-danger);
 }

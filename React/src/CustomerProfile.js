@@ -14,6 +14,12 @@ function CustomerProfile() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
 
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage({ text: "", type: "" });
+    }, 5000);
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -28,12 +34,21 @@ function CustomerProfile() {
           setInitialProfile(loadedData);
         } else {
           setMessage({
-            text: response.message || "Could not load profile.",
+            text:
+              response.message ||
+              "We were unable to load your profile details. Please try again.",
             type: "error",
           });
+          clearMessageAfterDelay();
         }
       } catch (err) {
-        setMessage({ text: err.message, type: "error" });
+        setMessage({
+          text:
+            err.message ||
+            "An unexpected error occurred while loading your profile.",
+          type: "error",
+        });
+        clearMessageAfterDelay();
       } finally {
         setLoading(false);
       }
@@ -74,15 +89,29 @@ function CustomerProfile() {
         setProfile(updatedData);
         setInitialProfile(updatedData);
         setIsEditing(false);
-        setMessage({ text: "Profile updated successfully!", type: "success" });
+
+        setMessage({
+          text: "Your personal details have been successfully updated.",
+          type: "success",
+        });
+        clearMessageAfterDelay();
       } else {
         setMessage({
-          text: response.message || "Update failed.",
+          text:
+            response.message ||
+            "We were unable to save your updates. Please check your information and try again.",
           type: "error",
         });
+        clearMessageAfterDelay();
       }
     } catch (err) {
-      setMessage({ text: err.message, type: "error" });
+      setMessage({
+        text:
+          err.message ||
+          "An unexpected error occurred while saving your details.",
+        type: "error",
+      });
+      clearMessageAfterDelay();
     } finally {
       setSubmitting(false);
     }
