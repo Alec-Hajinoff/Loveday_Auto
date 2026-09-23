@@ -97,12 +97,11 @@ function BookingCalendar({ onBookingComplete }) {
 
   const handleSelectSlot = (slot) => {
     setSelectedSlots((prev) => {
-      const exists = prev.some((s) => s.id === slot.id);
-      if (exists) {
-        return prev.filter((s) => s.id !== slot.id);
-      } else {
-        return [...prev, slot];
+      if (prev.length > 0 && prev[0].id === slot.id) {
+        return [];
       }
+
+      return [slot];
     });
   };
 

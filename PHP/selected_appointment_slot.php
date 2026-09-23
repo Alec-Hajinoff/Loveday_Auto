@@ -61,7 +61,15 @@ if ($user_role !== 'customer') {
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (! isset($input['slot_ids']) || ! is_array($input['slot_ids']) || empty($input['slot_ids'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Please select at least one appointment slot.']);
+    echo json_init(['status' => 'error', 'message' => 'Please select at least one appointment slot.']);
+    exit;
+}
+
+if (count($input['slot_ids']) > 1) {
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Only one appointment slot can be selected per appointment.',
+    ]);
     exit;
 }
 
