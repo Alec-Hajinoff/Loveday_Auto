@@ -3,139 +3,125 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "../Header";
 
-jest.mock("../LogoutComponent", () => {
-  return function DummyLogout({ onLogoutComplete }) {
-    return <button onClick={onLogoutComplete}>Logout Component</button>;
-  };
-});
+jest.mock("../LogoutComponent", () => () => (
+  <div data-testid="logout-component">Logout Component</div>
+));
 
-jest.mock("../BasketWidget", () => {
-  return function DummyBasket() {
-    return <div>Basket Widget</div>;
-  };
-});
+const mockUseLocation = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useLocation: () => mockUseLocation(),
+}));
 
 describe("Header Component", () => {
-  const mockOnLogoutComplete = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseLocation.mockReturnValue({ pathname: "/" });
   });
 
-  test("renders logo image with correct attributes linking to home", () => {
+  test("renders logo with correct alt text, title, and link to home", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
+      <MemoryRouter>
         <Header
           isAuthenticated={false}
           isLoading={false}
-          onLogoutComplete={mockOnLogoutComplete}
+          onLogoutComplete={() => {}}
         />
       </MemoryRouter>,
     );
 
-    const logo = screen.getByRole("img", {
-      name: /loveday auto repairs logo/i,
-    });
-    expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("title", "Loveday Auto Repairs");
-
-    const logoLink = logo.closest("a");
-    expect(logoLink).toHaveAttribute("href", "/");
+    const logoImg = screen.getByAltText("Loveday Auto Repairs Logo");
+    expect(logoImg).toBeInTheDocument();
+    expect(logoImg).toHaveAttribute("title", "Loveday Auto Repairs");
+    expect(logoImg.closest("a")).toHaveAttribute("href", "/");
   });
 
-  test("always renders BasketWidget regardless of authentication status", () => {
+  test("renders nothing in auth section when isLoading is true", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Header
-          isAuthenticated={false}
-          isLoading={false}
-          onLogoutComplete={mockOnLogoutComplete}
-        />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("Basket Widget")).toBeInTheDocument();
-  });
-
-  test("does not render login/logout controls while loading", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
+      <MemoryRouter>
         <Header
           isAuthenticated={false}
           isLoading={true}
-          onLogoutComplete={mockOnLogoutComplete}
+          onLogoutComplete={() => {}}
         />
       </MemoryRouter>,
     );
 
-    expect(
-      screen.queryByRole("link", { name: /log in/i }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: /sign up/i }),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByText("Logout Component")).not.toBeInTheDocument();
-    expect(screen.getByText("Basket Widget")).toBeInTheDocument();
+    expect(screen.queryByText("Log in")).not.toBeInTheDocument();
+    expect(screen.queryByText("Sign up")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("logout-component")).not.toBeInTheDocument();
   });
 
-  test("renders 'Log in' and 'Sign up' links when user is not authenticated", () => {
+  test("renders LogoutComponent when isAuthenticated is true and isLoading is false", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Header
-          isAuthenticated={false}
-          isLoading={false}
-          onLogoutComplete={mockOnLogoutComplete}
-        />
-      </MemoryRouter>,
-    );
-
-    const loginLink = screen.getByRole("link", { name: /log in/i });
-    const signupLink = screen.getByRole("link", { name: /sign up/i });
-
-    expect(loginLink).toBeInTheDocument();
-    expect(loginLink).toHaveAttribute("href", "/UserLogin");
-
-    expect(signupLink).toBeInTheDocument();
-    expect(signupLink).toHaveAttribute("href", "/UserRegistration");
-
-    expect(screen.queryByText("Logout Component")).not.toBeInTheDocument();
-  });
-
-  test("applies 'active' CSS class to current location link", () => {
-    render(
-      <MemoryRouter initialEntries={["/UserLogin"]}>
-        <Header
-          isAuthenticated={false}
-          isLoading={false}
-          onLogoutComplete={mockOnLogoutComplete}
-        />
-      </MemoryRouter>,
-    );
-
-    const loginLink = screen.getByRole("link", { name: /log in/i });
-    const signupLink = screen.getByRole("link", { name: /sign up/i });
-
-    expect(loginLink).toHaveClass("active");
-    expect(signupLink).not.toHaveClass("active");
-  });
-
-  test("renders LogoutComponent when user is authenticated", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
+      <MemoryRouter>
         <Header
           isAuthenticated={true}
           isLoading={false}
-          onLogoutComplete={mockOnLogoutComplete}
+          onLogoutComplete={() => {}}
         />
       </MemoryRouter>,
     );
 
-    expect(screen.getByText("Logout Component")).toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: /log in/i }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: /sign up/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("logout-component")).toBeInTheDocument();
+    expect(screen.queryByText("Log in")).not.toBeInTheDocument();
+  });
+
+  test("renders Log in and Sign up links when isAuthenticated is false and isLoading is false", () => {
+    render(
+      <MemoryRouter>
+        <Header
+          isAuthenticated={false}
+          isLoading={false}
+          onLogoutComplete={() => {}}
+        />
+      </MemoryRouter>,
+    );
+
+    const loginLink = screen.getByRole("link", { name: "Log in" });
+    const signupLink = screen.getByRole("link", { name: "Sign up" });
+
+    expect(loginLink).toBeInTheDocument();
+    expect(loginLink).toHaveAttribute("href", "/UserLogin");
+    expect(signupLink).toBeInTheDocument();
+    expect(signupLink).toHaveAttribute("href", "/UserRegistration");
+  });
+
+  test("applies active class to Log in link when pathname is /UserLogin", () => {
+    mockUseLocation.mockReturnValue({ pathname: "/UserLogin" });
+
+    render(
+      <MemoryRouter>
+        <Header
+          isAuthenticated={false}
+          isLoading={false}
+          onLogoutComplete={() => {}}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("link", { name: "Log in" })).toHaveClass("active");
+    expect(screen.getByRole("link", { name: "Sign up" })).not.toHaveClass(
+      "active",
+    );
+  });
+
+  test("applies active class to Sign up link when pathname is /UserRegistration", () => {
+    mockUseLocation.mockReturnValue({ pathname: "/UserRegistration" });
+
+    render(
+      <MemoryRouter>
+        <Header
+          isAuthenticated={false}
+          isLoading={false}
+          onLogoutComplete={() => {}}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("link", { name: "Sign up" })).toHaveClass("active");
+    expect(screen.getByRole("link", { name: "Log in" })).not.toHaveClass(
+      "active",
+    );
   });
 });

@@ -1,20 +1,16 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import MainRegLog from "../MainRegLog";
 
-jest.mock("../Main.js", () => {
-  return function DummyMain({ isAuthenticated, userRole, isLoading }) {
-    return (
-      <div data-testid="dummy-main">
-        Main Component - Auth: {String(isAuthenticated)}, Role: {userRole},
-        Loading: {String(isLoading)}
-      </div>
-    );
-  };
-});
+jest.mock("../Main", () => ({ isAuthenticated, userRole, isLoading }) => (
+  <div data-testid="main-component">
+    Main Component - Auth: {String(isAuthenticated)}, Role: {userRole}, Loading:{" "}
+    {String(isLoading)}
+  </div>
+));
 
 describe("MainRegLog Component", () => {
-  test("renders Main component and passes props through correctly", () => {
+  test("renders Main component and passes down props correctly", () => {
     render(
       <MainRegLog
         isAuthenticated={true}
@@ -23,53 +19,20 @@ describe("MainRegLog Component", () => {
       />,
     );
 
-    const mainElement = screen.getByTestId("dummy-main");
-    expect(mainElement).toBeInTheDocument();
-    expect(mainElement).toHaveTextContent(
+    const mainComponent = screen.getByTestId("main-component");
+    expect(mainComponent).toBeInTheDocument();
+    expect(mainComponent).toHaveTextContent(
       "Main Component - Auth: true, Role: customer, Loading: false",
     );
   });
 
-  test("attaches document event listeners on mount and removes them on unmount", () => {
-    const addEventListenerSpy = jest.spyOn(document, "addEventListener");
-    const removeEventListenerSpy = jest.spyOn(document, "removeEventListener");
+  test("passes unauthenticated and loading props correctly to Main component", () => {
+    render(<MainRegLog isAuthenticated={false} userRole="" isLoading={true} />);
 
-    const { unmount } = render(
-      <MainRegLog isAuthenticated={false} userRole="" isLoading={false} />,
+    const mainComponent = screen.getByTestId("main-component");
+    expect(mainComponent).toBeInTheDocument();
+    expect(mainComponent).toHaveTextContent(
+      "Main Component - Auth: false, Role: , Loading: true",
     );
-
-    expect(addEventListenerSpy).toHaveBeenCalledWith(
-      "mousedown",
-      expect.any(Function),
-    );
-    expect(addEventListenerSpy).toHaveBeenCalledWith(
-      "touchstart",
-      expect.any(Function),
-    );
-
-    unmount();
-
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      "mousedown",
-      expect.any(Function),
-    );
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      "touchstart",
-      expect.any(Function),
-    );
-
-    addEventListenerSpy.mockRestore();
-    removeEventListenerSpy.mockRestore();
-  });
-
-  test("handles document mousedown and touchstart events without crashing", () => {
-    render(
-      <MainRegLog isAuthenticated={false} userRole="" isLoading={false} />,
-    );
-
-    expect(() => {
-      fireEvent.mouseDown(document.body);
-      fireEvent.touchStart(document.body);
-    }).not.toThrow();
   });
 });

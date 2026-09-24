@@ -3,42 +3,44 @@ import { render, screen } from "@testing-library/react";
 import Footer from "../Footer";
 
 describe("Footer Component", () => {
-  let dateSpy;
+  test("renders copyright notice with current year", () => {
+    render(<Footer />);
+    const currentYear = new Date().getFullYear();
 
-  beforeEach(() => {
-    const mockDate = new Date(2026, 0, 1);
-    dateSpy = jest.spyOn(global, "Date").mockImplementation((...args) => {
-      if (args.length) {
-        return new (Function.prototype.bind.apply(Date, [null, ...args]))();
-      }
-      return mockDate;
-    });
-
-    global.Date.getFullYear = () => 2026;
+    expect(
+      screen.getByText(new RegExp(`© Copyright 2025 - ${currentYear}`)),
+    ).toBeInTheDocument();
   });
 
-  afterEach(() => {
-    dateSpy.mockRestore();
-  });
-
-  test("renders business address, phone number, and dynamic copyright year", () => {
+  test("renders garage address and phone number correctly", () => {
     render(<Footer />);
 
     expect(
-      screen.getByText(/50A Southbury Rd, Enfield, EN1 1YB/i),
+      screen.getByText(/Garage address: 50a Southbury Rd, Enfield, EN1 1YB/i),
     ).toBeInTheDocument();
-    expect(screen.getByText(/020 8367 5888/i)).toBeInTheDocument();
-    expect(screen.getByText(/Copyright 2025 - 2026/i)).toBeInTheDocument();
+    expect(screen.getByText(/Phone: 020 8367 5888/i)).toBeInTheDocument();
   });
 
-  test("constructs and renders mailto link with obfuscated email", () => {
+  test("renders constructed email address as a mailto link", () => {
     render(<Footer />);
 
     const emailLink = screen.getByRole("link", {
       name: "info@lovedayauto.com",
     });
-
     expect(emailLink).toBeInTheDocument();
     expect(emailLink).toHaveAttribute("href", "mailto:info@lovedayauto.com");
+  });
+
+  test("renders web application builder attribution link with security attributes", () => {
+    render(<Footer />);
+
+    const builderLink = screen.getByRole("link", { name: "Hertford Standard" });
+    expect(builderLink).toBeInTheDocument();
+    expect(builderLink).toHaveAttribute(
+      "href",
+      "https://hertfordstandard.com/",
+    );
+    expect(builderLink).toHaveAttribute("target", "_blank");
+    expect(builderLink).toHaveAttribute("rel", "noopener noreferrer");
   });
 });
