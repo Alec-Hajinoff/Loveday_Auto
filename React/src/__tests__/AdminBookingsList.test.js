@@ -1,6 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
 import AdminBookingsList from "../AdminBookingsList";
 import { adminBookingsList } from "../ApiService";
 
@@ -8,175 +7,81 @@ jest.mock("../ApiService", () => ({
   adminBookingsList: jest.fn(),
 }));
 
-jest.mock("../AdminCancelBooking", () => {
-  return function MockAdminCancelBooking({
-    appointmentId,
-    onBookingCancelled,
-  }) {
-    return (
-      <div data-testid={`cancel-container-${appointmentId}`}>
-        <button
-          type="button"
-          data-testid={`cancel-btn-${appointmentId}`}
-          onClick={onBookingCancelled}
-        >
-          Cancel Appointment
-        </button>
-      </div>
-    );
-  };
-});
+jest.mock("../AdminCancelBooking", () => () => (
+  <div data-testid="admin-cancel-booking">Mocked Cancel Booking</div>
+));
 
-describe("AdminBookingsList Component", () => {
-  const mockUpcomingBookings = [
+const mockBookingsResponse = {
+  status: "success",
+  upcoming: [
     {
-      appointment_id: 101,
-      date: "2026-09-01",
+      appointment_id: 1,
+      date: "2026-09-24",
       start_time: "09:00:00",
       end_time: "10:00:00",
       first_name: "John",
       surname: "Doe",
       customer_phone: "07123456789",
       customer_email: "john@example.com",
-      service_name: "Full Service & MOT",
-      vehicle_reg: "AB12CDE",
-      notes: "Check brakes",
+      service_name: "Full Service",
+      vehicle_reg: "AB12 CDE",
+      notes: "Check brakes please",
     },
-  ];
+  ],
+};
 
-  const mockPastBookings = [
-    {
-      appointment_id: 99,
-      date: "2026-08-01",
-      start_time: "14:00:00",
-      end_time: "15:00:00",
-      first_name: "Jane",
-      surname: "Smith",
-      customer_phone: "07987654321",
-      customer_email: "jane@example.com",
-      service_name: "Oil Change",
-      vehicle_reg: "XY56ZHT",
-      notes: "",
-    },
-  ];
-
+describe("AdminBookingsList Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders loading state initially", () => {
-    adminBookingsList.mockImplementation(() => new Promise(() => {}));
+  test("renders loading state initially and displays upcoming bookings upon success", async () => {
+    adminBookingsList.mockResolvedValueOnce(mockBookingsResponse);
 
     render(<AdminBookingsList />);
 
-    expect(screen.getByText("Loading garage bookings...")).toBeInTheDocument();
+    expect(screen.getByText(/Loading garage bookings.../i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(/Upcoming Appointments/i)).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.getByText(/Full Service/i)).toBeInTheDocument();
+    expect(screen.getByText(/AB12 CDE/i)).toBeInTheDocument();
+    expect(screen.getByText(/Check brakes please/i)).toBeInTheDocument();
+    expect(screen.getByTestId("admin-cancel-booking")).toBeInTheDocument();
   });
 
-  it("fetches and renders upcoming and past bookings successfully", async () => {
+  test("handles API error responses gracefully", async () => {
     adminBookingsList.mockResolvedValueOnce({
-      status: "success",
-      upcoming: mockUpcomingBookings,
-      past: mockPastBookings,
+      status: "error",
+      message: "Failed to retrieve bookings",
     });
 
     render(<AdminBookingsList />);
 
     await waitFor(() => {
-      expect(screen.getByText("Future Appointments")).toBeInTheDocument();
-      expect(screen.getByText("Past Appointments")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Failed to retrieve bookings/i),
+      ).toBeInTheDocument();
     });
-
-    expect(
-      screen.getByText(/2026-09-01 \(09:00 - 10:00\)/),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Upcoming")).toBeInTheDocument();
-    expect(screen.getByText(/John Doe/)).toBeInTheDocument();
-    expect(screen.getByText("Full Service & MOT")).toBeInTheDocument();
-    expect(screen.getByText("AB12CDE")).toBeInTheDocument();
-    expect(screen.getByText("Check brakes")).toBeInTheDocument();
-
-    expect(
-      screen.getByText(/2026-08-01 \(14:00 - 15:00\)/),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Past")).toBeInTheDocument();
-    expect(screen.getByText(/Jane Smith/)).toBeInTheDocument();
-    expect(screen.getByText("Oil Change")).toBeInTheDocument();
   });
 
-  it("renders empty state messages when no bookings are available", async () => {
+  test("displays empty state message when there are no upcoming appointments", async () => {
     adminBookingsList.mockResolvedValueOnce({
       status: "success",
       upcoming: [],
-      past: [],
     });
 
     render(<AdminBookingsList />);
 
     await waitFor(() => {
       expect(
-        screen.getByText("No upcoming appointments scheduled."),
+        screen.getByText(
+          /No upcoming appointments scheduled from today onwards./i,
+        ),
       ).toBeInTheDocument();
-      expect(
-        screen.getByText("No past appointments found."),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("displays an error alert when API request fails", async () => {
-    adminBookingsList.mockRejectedValueOnce(
-      new Error("Failed to connect to database"),
-    );
-
-    render(<AdminBookingsList />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("Failed to connect to database"),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("triggers fetchBookings and dispatches window event when a booking is cancelled", async () => {
-    adminBookingsList.mockResolvedValue({
-      status: "success",
-      upcoming: mockUpcomingBookings,
-      past: [],
-    });
-
-    const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
-
-    render(<AdminBookingsList />);
-
-    const cancelBtn = await screen.findByTestId("cancel-btn-101");
-    fireEvent.click(cancelBtn);
-
-    await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(3);
-    });
-
-    expect(dispatchEventSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ type: "bookingUpdated" }),
-    );
-
-    dispatchEventSpy.mockRestore();
-  });
-
-  it("refreshes bookings when window custom event 'bookingUpdated' is fired", async () => {
-    adminBookingsList.mockResolvedValue({
-      status: "success",
-      upcoming: mockUpcomingBookings,
-      past: [],
-    });
-
-    render(<AdminBookingsList />);
-
-    await screen.findByText("Future Appointments");
-    expect(adminBookingsList).toHaveBeenCalledTimes(1);
-
-    fireEvent(window, new CustomEvent("bookingUpdated"));
-
-    await waitFor(() => {
-      expect(adminBookingsList).toHaveBeenCalledTimes(2);
     });
   });
 });

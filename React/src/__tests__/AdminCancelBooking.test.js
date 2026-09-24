@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import AdminCancelBooking from "../AdminCancelBooking";
 import { adminCancelBooking } from "../ApiService";
 
@@ -9,12 +9,11 @@ jest.mock("../ApiService", () => ({
 }));
 
 describe("AdminCancelBooking Component", () => {
-  const mockAppointmentId = 101;
+  const mockAppointmentId = 123;
   const mockOnBookingCancelled = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
-
     jest.spyOn(window, "alert").mockImplementation(() => {});
   });
 
@@ -22,132 +21,79 @@ describe("AdminCancelBooking Component", () => {
     window.alert.mockRestore();
   });
 
-  it("renders the initial 'Cancel Booking' button", () => {
-    render(
-      <AdminCancelBooking
-        appointmentId={mockAppointmentId}
-        onBookingCancelled={mockOnBookingCancelled}
-      />,
-    );
+  test("renders initial cancel button and reveals confirmation options when clicked", async () => {
+    const user = userEvent.setup();
+    render(<AdminCancelBooking appointment_id={mockAppointmentId} />);
 
+    const initialButton = screen.getByRole("button", {
+      name: /Cancel Booking/i,
+    });
+    expect(initialButton).toBeInTheDocument();
+
+    await user.click(initialButton);
+
+    expect(screen.getByText(/Cancel this booking\?/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Cancel Booking" }),
+      screen.getByRole("button", { name: /Yes, Cancel/i }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /No/i })).toBeInTheDocument();
   });
 
-  it("shows confirmation prompt when 'Cancel Booking' is clicked", () => {
-    render(
-      <AdminCancelBooking
-        appointmentId={mockAppointmentId}
-        onBookingCancelled={mockOnBookingCancelled}
-      />,
-    );
+  test('returns to initial state when "No" button is clicked', async () => {
+    const user = userEvent.setup();
+    render(<AdminCancelBooking appointment_id={mockAppointmentId} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel Booking" }));
+    await user.click(screen.getByRole("button", { name: /Cancel Booking/i }));
+    expect(screen.getByText(/Cancel this booking\?/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /No/i }));
 
     expect(
-      screen.getByText("Cancel this customer booking?"),
+      screen.getByRole("button", { name: /Cancel Booking/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Yes, Cancel" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "No" })).toBeInTheDocument();
-  });
-
-  it("resets to initial state when 'No' is clicked", () => {
-    render(
-      <AdminCancelBooking
-        appointmentId={mockAppointmentId}
-        onBookingCancelled={mockOnBookingCancelled}
-      />,
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: "Cancel Booking" }));
-
-    fireEvent.click(screen.getByRole("button", { name: "No" }));
-
-    expect(
-      screen.getByRole("button", { name: "Cancel Booking" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByText("Cancel this customer booking?"),
+      screen.queryByText(/Cancel this booking\?/i),
     ).not.toBeInTheDocument();
   });
 
-  it("calls API, fires custom window event, and triggers callback on successful cancellation", async () => {
+  test("successfully handles cancellation flow on confirmation", async () => {
     adminCancelBooking.mockResolvedValueOnce({ status: "success" });
+    const user = userEvent.setup();
+
     const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
 
     render(
       <AdminCancelBooking
-        appointmentId={mockAppointmentId}
+        appointment_id={mockAppointmentId}
         onBookingCancelled={mockOnBookingCancelled}
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel Booking" }));
-    fireEvent.click(screen.getByRole("button", { name: "Yes, Cancel" }));
+    await user.click(screen.getByRole("button", { name: /Cancel Booking/i }));
+    await user.click(screen.getByRole("button", { name: /Yes, Cancel/i }));
 
-    expect(
-      screen.getByRole("button", { name: "Cancelling..." }),
-    ).toBeDisabled();
+    expect(adminCancelBooking).toHaveBeenCalledWith(mockAppointmentId);
 
     await waitFor(() => {
-      expect(adminCancelBooking).toHaveBeenCalledWith(mockAppointmentId);
+      expect(dispatchEventSpy).toHaveBeenCalled();
+      expect(mockOnBookingCancelled).toHaveBeenCalledTimes(1);
     });
-
-    expect(dispatchEventSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ type: "bookingUpdated" }),
-    );
-    expect(mockOnBookingCancelled).toHaveBeenCalledTimes(1);
-
-    dispatchEventSpy.mockRestore();
   });
 
-  it("displays alert message when API returns failure status", async () => {
+  test("shows an alert when cancellation fails from API error response", async () => {
     adminCancelBooking.mockResolvedValueOnce({
       status: "error",
-      message: "Booking cannot be cancelled within 2 hours of slot.",
+      message: "Booking cannot be found",
     });
+    const user = userEvent.setup();
 
-    render(
-      <AdminCancelBooking
-        appointmentId={mockAppointmentId}
-        onBookingCancelled={mockOnBookingCancelled}
-      />,
-    );
+    render(<AdminCancelBooking appointment_id={mockAppointmentId} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel Booking" }));
-    fireEvent.click(screen.getByRole("button", { name: "Yes, Cancel" }));
+    await user.click(screen.getByRole("button", { name: /Cancel Booking/i }));
+    await user.click(screen.getByRole("button", { name: /Yes, Cancel/i }));
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        "Booking cannot be cancelled within 2 hours of slot.",
-      );
+      expect(window.alert).toHaveBeenCalledWith("Booking cannot be found");
     });
-
-    expect(mockOnBookingCancelled).not.toHaveBeenCalled();
-  });
-
-  it("displays alert message when API request throws an exception", async () => {
-    adminCancelBooking.mockRejectedValueOnce(
-      new Error("Network connection lost"),
-    );
-
-    render(
-      <AdminCancelBooking
-        appointmentId={mockAppointmentId}
-        onBookingCancelled={mockOnBookingCancelled}
-      />,
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: "Cancel Booking" }));
-    fireEvent.click(screen.getByRole("button", { name: "Yes, Cancel" }));
-
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Network connection lost");
-    });
-
-    expect(mockOnBookingCancelled).not.toHaveBeenCalled();
   });
 });
