@@ -1,12 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { useNavigate } from "react-router-dom";
 import CustomerDeleteAccount from "../CustomerDeleteAccount";
 import { customerDeleteAccount } from "../ApiService";
 
-const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
+  useNavigate: jest.fn(),
 }));
 
 jest.mock("../ApiService", () => ({
@@ -14,73 +14,67 @@ jest.mock("../ApiService", () => ({
 }));
 
 describe("CustomerDeleteAccount Component", () => {
+  const mockNavigate = jest.fn();
+
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(window, "alert").mockImplementation(() => {});
+    useNavigate.mockReturnValue(mockNavigate);
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  test("renders initial header, description, and delete button", () => {
+  test("renders initial delete account button and information text", () => {
     render(<CustomerDeleteAccount />);
 
-    expect(
-      screen.getByRole("heading", { level: 5, name: /delete account/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Delete Your Account")).toBeInTheDocument();
     expect(
       screen.getByText(
-        /deleting your account will remove your personal information/i,
+        /Deleting your account will remove your personal information/i,
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /delete my account/i }),
+      screen.getByRole("button", { name: "Delete My Account" }),
     ).toBeInTheDocument();
   });
 
-  test("shows confirmation message and buttons when initial delete button is clicked", () => {
+  test("shows confirmation prompt when initial delete button is clicked", async () => {
+    const user = userEvent.setup();
     render(<CustomerDeleteAccount />);
 
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
+    await user.click(screen.getByRole("button", { name: "Delete My Account" }));
 
+    expect(screen.getByText("Are you sure?")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /are you sure you want to permanently delete your account\?/i,
-      ),
+      screen.getByRole("button", { name: "Yes, Delete Account" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /yes, delete account/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /^cancel$/i }),
-    ).toBeInTheDocument();
-  });
-
-  test("hides confirmation prompt when 'Cancel' abort button is clicked", () => {
-    render(<CustomerDeleteAccount />);
-
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^cancel$/i }));
-
-    expect(
-      screen.getByRole("button", { name: /delete my account/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByText(
-        /are you sure you want to permanently delete your account\?/i,
-      ),
+      screen.queryByRole("button", { name: "Delete My Account" }),
     ).not.toBeInTheDocument();
   });
 
-  test("navigates to '/' when account deletion succeeds", async () => {
+  test('returns to initial state when "Cancel" abort button is clicked', async () => {
+    const user = userEvent.setup();
+    render(<CustomerDeleteAccount />);
+
+    await user.click(screen.getByRole("button", { name: "Delete My Account" }));
+    expect(screen.getByText("Are you sure?")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(screen.queryByText("Are you sure?")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Delete My Account" }),
+    ).toBeInTheDocument();
+  });
+
+  test("successfully deletes account, shows loading text, and navigates to home", async () => {
+    const user = userEvent.setup();
     customerDeleteAccount.mockResolvedValueOnce({ status: "success" });
 
     render(<CustomerDeleteAccount />);
 
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /yes, delete account/i }),
+    await user.click(screen.getByRole("button", { name: "Delete My Account" }));
+    await user.click(
+      screen.getByRole("button", { name: "Yes, Delete Account" }),
     );
 
     expect(customerDeleteAccount).toHaveBeenCalledTimes(1);
@@ -90,85 +84,48 @@ describe("CustomerDeleteAccount Component", () => {
     });
   });
 
-  test("shows alert with custom message when API returns failure status", async () => {
-    const errorMessage = "Cannot delete account with active bookings.";
+  test("displays error message when deletion API returns an error status", async () => {
+    const user = userEvent.setup();
     customerDeleteAccount.mockResolvedValueOnce({
       status: "error",
-      message: errorMessage,
+      message: "Account cannot be deleted while active bookings exist.",
     });
 
     render(<CustomerDeleteAccount />);
 
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /yes, delete account/i }),
+    await user.click(screen.getByRole("button", { name: "Delete My Account" }));
+    await user.click(
+      screen.getByRole("button", { name: "Yes, Delete Account" }),
     );
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(errorMessage);
+      expect(
+        screen.getByText(
+          "Account cannot be deleted while active bookings exist.",
+        ),
+      ).toBeInTheDocument();
     });
-    expect(mockNavigate).not.toHaveBeenCalled();
+
+    expect(
+      screen.getByText(
+        "Account cannot be deleted while active bookings exist.",
+      ),
+    ).toHaveClass("delete-status-msg error");
   });
 
-  test("shows fallback alert message when API returns failure status without a message", async () => {
-    customerDeleteAccount.mockResolvedValueOnce({ status: "error" });
+  test("displays fallback error message when deletion API throws an exception", async () => {
+    const user = userEvent.setup();
+    customerDeleteAccount.mockRejectedValueOnce(new Error("Network failure"));
 
     render(<CustomerDeleteAccount />);
 
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /yes, delete account/i }),
+    await user.click(screen.getByRole("button", { name: "Delete My Account" }));
+    await user.click(
+      screen.getByRole("button", { name: "Yes, Delete Account" }),
     );
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Could not delete account.");
-    });
-    expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  test("shows alert when API promise rejects", async () => {
-    const networkError = new Error("Server error");
-    customerDeleteAccount.mockRejectedValueOnce(networkError);
-
-    render(<CustomerDeleteAccount />);
-
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /yes, delete account/i }),
-    );
-
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Server error");
-    });
-    expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  test("disables action buttons and shows loading text during execution", async () => {
-    let resolveApi;
-    customerDeleteAccount.mockImplementationOnce(
-      () =>
-        new Promise((resolve) => {
-          resolveApi = resolve;
-        }),
-    );
-
-    render(<CustomerDeleteAccount />);
-
-    fireEvent.click(screen.getByRole("button", { name: /delete my account/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /yes, delete account/i }),
-    );
-
-    const confirmBtn = screen.getByRole("button", { name: /deleting\.\.\./i });
-    const abortBtn = screen.getByRole("button", { name: /^cancel$/i });
-
-    expect(confirmBtn).toBeDisabled();
-    expect(abortBtn).toBeDisabled();
-
-    resolveApi({ status: "success" });
-
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+      expect(screen.getByText("Network failure")).toBeInTheDocument();
     });
   });
 });

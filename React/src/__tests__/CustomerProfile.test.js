@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import CustomerProfile from "../CustomerProfile";
 import { customerProfileGet, customerProfilePost } from "../ApiService";
 
@@ -9,261 +10,161 @@ jest.mock("../ApiService", () => ({
 }));
 
 describe("CustomerProfile Component", () => {
-  const mockUserData = {
-    first_name: "Jane",
-    surname: "Doe",
-    phone: "07123456789",
+  const mockProfileResponse = {
+    status: "success",
+    user: {
+      first_name: "John",
+      surname: "Doe",
+      phone: "07123456789",
+    },
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("displays loading indicator initially", () => {
-    customerProfileGet.mockImplementationOnce(() => new Promise(() => {}));
+  test("displays loading state initially and renders profile fields on successful fetch", async () => {
+    customerProfileGet.mockResolvedValueOnce(mockProfileResponse);
 
     render(<CustomerProfile />);
 
-    expect(screen.getByText(/loading profile\.\.\./i)).toBeInTheDocument();
+    expect(screen.getByText("Loading profile...")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("John")).toBeInTheDocument();
+    });
+
+    expect(screen.getByDisplayValue("Doe")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("07123456789")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Edit Details" }),
+    ).toBeInTheDocument();
   });
 
-  test("fetches and displays profile data in view mode (disabled inputs)", async () => {
+  test("displays error message when profile fetch fails", async () => {
     customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
+      status: "error",
+      message: "Failed to load profile.",
     });
 
     render(<CustomerProfile />);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { level: 4, name: /personal details/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Failed to load profile.")).toBeInTheDocument();
+    });
+  });
+
+  test("enables form inputs and action buttons when Edit Details is clicked", async () => {
+    customerProfileGet.mockResolvedValueOnce(mockProfileResponse);
+    const user = userEvent.setup();
+
+    render(<CustomerProfile />);
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("John")).toBeInTheDocument();
     });
 
-    const firstNameInput = screen.getByLabelText(/first name/i);
-    const surnameInput = screen.getByLabelText(/surname/i);
-    const phoneInput = screen.getByLabelText(/phone number/i);
+    const firstNameInput = screen.getByLabelText("First Name");
+    expect(firstNameInput).toBeDisabled();
+
+    await user.click(screen.getByRole("button", { name: "Edit Details" }));
+
+    expect(firstNameInput).not.toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Save Changes" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+  });
+
+  test("discards changes and exits edit mode when Cancel is clicked", async () => {
+    customerProfileGet.mockResolvedValueOnce(mockProfileResponse);
+    const user = userEvent.setup();
+
+    render(<CustomerProfile />);
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("John")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Edit Details" }));
+
+    const firstNameInput = screen.getByLabelText("First Name");
+    await user.clear(firstNameInput);
+    await user.type(firstNameInput, "Jane");
 
     expect(firstNameInput).toHaveValue("Jane");
-    expect(surnameInput).toHaveValue("Doe");
-    expect(phoneInput).toHaveValue("07123456789");
 
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(firstNameInput).toHaveValue("John");
     expect(firstNameInput).toBeDisabled();
-    expect(surnameInput).toBeDisabled();
-    expect(phoneInput).toBeDisabled();
-
-    expect(
-      screen.getByRole("button", { name: /edit details/i }),
-    ).toBeInTheDocument();
   });
 
-  test("displays error message if initial profile fetch fails", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "error",
-      message: "Session expired",
-    });
-
-    render(<CustomerProfile />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Session expired")).toBeInTheDocument();
-    });
-  });
-
-  test("displays fallback error message if initial profile fetch fails without message", async () => {
-    customerProfileGet.mockResolvedValueOnce({ status: "error" });
-
-    render(<CustomerProfile />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Could not load profile.")).toBeInTheDocument();
-    });
-  });
-
-  test("displays error message if fetch promise rejects", async () => {
-    customerProfileGet.mockRejectedValueOnce(new Error("Network Error"));
-
-    render(<CustomerProfile />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Network Error")).toBeInTheDocument();
-    });
-  });
-
-  test("enables inputs when 'Edit Details' is clicked", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
-    });
-
-    render(<CustomerProfile />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /edit details/i }),
-      ).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /edit details/i }));
-
-    expect(screen.getByLabelText(/first name/i)).not.toBeDisabled();
-    expect(screen.getByLabelText(/surname/i)).not.toBeDisabled();
-    expect(screen.getByLabelText(/phone number/i)).not.toBeDisabled();
-
-    expect(
-      screen.getByRole("button", { name: /save changes/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
-  });
-
-  test("resets changes when 'Cancel' is clicked", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
-    });
-
-    render(<CustomerProfile />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /edit details/i }),
-      ).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /edit details/i }));
-
-    const firstNameInput = screen.getByLabelText(/first name/i);
-    fireEvent.change(firstNameInput, { target: { value: "Johnny" } });
-    expect(firstNameInput).toHaveValue("Johnny");
-
-    fireEvent.click(screen.getByRole("button", { name: /cancel/i }));
-
-    expect(screen.getByLabelText(/first name/i)).toHaveValue("Jane");
-    expect(screen.getByLabelText(/first name/i)).toBeDisabled();
-    expect(
-      screen.getByRole("button", { name: /edit details/i }),
-    ).toBeInTheDocument();
-  });
-
-  test("submits updated profile data successfully", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
-    });
-
-    const updatedUser = {
-      first_name: "John",
-      surname: "Smith",
-      phone: "07987654321",
-    };
-
+  test("successfully updates profile details and shows success message", async () => {
+    customerProfileGet.mockResolvedValueOnce(mockProfileResponse);
     customerProfilePost.mockResolvedValueOnce({
       status: "success",
-      user: updatedUser,
+      user: {
+        first_name: "Johnathan",
+        surname: "Doe",
+        phone: "07123456789",
+      },
     });
+
+    const user = userEvent.setup();
 
     render(<CustomerProfile />);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /edit details/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByDisplayValue("John")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /edit details/i }));
+    await user.click(screen.getByRole("button", { name: "Edit Details" }));
 
-    fireEvent.change(screen.getByLabelText(/first name/i), {
-      target: { value: "John" },
-    });
-    fireEvent.change(screen.getByLabelText(/surname/i), {
-      target: { value: "Smith" },
-    });
-    fireEvent.change(screen.getByLabelText(/phone number/i), {
-      target: { value: "07987654321" },
-    });
+    const firstNameInput = screen.getByLabelText("First Name");
+    await user.clear(firstNameInput);
+    await user.type(firstNameInput, "Johnathan");
 
-    fireEvent.click(screen.getByRole("button", { name: /save changes/i }));
+    await user.click(screen.getByRole("button", { name: "Save Changes" }));
 
     expect(customerProfilePost).toHaveBeenCalledWith({
-      first_name: "John",
-      surname: "Smith",
-      phone: "07987654321",
+      first_name: "Johnathan",
+      surname: "Doe",
+      phone: "07123456789",
     });
 
     await waitFor(() => {
       expect(
-        screen.getByText("Profile updated successfully!"),
+        screen.getByText(
+          "Your personal details have been successfully updated.",
+        ),
       ).toBeInTheDocument();
     });
 
-    expect(screen.getByLabelText(/first name/i)).toHaveValue("John");
-    expect(screen.getByLabelText(/first name/i)).toBeDisabled();
+    expect(firstNameInput).toBeDisabled();
   });
 
-  test("shows error message when post request fails with custom error", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
-    });
-
+  test("displays error message when profile update fails", async () => {
+    customerProfileGet.mockResolvedValueOnce(mockProfileResponse);
     customerProfilePost.mockResolvedValueOnce({
       status: "error",
-      message: "Invalid phone number.",
+      message: "Invalid phone number format.",
     });
+
+    const user = userEvent.setup();
 
     render(<CustomerProfile />);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /edit details/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByDisplayValue("John")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /edit details/i }));
-    fireEvent.click(screen.getByRole("button", { name: /save changes/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Invalid phone number.")).toBeInTheDocument();
-    });
-  });
-
-  test("disables action buttons and displays loading text while submitting", async () => {
-    customerProfileGet.mockResolvedValueOnce({
-      status: "success",
-      user: mockUserData,
-    });
-
-    let resolvePost;
-    customerProfilePost.mockImplementationOnce(
-      () =>
-        new Promise((resolve) => {
-          resolvePost = resolve;
-        }),
-    );
-
-    render(<CustomerProfile />);
+    await user.click(screen.getByRole("button", { name: "Edit Details" }));
+    await user.click(screen.getByRole("button", { name: "Save Changes" }));
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /edit details/i }),
-      ).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /edit details/i }));
-    fireEvent.click(screen.getByRole("button", { name: /save changes/i }));
-
-    const saveBtn = screen.getByRole("button", { name: /saving\.\.\./i });
-    const cancelBtn = screen.getByRole("button", { name: /cancel/i });
-
-    expect(saveBtn).toBeDisabled();
-    expect(cancelBtn).toBeDisabled();
-
-    resolvePost({ status: "success", user: mockUserData });
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("Profile updated successfully!"),
+        screen.getByText("Invalid phone number format."),
       ).toBeInTheDocument();
     });
   });

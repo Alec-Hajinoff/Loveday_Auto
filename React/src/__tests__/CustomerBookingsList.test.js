@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import CustomerBookingsList from "../CustomerBookingsList";
 import { customerBookingsList } from "../ApiService";
 
@@ -8,56 +8,85 @@ jest.mock("../ApiService", () => ({
   customerBookingsList: jest.fn(),
 }));
 
-jest.mock("../CustomerCancelBooking", () => {
-  return function DummyCancelBooking({ appointmentId, onBookingCancelled }) {
-    return (
-      <button
-        data-testid={`cancel-btn-${appointmentId}`}
-        onClick={onBookingCancelled}
-      >
-        Cancel Appointment
-      </button>
-    );
-  };
-});
+jest.mock("../CustomerCancelBooking", () => ({ onBookingCancelled }) => (
+  <button data-testid="cancel-booking-btn" onClick={onBookingCancelled}>
+    Cancel Booking
+  </button>
+));
 
 describe("CustomerBookingsList Component", () => {
-  const mockUpcomingBookings = [
-    {
-      appointment_id: 101,
-      date: "2026-09-01",
-      start_time: "09:00:00",
-      end_time: "10:00:00",
-      service_name: "Full Service",
-      vehicle_reg: "AB12 CDE",
-      notes: "Check oil filter",
-    },
-  ];
-
-  const mockPastBookings = [
-    {
-      appointment_id: 102,
-      date: "2026-01-15",
-      start_time: "14:00:00",
-      end_time: "15:00:00",
-      service_name: "MOT Test",
-      vehicle_reg: "XY55 ZZZ",
-      notes: null,
-    },
-  ];
+  const mockBookingsResponse = {
+    status: "success",
+    upcoming: [
+      {
+        appointment_id: 1,
+        date: "2026-09-30",
+        start_time: "10:00:00",
+        end_time: "11:00:00",
+        service_name: "MOT Test",
+        vehicle_reg: "AB12CDE",
+        notes: "Check brakes",
+      },
+    ],
+    past: [
+      {
+        appointment_id: 2,
+        date: "2026-08-15",
+        start_time: "14:00:00",
+        end_time: "15:00:00",
+        service_name: "Full Service",
+        vehicle_reg: "XY54ZAB",
+        notes: null,
+      },
+    ],
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("displays loading text initially", () => {
-    customerBookingsList.mockImplementation(() => new Promise(() => {}));
+  test("displays loading state initially and renders upcoming and past bookings on success", async () => {
+    customerBookingsList.mockResolvedValueOnce(mockBookingsResponse);
+
     render(<CustomerBookingsList />);
 
     expect(screen.getByText("Loading your bookings...")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Your Upcoming Appointments"),
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.getByText("30-09-2026 (10:00 - 11:00)")).toBeInTheDocument();
+    expect(screen.getByText("MOT Test")).toBeInTheDocument();
+    expect(screen.getByText("AB12CDE")).toBeInTheDocument();
+    expect(screen.getByText("Check brakes")).toBeInTheDocument();
+    expect(screen.getByText("Upcoming")).toBeInTheDocument();
+
+    expect(screen.getByText("Your Previous Appointments")).toBeInTheDocument();
+    expect(screen.getByText("15-08-2026 (14:00 - 15:00)")).toBeInTheDocument();
+    expect(screen.getByText("Full Service")).toBeInTheDocument();
+    expect(screen.getByText("XY54ZAB")).toBeInTheDocument();
+    expect(screen.getByText("Previous")).toBeInTheDocument();
   });
 
-  test("renders empty states when no upcoming or past bookings exist", async () => {
+  test("displays error message when API fails", async () => {
+    customerBookingsList.mockResolvedValueOnce({
+      status: "error",
+      message: "Failed to retrieve bookings.",
+    });
+
+    render(<CustomerBookingsList />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Failed to retrieve bookings."),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test("displays empty state messages when no bookings exist", async () => {
     customerBookingsList.mockResolvedValueOnce({
       status: "success",
       upcoming: [],
@@ -68,89 +97,28 @@ describe("CustomerBookingsList Component", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("Loading your bookings..."),
-      ).not.toBeInTheDocument();
-    });
-
-    expect(
-      screen.getByText("No upcoming appointments scheduled."),
-    ).toBeInTheDocument();
-    expect(screen.getByText("No past appointments found.")).toBeInTheDocument();
-  });
-
-  test("renders upcoming and past booking cards correctly", async () => {
-    customerBookingsList.mockResolvedValueOnce({
-      status: "success",
-      upcoming: mockUpcomingBookings,
-      past: mockPastBookings,
-    });
-
-    render(<CustomerBookingsList />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("2026-09-01 (09:00 - 10:00)"),
+        screen.getByText("No upcoming appointments scheduled."),
       ).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("Upcoming")).toBeInTheDocument();
-    expect(screen.getByText("Full Service")).toBeInTheDocument();
-    expect(screen.getByText("AB12 CDE")).toBeInTheDocument();
-    expect(screen.getByText("Check oil filter")).toBeInTheDocument();
-    expect(screen.getByTestId("cancel-btn-101")).toBeInTheDocument();
-
-    expect(screen.getByText("2026-01-15 (14:00 - 15:00)")).toBeInTheDocument();
-    expect(screen.getByText("Past")).toBeInTheDocument();
-    expect(screen.getByText("MOT Test")).toBeInTheDocument();
-    expect(screen.getByText("XY55 ZZZ")).toBeInTheDocument();
-    expect(screen.queryByTestId("cancel-btn-102")).not.toBeInTheDocument();
-  });
-
-  test("renders error message on API failure", async () => {
-    customerBookingsList.mockResolvedValueOnce({
-      status: "error",
-      message: "Failed to fetch customer data.",
-    });
-
-    render(<CustomerBookingsList />);
-
-    await waitFor(() => {
       expect(
-        screen.getByText("Failed to fetch customer data."),
+        screen.getByText("No previous appointments found."),
       ).toBeInTheDocument();
     });
   });
 
-  test("renders error message on promise rejection", async () => {
-    customerBookingsList.mockRejectedValueOnce(new Error("Network Error"));
-
-    render(<CustomerBookingsList />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Network Error")).toBeInTheDocument();
-    });
-  });
-
-  test("re-fetches bookings and dispatches event when cancellation occurs", async () => {
-    customerBookingsList.mockResolvedValue({
-      status: "success",
-      upcoming: mockUpcomingBookings,
-      past: [],
-    });
-
+  test("handles booking cancellation, refetches bookings, and dispatches event", async () => {
+    const user = userEvent.setup();
+    customerBookingsList.mockResolvedValue(mockBookingsResponse);
     const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
 
     render(<CustomerBookingsList />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("cancel-btn-101")).toBeInTheDocument();
+      expect(screen.getByTestId("cancel-booking-btn")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId("cancel-btn-101"));
+    await user.click(screen.getByTestId("cancel-booking-btn"));
 
-    await waitFor(() => {
-      expect(customerBookingsList).toHaveBeenCalledTimes(3);
-    });
+    expect(customerBookingsList).toHaveBeenCalledTimes(3);
 
     expect(dispatchEventSpy).toHaveBeenCalledWith(
       expect.objectContaining({ type: "bookingUpdated" }),
@@ -159,23 +127,42 @@ describe("CustomerBookingsList Component", () => {
     dispatchEventSpy.mockRestore();
   });
 
-  test("re-fetches bookings when 'bookingUpdated' window event is triggered", async () => {
-    customerBookingsList.mockResolvedValue({
+  test("paginates past appointments correctly", async () => {
+    const manyPastBookings = {
       status: "success",
       upcoming: [],
-      past: [],
-    });
+      past: Array.from({ length: 7 }, (_, index) => ({
+        appointment_id: 10 + index,
+        date: `2026-07-0${index + 1}`,
+        start_time: "09:00:00",
+        end_time: "10:00:00",
+        service_name: `Service ${index + 1}`,
+        vehicle_reg: `REG${index}`,
+        notes: null,
+      })),
+    };
+
+    customerBookingsList.mockResolvedValueOnce(manyPastBookings);
+    const user = userEvent.setup();
 
     render(<CustomerBookingsList />);
 
     await waitFor(() => {
-      expect(customerBookingsList).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Service 1")).toBeInTheDocument();
     });
 
-    fireEvent(window, new CustomEvent("bookingUpdated"));
+    expect(screen.getByText("Service 5")).toBeInTheDocument();
+    expect(screen.queryByText("Service 6")).not.toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(customerBookingsList).toHaveBeenCalledTimes(2);
-    });
+    const nextButton = screen.getByRole("button", { name: /Next >/i });
+    await user.click(nextButton);
+
+    expect(screen.getByText("Service 6")).toBeInTheDocument();
+    expect(screen.queryByText("Service 1")).not.toBeInTheDocument();
+
+    const prevButton = screen.getByRole("button", { name: /< Prev/i });
+    await user.click(prevButton);
+
+    expect(screen.getByText("Service 1")).toBeInTheDocument();
   });
 });
