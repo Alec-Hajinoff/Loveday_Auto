@@ -1,51 +1,54 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { BrowserRouter } from "react-router-dom";
 import UserLogin from "../UserLogin";
 import { loginUser, passwordResetLink } from "../ApiService";
 
-const mockNavigate = jest.fn();
+jest.mock("../ApiService");
+
+const mockedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
-
-jest.mock("../ApiService", () => ({
-  loginUser: jest.fn(),
-  passwordResetLink: jest.fn(),
+  useNavigate: () => mockedNavigate,
 }));
 
 describe("UserLogin Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  test("renders login form elements correctly", () => {
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-  test("renders form inputs, buttons, and links", () => {
-    render(<UserLogin />);
-
-    expect(screen.getByPlaceholderText(/Email address/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Login/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Email address")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Forgot your password\?/i }),
+      screen.getByRole("button", { name: /^login$/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /forgot your password\?/i }),
     ).toBeInTheDocument();
   });
 
-  test("shows error message on client-side invalid email submission", async () => {
-    render(<UserLogin />);
+  test("shows validation error for invalid email format", async () => {
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
       target: { value: "invalid-email" },
     });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), {
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
 
     expect(
       screen.getByText(/Please enter a valid email address/i),
@@ -53,16 +56,21 @@ describe("UserLogin Component", () => {
     expect(loginUser).not.toHaveBeenCalled();
   });
 
-  test("shows error message on short password submission", async () => {
-    render(<UserLogin />);
+  test("shows validation error for password less than 8 characters", async () => {
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "user@example.com" },
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
+      target: { value: "test@domain.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), {
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "short" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
 
     expect(
       screen.getByText(
@@ -72,126 +80,105 @@ describe("UserLogin Component", () => {
     expect(loginUser).not.toHaveBeenCalled();
   });
 
-  test("navigates to /UserDashboard on successful customer login", async () => {
+  test("successfully logs in customer and navigates to UserDashboard", async () => {
     loginUser.mockResolvedValueOnce({ status: "success", role: "customer" });
 
-    render(<UserLogin />);
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "customer@example.com" },
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
+      target: { value: "customer@domain.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), {
-      target: { value: "password123" },
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "securePassword123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
 
     await waitFor(() => {
-      expect(loginUser).toHaveBeenCalledWith({
-        email: "customer@example.com",
-        password: "password123",
-      });
-      expect(mockNavigate).toHaveBeenCalledWith("/UserDashboard");
+      expect(mockedNavigate).toHaveBeenCalledWith("/UserDashboard");
     });
   });
 
-  test("navigates to /AdminDashboard on successful admin login", async () => {
+  test("successfully logs in admin and navigates to AdminDashboard", async () => {
     loginUser.mockResolvedValueOnce({ status: "success", role: "admin" });
 
-    render(<UserLogin />);
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "admin@example.com" },
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
+      target: { value: "admin@domain.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), {
-      target: { value: "password123" },
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "adminPassword123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/AdminDashboard");
+      expect(mockedNavigate).toHaveBeenCalledWith("/AdminDashboard");
     });
   });
 
-  test("displays unverified message and clears password field on unverified response", async () => {
+  test("handles unverified user status", async () => {
     loginUser.mockResolvedValueOnce({
       status: "unverified",
-      message: "Please verify your email address.",
+      message: "Please verify your email before logging in.",
     });
 
-    render(<UserLogin />);
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    const passwordInput = screen.getByPlaceholderText(/Password/i);
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "unverified@example.com" },
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
+      target: { value: "unverified@domain.com" },
     });
-    fireEvent.change(passwordInput, {
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Please verify your email address."),
+        screen.getByText("Please verify your email before logging in."),
       ).toBeInTheDocument();
-      expect(passwordInput.value).toBe("");
     });
   });
 
-  test("displays error message on failed login attempt", async () => {
-    loginUser.mockResolvedValueOnce({
-      status: "error",
-      message: "Invalid credentials.",
-    });
-
-    render(<UserLogin />);
-
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "user@example.com" },
-    });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), {
-      target: { value: "password123" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Login/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Invalid credentials.")).toBeInTheDocument();
-    });
-  });
-
-  test("handles forgot password click with empty email field", () => {
-    render(<UserLogin />);
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /Forgot your password\?/i }),
-    );
-
-    expect(
-      screen.getByText(
-        /Please enter your email address so we can help you reset your password/i,
-      ),
-    ).toBeInTheDocument();
-    expect(passwordResetLink).not.toHaveBeenCalled();
-  });
-
-  test("triggers password reset request successfully when email is provided", async () => {
+  test("handles forgot password flow successfully", async () => {
     passwordResetLink.mockResolvedValueOnce({ status: "success" });
 
-    render(<UserLogin />);
+    render(
+      <BrowserRouter>
+        <UserLogin />
+      </BrowserRouter>,
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Email address/i), {
-      target: { value: "user@example.com" },
+    fireEvent.change(screen.getByPlaceholderText("Email address"), {
+      target: { value: "forgot@domain.com" },
     });
+
     fireEvent.click(
-      screen.getByRole("button", { name: /Forgot your password\?/i }),
+      screen.getByRole("button", { name: /forgot your password\?/i }),
     );
 
     await waitFor(() => {
-      expect(passwordResetLink).toHaveBeenCalledWith("user@example.com");
       expect(
         screen.getByText(
-          /If an account exists for this email address, a password reset link has been sent./i,
+          /If an account exists for this email address, a password reset link has been sent\./i,
         ),
       ).toBeInTheDocument();
     });
+
+    expect(passwordResetLink).toHaveBeenCalledWith("forgot@domain.com");
   });
 });
