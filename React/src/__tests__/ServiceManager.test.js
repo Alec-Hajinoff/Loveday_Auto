@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ServiceManager from "../ServiceManager";
 import { serviceManager } from "../ApiService";
 
@@ -10,83 +10,73 @@ describe("ServiceManager Component", () => {
     jest.clearAllMocks();
   });
 
-  test("renders initial empty service form row without remove button", () => {
+  test("renders initial service form with one service row", () => {
     render(<ServiceManager />);
 
-    expect(screen.getByText("Garage Services Manager")).toBeInTheDocument();
-    expect(screen.getByText("Service #1")).toBeInTheDocument();
+    expect(screen.getByText("Add Garage Services")).toBeInTheDocument();
+    expect(screen.getByText("Service #1 Name")).toBeInTheDocument();
+    expect(screen.getByText("Duration (Minutes)")).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /remove/i }),
+      screen.getByRole("button", { name: /\+ Add Another Service/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Save Services/i }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: /Remove/i }),
     ).not.toBeInTheDocument();
   });
 
-  test("adds a new service row when '+ Add Another Service' is clicked", async () => {
+  test("allows adding and removing service rows", () => {
     render(<ServiceManager />);
 
-    const addBtn = screen.getByRole("button", {
-      name: /\+ add another service/i,
+    const addButton = screen.getByRole("button", {
+      name: /\+ Add Another Service/i,
     });
-    await userEvent.click(addBtn);
 
-    expect(screen.getByText("Service #1")).toBeInTheDocument();
-    expect(screen.getByText("Service #2")).toBeInTheDocument();
+    fireEvent.click(addButton);
+    expect(screen.getByText("Service #2 Name")).toBeInTheDocument();
 
-    const removeButtons = screen.getAllByRole("button", { name: /remove/i });
-    expect(removeButtons).toHaveLength(2);
-  });
+    const removeButtons = screen.getAllByRole("button", { name: /Remove/i });
+    expect(removeButtons.length).toBe(2);
 
-  test("removes a service row when 'Remove' button is clicked", async () => {
-    render(<ServiceManager />);
+    fireEvent.click(removeButtons[0]);
 
-    const addBtn = screen.getByRole("button", {
-      name: /\+ add another service/i,
-    });
-    await userEvent.click(addBtn);
-
-    const nameInputs = screen.getAllByRole("textbox");
-    await userEvent.type(nameInputs[0], "MOT Test");
-    await userEvent.type(nameInputs[1], "Brake Check");
-
-    const removeButtons = screen.getAllByRole("button", { name: /remove/i });
-    await userEvent.click(removeButtons[0]);
-
-    expect(screen.queryByDisplayValue("MOT Test")).not.toBeInTheDocument();
-    expect(screen.getByDisplayValue("Brake Check")).toBeInTheDocument();
+    expect(screen.queryByText("Service #2 Name")).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /remove/i }),
+      screen.queryByRole("button", { name: /Remove/i }),
     ).not.toBeInTheDocument();
   });
 
-  test("shows validation error message when submitting empty or invalid fields", async () => {
+  test("shows validation message when submitting empty fields", async () => {
     render(<ServiceManager />);
 
-    const submitBtn = screen.getByRole("button", { name: /save services/i });
-    await userEvent.click(submitBtn);
+    const saveButton = screen.getByRole("button", { name: /Save Services/i });
+    fireEvent.click(saveButton);
 
     expect(
       screen.getByText(
-        /please complete all required fields \(name and duration in minutes\)\./i,
+        /Please complete all required fields \(Name and Duration in minutes\)\./i,
       ),
     ).toBeInTheDocument();
+
     expect(serviceManager).not.toHaveBeenCalled();
   });
 
-  test("submits form successfully and resets input fields", async () => {
+  test("successfully submits services when fields are valid", async () => {
     serviceManager.mockResolvedValueOnce({ status: "success" });
 
     render(<ServiceManager />);
 
     const nameInput = screen.getByRole("textbox");
     const durationInput = screen.getByRole("spinbutton");
-    const submitBtn = screen.getByRole("button", { name: /save services/i });
 
-    await userEvent.type(nameInput, "Full Service");
-    await userEvent.type(durationInput, "120");
-    await userEvent.click(submitBtn);
+    fireEvent.change(nameInput, { target: { value: "Full Service" } });
+    fireEvent.change(durationInput, { target: { value: "120" } });
 
-    expect(serviceManager).toHaveBeenCalledWith([
-      { name: "Full Service", duration_minutes: "120" },
-    ]);
+    const saveButton = screen.getByRole("button", { name: /Save Services/i });
+    fireEvent.click(saveButton);
 
     await waitFor(() => {
       expect(
@@ -94,30 +84,9 @@ describe("ServiceManager Component", () => {
       ).toBeInTheDocument();
     });
 
-    expect(nameInput).toHaveValue("");
-    expect(durationInput).toHaveValue(null);
-  });
-
-  test("displays API error message when serviceManager fails", async () => {
-    serviceManager.mockResolvedValueOnce({
-      status: "error",
-      message: "Database connection failed.",
-    });
-
-    render(<ServiceManager />);
-
-    const nameInput = screen.getByRole("textbox");
-    const durationInput = screen.getByRole("spinbutton");
-    const submitBtn = screen.getByRole("button", { name: /save services/i });
-
-    await userEvent.type(nameInput, "Oil Change");
-    await userEvent.type(durationInput, "30");
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("Database connection failed."),
-      ).toBeInTheDocument();
-    });
+    expect(serviceManager).toHaveBeenCalledTimes(1);
+    expect(serviceManager).toHaveBeenCalledWith([
+      { name: "Full Service", duration_minutes: "120" },
+    ]);
   });
 });

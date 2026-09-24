@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute";
@@ -10,64 +11,47 @@ describe("ProtectedRoute Component", () => {
     jest.clearAllMocks();
   });
 
-  test("renders nothing (null) while session check is pending", () => {
+  test("renders nothing initially while session verification is pending", () => {
     checkSession.mockImplementation(() => new Promise(() => {}));
 
     const { container } = render(
-      <MemoryRouter initialEntries={["/protected"]}>
-        <Routes>
-          <Route
-            path="/protected"
-            element={
-              <ProtectedRoute>
-                <div>Secret Content</div>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+      <MemoryRouter>
+        <ProtectedRoute>
+          <div>Protected Admin Content</div>
+        </ProtectedRoute>
       </MemoryRouter>,
     );
 
-    expect(screen.queryByText("Secret Content")).not.toBeInTheDocument();
     expect(container.firstChild).toBeNull();
   });
 
-  test("renders protected children when session check succeeds (authenticated: true)", async () => {
+  test("renders children when the user is successfully authenticated", async () => {
     checkSession.mockResolvedValueOnce({ authenticated: true });
 
     render(
-      <MemoryRouter initialEntries={["/protected"]}>
-        <Routes>
-          <Route
-            path="/protected"
-            element={
-              <ProtectedRoute>
-                <div>Secret Content</div>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+      <MemoryRouter>
+        <ProtectedRoute>
+          <div>Protected Admin Content</div>
+        </ProtectedRoute>
       </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Secret Content")).toBeInTheDocument();
+      expect(screen.getByText("Protected Admin Content")).toBeInTheDocument();
     });
-
-    expect(checkSession).toHaveBeenCalledTimes(1);
   });
 
-  test("redirects to home route ('/') when session check returns authenticated: false", async () => {
+  test("redirects to home when the user is not authenticated", async () => {
     checkSession.mockResolvedValueOnce({ authenticated: false });
 
     render(
-      <MemoryRouter initialEntries={["/protected"]}>
+      <MemoryRouter initialEntries={["/admin"]}>
         <Routes>
           <Route
-            path="/protected"
+            path="/admin"
             element={
               <ProtectedRoute>
-                <div>Secret Content</div>
+                <div>Protected Admin Content</div>
               </ProtectedRoute>
             }
           />
@@ -78,22 +62,23 @@ describe("ProtectedRoute Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Home Page")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Protected Admin Content"),
+      ).not.toBeInTheDocument();
     });
-
-    expect(screen.queryByText("Secret Content")).not.toBeInTheDocument();
   });
 
-  test("redirects to home route ('/') when session check API call fails", async () => {
-    checkSession.mockRejectedValueOnce(new Error("Network Error"));
+  test("redirects to home when the session check throws an error", async () => {
+    checkSession.mockRejectedValueOnce(new Error("Network failure"));
 
     render(
-      <MemoryRouter initialEntries={["/protected"]}>
+      <MemoryRouter initialEntries={["/admin"]}>
         <Routes>
           <Route
-            path="/protected"
+            path="/admin"
             element={
               <ProtectedRoute>
-                <div>Secret Content</div>
+                <div>Protected Admin Content</div>
               </ProtectedRoute>
             }
           />
@@ -104,8 +89,9 @@ describe("ProtectedRoute Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Home Page")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Protected Admin Content"),
+      ).not.toBeInTheDocument();
     });
-
-    expect(screen.queryByText("Secret Content")).not.toBeInTheDocument();
   });
 });

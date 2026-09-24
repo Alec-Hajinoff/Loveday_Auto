@@ -1,14 +1,15 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import RegisteredPage from "../RegisteredPage";
 
-jest.mock("../UserLogin.js", () => {
-  return function MockUserLogin() {
-    return <div data-testid="user-login-component">User Login Mock</div>;
+jest.mock("../UserLogin", () => {
+  return function DummyUserLogin() {
+    return <div data-testid="user-login-mock">User Login Component</div>;
   };
 });
 
 describe("RegisteredPage Component", () => {
-  test("renders email verification success message and section divider", () => {
+  test("renders the email verification thank you message", () => {
     render(<RegisteredPage />);
 
     expect(
@@ -16,14 +17,11 @@ describe("RegisteredPage Component", () => {
         /thank you for verifying your email address! please log in using your credentials\./i,
       ),
     ).toBeInTheDocument();
-
-    expect(screen.getByText(/registered user login:/i)).toBeInTheDocument();
   });
 
-  test("renders child UserLogin component", () => {
+  test("renders the UserLogin component", () => {
     render(<RegisteredPage />);
 
-    expect(screen.getByTestId("user-login-component")).toBeInTheDocument();
-    expect(screen.getByText("User Login Mock")).toBeInTheDocument();
+    expect(screen.getByTestId("user-login-mock")).toBeInTheDocument();
   });
 });

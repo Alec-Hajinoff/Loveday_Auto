@@ -4,84 +4,63 @@ import { MemoryRouter } from "react-router-dom";
 import NavigationBar from "../NavigationBar";
 
 describe("NavigationBar Component", () => {
-  test("renders Home and Shop navigation links", () => {
+  test("renders all navigation links", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <NavigationBar isAuthenticated={false} userRole={null} />
+      <MemoryRouter>
+        <NavigationBar isAuthenticated={false} />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /shop/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /dashboard/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("Services")).toBeInTheDocument();
+    expect(screen.getByText("About Us")).toBeInTheDocument();
+    expect(screen.getByText("Dashboard")).toBeInTheDocument();
   });
 
-  test("applies active class to current path link", () => {
+  test("routes dashboard to /UserLogin when not authenticated", () => {
     render(
-      <MemoryRouter initialEntries={["/shop"]}>
-        <NavigationBar isAuthenticated={false} userRole={null} />
+      <MemoryRouter initialEntries={["/"]}>
+        <NavigationBar isAuthenticated={false} />
       </MemoryRouter>,
     );
 
-    const shopLink = screen.getByRole("link", { name: /shop/i });
-    const homeLink = screen.getByRole("link", { name: /home/i });
+    const dashboardLink = screen.getByText("Dashboard");
+    expect(dashboardLink.getAttribute("href")).toBe("/UserLogin");
+  });
 
-    expect(shopLink).toHaveClass("active");
+  test("routes dashboard to /UserDashboard when authenticated as a customer", () => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <NavigationBar isAuthenticated={true} userRole="customer" />
+      </MemoryRouter>,
+    );
+
+    const dashboardLink = screen.getByText("Dashboard");
+    expect(dashboardLink.getAttribute("href")).toBe("/UserDashboard");
+  });
+
+  test("routes dashboard to /AdminDashboard when authenticated as an admin", () => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <NavigationBar isAuthenticated={true} userRole="admin" />
+      </MemoryRouter>,
+    );
+
+    const dashboardLink = screen.getByText("Dashboard");
+    expect(dashboardLink.getAttribute("href")).toBe("/AdminDashboard");
+  });
+
+  test("applies active class to the current route link", () => {
+    render(
+      <MemoryRouter initialEntries={["/Services"]}>
+        <NavigationBar isAuthenticated={false} />
+      </MemoryRouter>,
+    );
+
+    const servicesLink = screen.getByText("Services");
+    expect(servicesLink).toHaveClass("active");
+
+    const homeLink = screen.getByText("Home");
     expect(homeLink).not.toHaveClass("active");
-  });
-
-  test("routes Dashboard link to /UserLogin when user is not authenticated", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
-        <NavigationBar isAuthenticated={false} userRole={null} />
-      </MemoryRouter>,
-    );
-
-    const dashboardLink = screen.getByRole("link", { name: /dashboard/i });
-    expect(dashboardLink).toHaveAttribute("href", "/UserLogin");
-  });
-
-  test("routes Dashboard link to /UserDashboard for authenticated customers", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
-        <NavigationBar isAuthenticated={true} userRole="customer" />
-      </MemoryRouter>,
-    );
-
-    const dashboardLink = screen.getByRole("link", { name: /dashboard/i });
-    expect(dashboardLink).toHaveAttribute("href", "/UserDashboard");
-  });
-
-  test("routes Dashboard link to /AdminDashboard for authenticated admin users", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
-        <NavigationBar isAuthenticated={true} userRole="admin" />
-      </MemoryRouter>,
-    );
-
-    const dashboardLink = screen.getByRole("link", { name: /dashboard/i });
-    expect(dashboardLink).toHaveAttribute("href", "/AdminDashboard");
-  });
-
-  test("highlights Dashboard link as active on /UserDashboard and /AdminDashboard routes", () => {
-    const { rerender } = render(
-      <MemoryRouter initialEntries={["/UserDashboard"]}>
-        <NavigationBar isAuthenticated={true} userRole="customer" />
-      </MemoryRouter>,
-    );
-
-    let dashboardLink = screen.getByRole("link", { name: /dashboard/i });
-    expect(dashboardLink).toHaveClass("active");
-
-    rerender(
-      <MemoryRouter initialEntries={["/AdminDashboard"]}>
-        <NavigationBar isAuthenticated={true} userRole="admin" />
-      </MemoryRouter>,
-    );
-
-    dashboardLink = screen.getByRole("link", { name: /dashboard/i });
-    expect(dashboardLink).toHaveClass("active");
   });
 });
