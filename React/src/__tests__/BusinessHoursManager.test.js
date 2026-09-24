@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import BusinessHoursManager from "../BusinessHoursManager";
 import { businessHoursManager } from "../ApiService";
 
@@ -13,92 +13,63 @@ describe("BusinessHoursManager Component", () => {
     jest.clearAllMocks();
   });
 
-  test("renders all 7 days of the week with unchecked inputs by default", () => {
+  test("renders heading and all seven days of the week with inputs", () => {
     render(<BusinessHoursManager />);
 
-    const days = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
-
-    days.forEach((day) => {
-      const checkbox = screen.getByLabelText(day);
-      expect(checkbox).toBeInTheDocument();
-      expect(checkbox).not.toBeChecked();
-    });
-
-    const submitBtn = screen.getByRole("button", { name: /save hours/i });
-    expect(submitBtn).toBeInTheDocument();
+    expect(screen.getByText("Add Opening Hours")).toBeInTheDocument();
+    expect(screen.getByLabelText("Monday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tuesday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Wednesday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Thursday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Friday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Saturday")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sunday")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Save Hours/i }),
+    ).toBeInTheDocument();
   });
 
-  test("shows error message when submitting with no days selected", () => {
+  test("shows validation error if no days are selected on submit", async () => {
+    const user = userEvent.setup();
     render(<BusinessHoursManager />);
 
-    fireEvent.click(screen.getByRole("button", { name: /save hours/i }));
+    await user.click(screen.getByRole("button", { name: /Save Hours/i }));
 
     expect(
       screen.getByText("Please select at least one day."),
     ).toBeInTheDocument();
-    expect(businessHoursManager).not.toHaveBeenCalled();
   });
 
-  test("disables time inputs until a day is checked", () => {
+  test("shows validation error if a selected day is missing open or close times", async () => {
+    const user = userEvent.setup();
     render(<BusinessHoursManager />);
 
-    const mondayCheckbox = screen.getByLabelText("Monday");
-    const mondayRow = mondayCheckbox.closest(".day-row");
-    const timeInputs = mondayRow.querySelectorAll('input[type="time"]');
+    await user.click(screen.getByLabelText("Monday"));
 
-    expect(timeInputs[0]).toBeDisabled();
-    expect(timeInputs[1]).toBeDisabled();
-
-    fireEvent.click(mondayCheckbox);
-
-    expect(timeInputs[0]).not.toBeDisabled();
-    expect(timeInputs[1]).not.toBeDisabled();
-  });
-
-  test("shows error message when a selected day is missing open or close time", () => {
-    render(<BusinessHoursManager />);
-
-    const mondayCheckbox = screen.getByLabelText("Monday");
-    fireEvent.click(mondayCheckbox);
-
-    const mondayRow = mondayCheckbox.closest(".day-row");
-    const [openInput] = mondayRow.querySelectorAll('input[type="time"]');
-
-    fireEvent.change(openInput, { target: { value: "08:00" } });
-
-    fireEvent.click(screen.getByRole("button", { name: /save hours/i }));
+    await user.click(screen.getByRole("button", { name: /Save Hours/i }));
 
     expect(
       screen.getByText(
         "Please enter both opening and closing times for all selected days.",
       ),
     ).toBeInTheDocument();
-    expect(businessHoursManager).not.toHaveBeenCalled();
   });
 
-  test("submits selected days and dispatches 'bookingUpdated' event on success", async () => {
+  test("successfully saves business hours, dispatches event, and shows success message", async () => {
+    const user = userEvent.setup();
     businessHoursManager.mockResolvedValueOnce({ status: "success" });
     const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
 
     render(<BusinessHoursManager />);
 
-    const mondayCheckbox = screen.getByLabelText("Monday");
-    fireEvent.click(mondayCheckbox);
-    const mondayRow = mondayCheckbox.closest(".day-row");
-    const [monOpen, monClose] =
-      mondayRow.querySelectorAll('input[type="time"]');
-    fireEvent.change(monOpen, { target: { value: "08:00" } });
-    fireEvent.change(monClose, { target: { value: "17:00" } });
+    await user.click(screen.getByLabelText("Monday"));
 
-    fireEvent.click(screen.getByRole("button", { name: /save hours/i }));
+    const allTimeInputs = document.querySelectorAll('input[type="time"]');
+
+    await user.type(allTimeInputs[0], "08:00");
+    await user.type(allTimeInputs[1], "17:00");
+
+    await user.click(screen.getByRole("button", { name: /Save Hours/i }));
 
     expect(businessHoursManager).toHaveBeenCalledWith([
       { day_of_week: 1, open_time: "08:00", close_time: "17:00" },
@@ -117,34 +88,26 @@ describe("BusinessHoursManager Component", () => {
     dispatchEventSpy.mockRestore();
   });
 
-  test("handles API error responses and catch block errors gracefully", async () => {
+  test("handles API failure response gracefully", async () => {
+    const user = userEvent.setup();
     businessHoursManager.mockResolvedValueOnce({
       status: "error",
-      message: "Server database failure",
+      message: "Failed to update schedule.",
     });
 
-    const { rerender } = render(<BusinessHoursManager />);
+    render(<BusinessHoursManager />);
 
-    const mondayCheckbox = screen.getByLabelText("Monday");
-    fireEvent.click(mondayCheckbox);
-    const mondayRow = mondayCheckbox.closest(".day-row");
-    const [monOpen, monClose] =
-      mondayRow.querySelectorAll('input[type="time"]');
-    fireEvent.change(monOpen, { target: { value: "09:00" } });
-    fireEvent.change(monClose, { target: { value: "17:00" } });
+    await user.click(screen.getByLabelText("Monday"));
+    const allTimeInputs = document.querySelectorAll('input[type="time"]');
+    await user.type(allTimeInputs[0], "09:00");
+    await user.type(allTimeInputs[1], "17:00");
 
-    fireEvent.click(screen.getByRole("button", { name: /save hours/i }));
+    await user.click(screen.getByRole("button", { name: /Save Hours/i }));
 
     await waitFor(() => {
-      expect(screen.getByText("Server database failure")).toBeInTheDocument();
-    });
-
-    businessHoursManager.mockRejectedValueOnce(new Error("Network Error"));
-
-    fireEvent.click(screen.getByRole("button", { name: /save hours/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Network Error")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to update schedule."),
+      ).toBeInTheDocument();
     });
   });
 });

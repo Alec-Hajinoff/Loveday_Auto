@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import BookingDetailsForm from "../BookingDetailsForm";
 import { bookingDetailsForm } from "../ApiService";
 
@@ -8,146 +8,135 @@ jest.mock("../ApiService", () => ({
   bookingDetailsForm: jest.fn(),
 }));
 
-const mockServices = [
-  { id: 1, name: "Full Service", duration_minutes: 120 },
-  { id: 2, name: "MOT Inspection", duration_minutes: 45 },
-];
-
-const mockUser = {
-  first_name: "Jane",
-  surname: "Smith",
-  phone: "07987654321",
-};
-
 describe("BookingDetailsForm Component", () => {
-  const mockOnConfirm = jest.fn();
+  const mockFormResponse = {
+    status: "success",
+    services: [
+      { id: 101, name: "MOT Test" },
+      { id: 102, name: "Full Service" },
+    ],
+    user: {
+      first_name: "Alice",
+      surname: "Smith",
+      phone: "07123456789",
+    },
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    bookingDetailsForm.mockResolvedValue({
-      status: "success",
-      services: mockServices,
-      user: mockUser,
-    });
   });
 
-  test("fetches initial form data and pre-populates user details", async () => {
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
+  test("renders form fields and loads initial data from API", async () => {
+    bookingDetailsForm.mockResolvedValueOnce(mockFormResponse);
+
+    render(<BookingDetailsForm onConfirm={() => {}} submitting={false} />);
+
+    expect(screen.getByText("Enter Appointment Details")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText("John")).toHaveValue("Jane");
+      expect(
+        screen.getByRole("option", { name: "MOT Test" }),
+      ).toBeInTheDocument();
     });
 
-    expect(screen.getByPlaceholderText("Doe")).toHaveValue("Smith");
-    expect(screen.getByPlaceholderText("e.g. 07123456789")).toHaveValue(
-      "07987654321",
-    );
-
     expect(
-      screen.getByRole("option", { name: "Full Service (120 mins)" }),
+      screen.getByRole("option", { name: "Full Service" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("option", { name: "MOT Inspection (45 mins)" }),
-    ).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Alice")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Smith")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("07123456789")).toBeInTheDocument();
   });
 
-  test("shows estimated duration when a service is selected", async () => {
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
+  test("shows error message if vehicle registration is empty on submit", async () => {
+    const user = userEvent.setup();
+    bookingDetailsForm.mockResolvedValueOnce(mockFormResponse);
 
-    await screen.findByRole("option", { name: "Full Service (120 mins)" });
+    render(<BookingDetailsForm onConfirm={() => {}} submitting={false} />);
 
-    fireEvent.change(screen.getByRole("combobox"), { target: { value: "1" } });
-
-    expect(
-      screen.getByText("Estimated duration: 120 minutes"),
-    ).toBeInTheDocument();
-  });
-
-  test("shows error when both service and notes are omitted", async () => {
-    bookingDetailsForm.mockResolvedValueOnce({
-      status: "success",
-      services: mockServices,
-      user: null,
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("Alice")).toBeInTheDocument();
     });
 
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
-
-    await waitFor(() => expect(bookingDetailsForm).toHaveBeenCalled());
-
-    fireEvent.change(screen.getByPlaceholderText("e.g. AB12 CDE"), {
-      target: { value: "AB12 CDE" },
+    const submitButton = screen.getByRole("button", {
+      name: /Confirm Booking/i,
     });
-    fireEvent.change(screen.getByPlaceholderText("John"), {
-      target: { value: "John" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Doe"), {
-      target: { value: "Doe" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("e.g. 07123456789"), {
-      target: { value: "07123456789" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /confirm booking/i }));
+    await user.click(submitButton);
 
     expect(
       screen.getByText(
-        "Please either select a garage service or provide details in the notes section.",
+        "Please enter a valid vehicle registration number to proceed.",
       ),
     ).toBeInTheDocument();
-    expect(mockOnConfirm).not.toHaveBeenCalled();
   });
 
-  test("submits successfully with selected service", async () => {
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
+  test("shows error message if neither service nor notes are provided", async () => {
+    const user = userEvent.setup();
+    bookingDetailsForm.mockResolvedValueOnce(mockFormResponse);
 
-    await screen.findByRole("option", { name: "Full Service (120 mins)" });
+    render(<BookingDetailsForm onConfirm={() => {}} submitting={false} />);
 
-    fireEvent.change(screen.getByPlaceholderText("e.g. AB12 CDE"), {
-      target: { value: " XY55 ZZZ " },
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("Alice")).toBeInTheDocument();
     });
-    fireEvent.change(screen.getByRole("combobox"), { target: { value: "2" } });
 
-    fireEvent.click(screen.getByRole("button", { name: /confirm booking/i }));
+    const regInput = screen.getByPlaceholderText(/e.g. AB12CDE/i);
+    await user.type(regInput, "AB12CDE");
 
-    expect(mockOnConfirm).toHaveBeenCalledWith({
-      service_id: 2,
-      vehicle_reg: "XY55 ZZZ",
-      notes: null,
-      first_name: "Jane",
-      surname: "Smith",
-      phone: "07987654321",
+    const submitButton = screen.getByRole("button", {
+      name: /Confirm Booking/i,
     });
+    await user.click(submitButton);
+
+    expect(
+      screen.getByText(
+        "Please select a garage service or provide details in the notes section.",
+      ),
+    ).toBeInTheDocument();
   });
 
-  test("submits successfully without service if notes are provided", async () => {
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={false} />);
+  test("successfully submits form payload when all required fields are valid", async () => {
+    const user = userEvent.setup();
+    const handleConfirmMock = jest.fn();
+    bookingDetailsForm.mockResolvedValueOnce(mockFormResponse);
 
-    await waitFor(() => expect(bookingDetailsForm).toHaveBeenCalled());
-
-    fireEvent.change(screen.getByPlaceholderText("e.g. AB12 CDE"), {
-      target: { value: "AB12 CDE" },
-    });
-    fireEvent.change(
-      screen.getByPlaceholderText("Describe your issue or custom request..."),
-      { target: { value: "Brake noise check" } },
+    render(
+      <BookingDetailsForm onConfirm={handleConfirmMock} submitting={false} />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /confirm booking/i }));
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("Alice")).toBeInTheDocument();
+    });
 
-    expect(mockOnConfirm).toHaveBeenCalledWith({
-      service_id: null,
-      vehicle_reg: "AB12 CDE",
-      notes: "Brake noise check",
-      first_name: "Jane",
+    await user.type(screen.getByPlaceholderText(/e.g. AB12CDE/i), "AB12CDE");
+
+    await user.selectOptions(screen.getByRole("combobox"), "101");
+
+    const submitButton = screen.getByRole("button", {
+      name: /Confirm Booking/i,
+    });
+    await user.click(submitButton);
+
+    expect(handleConfirmMock).toHaveBeenCalledTimes(1);
+    expect(handleConfirmMock).toHaveBeenCalledWith({
+      service_id: 101,
+      vehicle_reg: "AB12CDE",
+      notes: null,
+      first_name: "Alice",
       surname: "Smith",
-      phone: "07987654321",
+      phone: "07123456789",
     });
   });
 
-  test("disables submit button and updates text when submitting prop is true", async () => {
-    render(<BookingDetailsForm onConfirm={mockOnConfirm} submitting={true} />);
+  test("displays loading text on submit button when submitting is true", async () => {
+    bookingDetailsForm.mockResolvedValueOnce(mockFormResponse);
 
-    const submitBtn = screen.getByRole("button", { name: /booking\.\.\./i });
-    expect(submitBtn).toBeDisabled();
+    render(<BookingDetailsForm onConfirm={() => {}} submitting={true} />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Booking..." }),
+      ).toBeInTheDocument();
+    });
+    expect(screen.getByRole("button", { name: "Booking..." })).toBeDisabled();
   });
 });

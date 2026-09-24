@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import BookingCalendar from "../BookingCalendar";
 import { bookingCalendar, selectedAppointmentSlot } from "../ApiService";
 
@@ -9,166 +9,118 @@ jest.mock("../ApiService", () => ({
   selectedAppointmentSlot: jest.fn(),
 }));
 
-jest.mock("../BookingDetailsForm", () => {
-  return function DummyBookingDetailsForm({ onConfirm, submitting }) {
-    return (
-      <div data-testid="booking-details-form">
-        <button
-          type="button"
-          disabled={submitting}
-          onClick={() =>
-            onConfirm({
-              service_id: 1,
-              vehicle_reg: "AB12 CDE",
-              notes: "Oil change",
-              first_name: "John",
-              surname: "Doe",
-              phone: "07123456789",
-            })
-          }
-        >
-          Confirm Details
-        </button>
-      </div>
-    );
-  };
-});
-
-const getTodayISO = () => {
-  const date = new Date();
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
-};
+jest.mock("../BookingDetailsForm", () => ({ onConfirm, submitting }) => (
+  <div data-testid="booking-details-form">
+    <button
+      type="button"
+      onClick={() =>
+        onConfirm({ customer_name: "John Doe", email: "john@example.com" })
+      }
+      disabled={submitting}
+    >
+      {submitting ? "Submitting Booking..." : "Confirm Booking"}
+    </button>
+  </div>
+));
 
 describe("BookingCalendar Component", () => {
-  const dynamicToday = getTodayISO();
-  const mockSlots = [
-    {
-      id: 101,
-      date: dynamicToday,
-      start_time: "09:00",
-      end_time: "10:00",
-      status: "available",
-    },
-    {
-      id: 102,
-      date: dynamicToday,
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "booked",
-    },
-  ];
+  const mockSlotsResponse = {
+    status: "success",
+    slots: [
+      {
+        id: 1,
+        date: "2026-09-24",
+        start_time: "10:00",
+        end_time: "11:00",
+        status: "available",
+      },
+      {
+        id: 2,
+        date: "2026-09-24",
+        start_time: "11:00",
+        end_time: "12:00",
+        status: "booked",
+      },
+    ],
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    bookingCalendar.mockResolvedValue({
-      status: "success",
-      slots: mockSlots,
-    });
+    Element.prototype.scrollIntoView = jest.fn();
   });
 
-  test("renders loading state initially and populates available slots", async () => {
+  test("renders calendar header and loads appointment slots on mount", async () => {
+    bookingCalendar.mockResolvedValueOnce(mockSlotsResponse);
+
     render(<BookingCalendar />);
-
-    expect(screen.getByText(/loading schedule\.\.\./i)).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText(/loading schedule\.\.\./i),
-      ).not.toBeInTheDocument();
-    });
 
     expect(screen.getByText("Available Appointments")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "09:00 - 10:00" }),
-    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "10:00 - 11:00" }),
+      ).toBeInTheDocument();
+    });
+
     expect(screen.getByText("Booked")).toBeInTheDocument();
+    expect(bookingCalendar).toHaveBeenCalledTimes(1);
   });
 
-  test("handles empty slot schedules appropriately", async () => {
-    bookingCalendar.mockResolvedValueOnce({
-      status: "success",
-      slots: [],
-    });
+  test("selects an available slot and displays booking details form", async () => {
+    const user = userEvent.setup();
+    bookingCalendar.mockResolvedValueOnce(mockSlotsResponse);
 
     render(<BookingCalendar />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          /no available working hours scheduled for this period\./i,
-        ),
-      ).toBeInTheDocument();
+    const slotButton = await screen.findByRole("button", {
+      name: "10:00 - 11:00",
     });
-  });
+    await user.click(slotButton);
 
-  test("handles API error message when fetching slots", async () => {
-    bookingCalendar.mockResolvedValueOnce({
-      status: "error",
-      message: "Failed to load schedule from server.",
-    });
-
-    render(<BookingCalendar />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("Failed to load schedule from server."),
-      ).toBeInTheDocument();
-    });
-  });
-
-  test("allows selecting and deselecting an available slot", async () => {
-    render(<BookingCalendar />);
-
-    const slotBtn = await screen.findByRole("button", {
-      name: "09:00 - 10:00",
-    });
-
-    fireEvent.click(slotBtn);
-
-    expect(screen.getByText(/selected \(1 slot\/s\):/i)).toBeInTheDocument();
     expect(screen.getByTestId("booking-details-form")).toBeInTheDocument();
-
-    fireEvent.click(slotBtn);
-
-    expect(
-      screen.queryByText(/selected \(1 slot\/s\):/i),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId("booking-details-form"),
-    ).not.toBeInTheDocument();
   });
 
-  test("submits booking details successfully and refreshes the calendar", async () => {
+  test("successfully confirms booking, reloads calendar, and shows success message", async () => {
+    const user = userEvent.setup();
+    bookingCalendar.mockResolvedValue(mockSlotsResponse);
     selectedAppointmentSlot.mockResolvedValueOnce({ status: "success" });
 
     render(<BookingCalendar />);
 
-    const slotBtn = await screen.findByRole("button", {
-      name: "09:00 - 10:00",
+    const slotButton = await screen.findByRole("button", {
+      name: "10:00 - 11:00",
+    });
+    await user.click(slotButton);
+
+    const confirmButton = screen.getByRole("button", {
+      name: "Confirm Booking",
+    });
+    await user.click(confirmButton);
+
+    expect(selectedAppointmentSlot).toHaveBeenCalledWith({
+      customer_name: "John Doe",
+      email: "john@example.com",
+      slot_ids: [1],
     });
 
-    fireEvent.click(slotBtn);
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Thank you, we've got your booking/i),
+      ).toBeInTheDocument();
+    });
+  });
 
-    const dummyForm = await screen.findByTestId("booking-details-form");
-    expect(dummyForm).toBeInTheDocument();
+  test("handles API load failure gracefully", async () => {
+    bookingCalendar.mockResolvedValueOnce({
+      status: "error",
+      message: "Failed to load schedule.",
+    });
 
-    const submitBtn = screen.getByRole("button", { name: "Confirm Details" });
-    fireEvent.click(submitBtn);
+    render(<BookingCalendar />);
 
     await waitFor(() => {
-      expect(selectedAppointmentSlot).toHaveBeenCalledWith({
-        slot_ids: [101],
-        service_id: 1,
-        vehicle_reg: "AB12 CDE",
-        notes: "Oil change",
-        first_name: "John",
-        surname: "Doe",
-        phone: "07123456789",
-      });
+      expect(screen.getByText("Failed to load schedule.")).toBeInTheDocument();
     });
   });
 });

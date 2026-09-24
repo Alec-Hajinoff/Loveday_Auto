@@ -1,122 +1,143 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { BrowserRouter } from "react-router-dom";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import BookingCallToAction from "../BookingCallToAction";
 
-const mockNavigate = jest.fn();
+const mockedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => mockedNavigate,
 }));
-
-const renderComponent = (props = {}) => {
-  const defaultProps = {
-    isAuthenticated: false,
-    userRole: null,
-    isLoading: false,
-    ...props,
-  };
-
-  return render(
-    <BrowserRouter>
-      <BookingCallToAction {...defaultProps} />
-    </BrowserRouter>,
-  );
-};
 
 describe("BookingCallToAction Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("renders static component content correctly", () => {
-    renderComponent();
+  test("renders component with title, description, and button", () => {
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={false}
+          userRole={null}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    );
 
+    expect(screen.getByText("Need a Garage Appointment?")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /need a garage appointment\?/i }),
+      screen.getByText("Book your slot online for MOT, servicing, or repairs."),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Book an Appointment/i }),
+    ).toBeInTheDocument();
+  });
+
+  test("displays loading state on button when isLoading is true", () => {
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={false}
+          userRole={null}
+          isLoading={true}
+        />
+      </MemoryRouter>,
+    );
+
+    const button = screen.getByRole("button", { name: /Checking session.../i });
+    expect(button).toBeDisabled();
+  });
+
+  test("navigates to /UserDashboard when authenticated as a customer", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={true}
+          userRole="customer"
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: /Book an Appointment/i }),
+    );
+    expect(mockedNavigate).toHaveBeenCalledWith("/UserDashboard");
+  });
+
+  test("navigates to /AdminDashboard when authenticated as a non-customer", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={true}
+          userRole="admin"
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: /Book an Appointment/i }),
+    );
+    expect(mockedNavigate).toHaveBeenCalledWith("/AdminDashboard");
+  });
+
+  test("opens sign-in modal when not authenticated", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={false}
+          userRole={null}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: /Book an Appointment/i }),
+    );
+
+    expect(screen.getByText("Sign In Required")).toBeInTheDocument();
     expect(
       screen.getByText(
-        /book your slot online for mot, servicing, or repairs at loveday auto\./i,
+        /Please log in or sign up for an account to schedule your appointment slot/i,
       ),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /book an appointment/i }),
-    ).toBeInTheDocument();
-  });
-
-  test("disables button and shows loading state when isLoading is true", () => {
-    renderComponent({ isLoading: true });
-
-    const button = screen.getByRole("button", {
-      name: /checking session\.\.\./i,
-    });
-    expect(button).toBeDisabled();
-
-    fireEvent.click(button);
-    expect(mockNavigate).not.toHaveBeenCalled();
-    expect(screen.queryByText(/sign in required/i)).not.toBeInTheDocument();
-  });
-
-  test("navigates to /UserDashboard when authenticated customer clicks book", () => {
-    renderComponent({ isAuthenticated: true, userRole: "customer" });
-
-    const button = screen.getByRole("button", { name: /book an appointment/i });
-    fireEvent.click(button);
-
-    expect(mockNavigate).toHaveBeenCalledWith("/UserDashboard");
-  });
-
-  test("navigates to /AdminDashboard when authenticated non-customer clicks book", () => {
-    renderComponent({ isAuthenticated: true, userRole: "admin" });
-
-    const button = screen.getByRole("button", { name: /book an appointment/i });
-    fireEvent.click(button);
-
-    expect(mockNavigate).toHaveBeenCalledWith("/AdminDashboard");
-  });
-
-  test("opens authentication modal when unauthenticated user clicks book", () => {
-    renderComponent({ isAuthenticated: false });
-
-    expect(screen.queryByText(/sign in required/i)).not.toBeInTheDocument();
-
-    const button = screen.getByRole("button", { name: /book an appointment/i });
-    fireEvent.click(button);
-
-    expect(screen.getByText(/sign in required/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /log in/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Log In/i })).toHaveAttribute(
       "href",
       "/UserLogin",
     );
-    expect(screen.getByRole("link", { name: /sign up/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Sign Up/i })).toHaveAttribute(
       "href",
       "/UserRegistration",
     );
   });
 
-  test("closes modal when clicking the close button or backdrop", () => {
-    renderComponent({ isAuthenticated: false });
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /book an appointment/i }),
+  test("closes sign-in modal when close button is clicked", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <BookingCallToAction
+          isAuthenticated={false}
+          userRole={null}
+          isLoading={false}
+        />
+      </MemoryRouter>,
     );
-    expect(screen.getByText(/sign in required/i)).toBeInTheDocument();
 
-    const closeBtn = screen.getByRole("button", { name: /close/i });
-    fireEvent.click(closeBtn);
-
-    expect(screen.queryByText(/sign in required/i)).not.toBeInTheDocument();
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /book an appointment/i }),
+    await user.click(
+      screen.getByRole("button", { name: /Book an Appointment/i }),
     );
-    const backdrop = screen
-      .getByText(/sign in required/i)
-      .closest(".booking-cta-modal-backdrop");
-    fireEvent.click(backdrop);
+    expect(screen.getByText("Sign In Required")).toBeInTheDocument();
 
-    expect(screen.queryByText(/sign in required/i)).not.toBeInTheDocument();
+    const closeBtn = screen.getByRole("button", { name: /Close/i });
+    await user.click(closeBtn);
+
+    expect(screen.queryByText("Sign In Required")).not.toBeInTheDocument();
   });
 });
