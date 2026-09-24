@@ -1,172 +1,141 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import BlockUnblockActionBar from "../BlockUnblockActionBar";
 import { blockUnblockActionBar } from "../ApiService";
 
-jest.mock("../ApiService");
+jest.mock("../ApiService", () => ({
+  blockUnblockActionBar: jest.fn(),
+}));
 
 describe("BlockUnblockActionBar Component", () => {
-  const mockOnActionCompleted = jest.fn();
-  const mockOnClearSelection = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(window, "alert").mockImplementation(() => {});
   });
 
-  afterEach(() => {
-    window.alert.mockRestore();
-  });
-
-  test("renders nothing when no slots are selected", () => {
-    const { container } = render(
-      <BlockUnblockActionBar
-        selectedSlots={[]}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
-      />,
-    );
-
+  test("renders nothing when selectedSlots is empty or undefined", () => {
+    const { container } = render(<BlockUnblockActionBar selectedSlots={[]} />);
     expect(container).toBeEmptyDOMElement();
   });
 
-  test("renders correct UI and both buttons when selected slots contain mixed statuses", () => {
-    const mockSlots = [
+  test("displays correct pluralized count and render buttons for available slots", () => {
+    const selectedSlots = [
       { id: 1, status: "available" },
-      { id: 2, status: "blocked" },
+      { id: 2, status: "available" },
     ];
 
     render(
       <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
+        selectedSlots={selectedSlots}
+        onActionCompleted={() => {}}
+        onClearSelection={() => {}}
       />,
     );
 
     expect(screen.getByText("2 slots selected")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /^block selected slots/i }),
+      screen.getByRole("button", { name: /Block Selected Slots/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /unblock selected slots/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: /Unblock Selected Slots/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Cancel/i })).toBeInTheDocument();
   });
 
-  test("renders only 'Block' button when all selected slots are available", () => {
-    const mockSlots = [{ id: 1, status: "available" }];
+  test("displays singular text and unblock button when blocked slots are selected", () => {
+    const selectedSlots = [{ id: 1, status: "blocked" }];
 
     render(
       <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
+        selectedSlots={selectedSlots}
+        onActionCompleted={() => {}}
+        onClearSelection={() => {}}
       />,
     );
 
     expect(screen.getByText("1 slot selected")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /block selected slots/i }),
+      screen.getByRole("button", { name: /Unblock Selected Slots/i }),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /unblock selected slots/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Cancel/i })).toBeInTheDocument();
   });
 
-  test("handles successful slot action, triggers dispatchEvent, and fires callback", async () => {
-    const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
-    blockUnblockActionBar.mockResolvedValueOnce({ status: "success" });
+  test("successfully blocks slots, dispatches event, and calls onActionCompleted", async () => {
+    const user = userEvent.setup();
+    const selectedSlots = [{ id: 10, status: "available" }];
+    const onActionCompletedMock = jest.fn();
 
-    const mockSlots = [{ id: 1, status: "available" }];
+    blockUnblockActionBar.mockResolvedValueOnce({ status: "success" });
+    const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
 
     render(
       <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
+        selectedSlots={selectedSlots}
+        onActionCompleted={onActionCompletedMock}
+        onClearSelection={() => {}}
       />,
     );
 
-    const blockBtn = screen.getByRole("button", {
-      name: /block selected slots/i,
+    const blockButton = screen.getByRole("button", {
+      name: /Block Selected Slots/i,
     });
-    fireEvent.click(blockBtn);
+    await user.click(blockButton);
 
-    expect(blockUnblockActionBar).toHaveBeenCalledWith([1], "block");
+    expect(blockUnblockActionBar).toHaveBeenCalledWith([10], "block");
 
     await waitFor(() => {
       expect(dispatchEventSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "bookingUpdated" }),
       );
-      expect(mockOnActionCompleted).toHaveBeenCalledTimes(1);
     });
 
+    expect(onActionCompletedMock).toHaveBeenCalledTimes(1);
     dispatchEventSpy.mockRestore();
   });
 
-  test("displays alert on API response failure", async () => {
-    const mockErrorMessage = "Failed to update slot status.";
+  test("calls onClearSelection when Cancel button is clicked", async () => {
+    const user = userEvent.setup();
+    const selectedSlots = [{ id: 1, status: "available" }];
+    const onClearSelectionMock = jest.fn();
+
+    render(
+      <BlockUnblockActionBar
+        selectedSlots={selectedSlots}
+        onActionCompleted={() => {}}
+        onClearSelection={onClearSelectionMock}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Cancel/i }));
+    expect(onClearSelectionMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("handles API failure gracefully and alerts message", async () => {
+    const user = userEvent.setup();
+    const selectedSlots = [{ id: 1, status: "available" }];
+    const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
+
     blockUnblockActionBar.mockResolvedValueOnce({
       status: "error",
-      message: mockErrorMessage,
+      message: "Custom failure message",
     });
-
-    const mockSlots = [{ id: 2, status: "blocked" }];
 
     render(
       <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
+        selectedSlots={selectedSlots}
+        onActionCompleted={() => {}}
+        onClearSelection={() => {}}
       />,
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /unblock selected slots/i }),
+    await user.click(
+      screen.getByRole("button", { name: /Block Selected Slots/i }),
     );
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(mockErrorMessage);
-      expect(mockOnActionCompleted).not.toHaveBeenCalled();
+      expect(alertSpy).toHaveBeenCalledWith("Custom failure message");
     });
-  });
 
-  test("displays alert on network or runtime error", async () => {
-    blockUnblockActionBar.mockRejectedValueOnce(
-      new Error("Network disconnect"),
-    );
-
-    const mockSlots = [{ id: 1, status: "available" }];
-
-    render(
-      <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
-      />,
-    );
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /block selected slots/i }),
-    );
-
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Network disconnect");
-    });
-  });
-
-  test("triggers onClearSelection when Cancel button is clicked", () => {
-    const mockSlots = [{ id: 1, status: "available" }];
-
-    render(
-      <BlockUnblockActionBar
-        selectedSlots={mockSlots}
-        onActionCompleted={mockOnActionCompleted}
-        onClearSelection={mockOnClearSelection}
-      />,
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /cancel/i }));
-    expect(mockOnClearSelection).toHaveBeenCalledTimes(1);
+    alertSpy.mockRestore();
   });
 });

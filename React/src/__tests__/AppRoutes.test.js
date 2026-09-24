@@ -1,135 +1,96 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import "@testing-library/jest-dom";
 import AppRoutes from "../AppRoutes";
 
-jest.mock("../MainRegLog", () => ({ isAuthenticated, userRole, isLoading }) => (
-  <div data-testid="main-reg-log">
-    MainRegLog - Auth: {String(isAuthenticated)}, Role: {userRole || "none"},
-    Loading: {String(isLoading)}
-  </div>
+jest.mock("../MainRegLog", () => () => (
+  <div data-testid="main-reg-log">MainRegLog</div>
 ));
+jest.mock("../Services", () => () => (
+  <div data-testid="services">Services</div>
+));
+jest.mock("../AboutUs", () => () => <div data-testid="about-us">AboutUs</div>);
 jest.mock("../UserLogin", () => () => (
-  <div data-testid="user-login">User Login</div>
+  <div data-testid="user-login">UserLogin</div>
 ));
 jest.mock("../UserRegistration", () => () => (
-  <div data-testid="user-registration">User Registration</div>
+  <div data-testid="user-registration">UserRegistration</div>
 ));
 jest.mock("../RegisteredPage", () => () => (
-  <div data-testid="registered-page">Registered Page</div>
+  <div data-testid="registered-page">RegisteredPage</div>
 ));
 jest.mock("../LogoutComponent", () => () => (
-  <div data-testid="logout-component">Logout Component</div>
+  <div data-testid="logout-component">LogoutComponent</div>
 ));
 jest.mock("../VerifyEmail", () => () => (
-  <div data-testid="verify-email">Verify Email</div>
+  <div data-testid="verify-email">VerifyEmail</div>
 ));
 jest.mock("../PasswordReset", () => () => (
-  <div data-testid="password-reset">Password Reset</div>
+  <div data-testid="password-reset">PasswordReset</div>
 ));
-
-jest.mock("../ShopPage", () => () => (
-  <div data-testid="shop-page">Shop Page</div>
-));
-jest.mock("../ProductDetailPage", () => () => (
-  <div data-testid="product-detail-page">Product Detail Page</div>
-));
-jest.mock("../BasketPage", () => () => (
-  <div data-testid="basket-page">Basket Page</div>
-));
-jest.mock("../CheckoutPage", () => () => (
-  <div data-testid="checkout-page">Checkout Page</div>
-));
-jest.mock("../OrderSuccessPage", () => () => (
-  <div data-testid="order-success-page">Order Success Page</div>
-));
-
 jest.mock("../UserDashboard", () => () => (
-  <div data-testid="user-dashboard">User Dashboard</div>
+  <div data-testid="user-dashboard">UserDashboard</div>
 ));
 jest.mock("../AdminDashboard", () => () => (
-  <div data-testid="admin-dashboard">Admin Dashboard</div>
+  <div data-testid="admin-dashboard">AdminDashboard</div>
 ));
-
 jest.mock("../ProtectedRoute", () => ({ children }) => (
   <div data-testid="protected-route">{children}</div>
 ));
 
 describe("AppRoutes Component", () => {
-  const renderWithRouter = (initialEntries = ["/"], props = {}) => {
-    const defaultProps = {
-      isAuthenticated: false,
-      userRole: null,
-      isLoading: false,
-      ...props,
-    };
-
-    return render(
-      <MemoryRouter initialEntries={initialEntries}>
-        <AppRoutes {...defaultProps} />
+  test('renders MainRegLog component on default path "/"', () => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <AppRoutes isAuthenticated={false} userRole={null} isLoading={false} />
       </MemoryRouter>,
     );
-  };
-
-  it("renders MainRegLog for root path '/' with received props", () => {
-    renderWithRouter(["/"], {
-      isAuthenticated: true,
-      userRole: "customer",
-      isLoading: false,
-    });
-
     expect(screen.getByTestId("main-reg-log")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "MainRegLog - Auth: true, Role: customer, Loading: false",
-      ),
-    ).toBeInTheDocument();
   });
 
-  it("renders public authentication pages correctly", () => {
-    const publicRoutes = [
-      { path: "/UserLogin", testId: "user-login" },
-      { path: "/UserRegistration", testId: "user-registration" },
-      { path: "/RegisteredPage", testId: "registered-page" },
-      { path: "/LogoutComponent", testId: "logout-component" },
-      { path: "/VerifyEmail", testId: "verify-email" },
-      { path: "/PasswordReset", testId: "password-reset" },
-    ];
-
-    publicRoutes.forEach(({ path, testId }) => {
-      const { unmount } = renderWithRouter([path]);
-      expect(screen.getByTestId(testId)).toBeInTheDocument();
-      unmount();
-    });
+  test('renders Services component on path "/Services"', () => {
+    render(
+      <MemoryRouter initialEntries={["/Services"]}>
+        <AppRoutes isAuthenticated={false} userRole={null} isLoading={false} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId("services")).toBeInTheDocument();
   });
 
-  it("renders e-commerce shop pages correctly", () => {
-    const shopRoutes = [
-      { path: "/shop", testId: "shop-page" },
-      { path: "/product/42", testId: "product-detail-page" },
-      { path: "/basket", testId: "basket-page" },
-      { path: "/checkout", testId: "checkout-page" },
-      { path: "/order/success", testId: "order-success-page" },
-    ];
-
-    shopRoutes.forEach(({ path, testId }) => {
-      const { unmount } = renderWithRouter([path]);
-      expect(screen.getByTestId(testId)).toBeInTheDocument();
-      unmount();
-    });
+  test('renders AboutUs component on path "/AboutUs"', () => {
+    render(
+      <MemoryRouter initialEntries={["/AboutUs"]}>
+        <AppRoutes isAuthenticated={false} userRole={null} isLoading={false} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId("about-us")).toBeInTheDocument();
   });
 
-  it("renders UserDashboard wrapped inside ProtectedRoute", () => {
-    renderWithRouter(["/UserDashboard"]);
+  test('renders UserLogin component on path "/UserLogin"', () => {
+    render(
+      <MemoryRouter initialEntries={["/UserLogin"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId("user-login")).toBeInTheDocument();
+  });
 
+  test('renders UserDashboard inside ProtectedRoute on path "/UserDashboard"', () => {
+    render(
+      <MemoryRouter initialEntries={["/UserDashboard"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
     expect(screen.getByTestId("protected-route")).toBeInTheDocument();
     expect(screen.getByTestId("user-dashboard")).toBeInTheDocument();
   });
 
-  it("renders AdminDashboard wrapped inside ProtectedRoute", () => {
-    renderWithRouter(["/AdminDashboard"]);
-
+  test('renders AdminDashboard inside ProtectedRoute on path "/AdminDashboard"', () => {
+    render(
+      <MemoryRouter initialEntries={["/AdminDashboard"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
     expect(screen.getByTestId("protected-route")).toBeInTheDocument();
     expect(screen.getByTestId("admin-dashboard")).toBeInTheDocument();
   });

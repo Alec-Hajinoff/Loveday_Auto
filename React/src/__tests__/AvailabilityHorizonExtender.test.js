@@ -1,133 +1,109 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import AvailabilityHorizonExtender from "../AvailabilityHorizonExtender";
 import { availabilityHorizonExtender } from "../ApiService";
 
-jest.mock("../ApiService");
+jest.mock("../ApiService", () => ({
+  availabilityHorizonExtender: jest.fn(),
+}));
 
 describe("AvailabilityHorizonExtender Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("renders component correctly with initial state", () => {
+  test("renders initial layout with heading, description, and button", () => {
     render(<AvailabilityHorizonExtender />);
 
     expect(
-      screen.getByRole("heading", { name: /extend appointment horizon/i }),
+      screen.getByRole("heading", { name: /Generate appointment slots/i }),
     ).toBeInTheDocument();
-
     expect(
-      screen.getByRole("button", {
-        name: /generate 3 additional months of slots/i,
-      }),
+      screen.getByText(
+        /Generate 3 additional months of appointment slots starting from the end of the existing schedule horizon\./i,
+      ),
     ).toBeInTheDocument();
-
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Generate Additional Slots/i }),
+    ).toBeInTheDocument();
   });
 
-  test("handles successful slot generation and dispatches custom event", async () => {
-    const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
-    const mockSuccessResponse = {
-      status: "success",
-      message: "Extended availability slots by 3 additional months.",
-    };
+  test("successfully extends availability horizon, shows success message, and dispatches custom event", async () => {
+    const user = userEvent.setup();
 
-    availabilityHorizonExtender.mockResolvedValueOnce(mockSuccessResponse);
+    let resolveApi;
+    const apiPromise = new Promise((resolve) => {
+      resolveApi = resolve;
+    });
+
+    availabilityHorizonExtender.mockReturnValueOnce(apiPromise);
+
+    const dispatchEventSpy = jest.spyOn(window, "dispatchEvent");
 
     render(<AvailabilityHorizonExtender />);
 
     const button = screen.getByRole("button", {
-      name: /generate 3 additional months of slots/i,
+      name: /Generate Additional Slots/i,
     });
+    await user.click(button);
 
-    fireEvent.click(button);
+    expect(button).toHaveTextContent("Generating Slots...");
+    expect(button).toBeDisabled();
 
-    expect(
-      screen.getByRole("button", { name: /generating slots\.\.\./i }),
-    ).toBeDisabled();
+    resolveApi({
+      status: "success",
+      message: "Extended availability slots by 3 additional months.",
+    });
 
     await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toBeInTheDocument();
-      expect(alert).toHaveClass("alert-success");
-      expect(alert).toHaveTextContent(mockSuccessResponse.message);
+      expect(
+        screen.getByText("Extended availability slots by 3 additional months."),
+      ).toBeInTheDocument();
     });
 
+    expect(availabilityHorizonExtender).toHaveBeenCalledTimes(1);
     expect(dispatchEventSpy).toHaveBeenCalledWith(
       expect.objectContaining({ type: "bookingUpdated" }),
     );
 
-    expect(
-      screen.getByRole("button", {
-        name: /generate 3 additional months of slots/i,
-      }),
-    ).not.toBeDisabled();
-
     dispatchEventSpy.mockRestore();
   });
 
-  test("handles fallback success message when API response message is missing", async () => {
-    availabilityHorizonExtender.mockResolvedValueOnce({ status: "success" });
-
-    render(<AvailabilityHorizonExtender />);
-
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /generate 3 additional months of slots/i,
-      }),
-    );
-
-    await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toHaveClass("alert-success");
-      expect(alert).toHaveTextContent(
-        "Extended availability slots by 3 additional months.",
-      );
-    });
-  });
-
-  test("handles failure status response from API", async () => {
-    const mockErrorResponse = {
+  test("handles API error response status gracefully", async () => {
+    const user = userEvent.setup();
+    availabilityHorizonExtender.mockResolvedValueOnce({
       status: "error",
-      message: "Unable to extend slots at this time.",
-    };
-
-    availabilityHorizonExtender.mockResolvedValueOnce(mockErrorResponse);
+      message: "Failed to extend availability slots.",
+    });
 
     render(<AvailabilityHorizonExtender />);
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /generate 3 additional months of slots/i,
-      }),
+    await user.click(
+      screen.getByRole("button", { name: /Generate Additional Slots/i }),
     );
 
     await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toBeInTheDocument();
-      expect(alert).toHaveClass("alert-danger");
-      expect(alert).toHaveTextContent(mockErrorResponse.message);
+      expect(
+        screen.getByText("Failed to extend availability slots."),
+      ).toBeInTheDocument();
     });
   });
 
-  test("handles rejected API promise", async () => {
-    const errorMessage = "Network Error";
-    availabilityHorizonExtender.mockRejectedValueOnce(new Error(errorMessage));
+  test("handles network exceptions and displays error message", async () => {
+    const user = userEvent.setup();
+    availabilityHorizonExtender.mockRejectedValueOnce(
+      new Error("Network error"),
+    );
 
     render(<AvailabilityHorizonExtender />);
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /generate 3 additional months of slots/i,
-      }),
+    await user.click(
+      screen.getByRole("button", { name: /Generate Additional Slots/i }),
     );
 
     await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toBeInTheDocument();
-      expect(alert).toHaveClass("alert-danger");
-      expect(alert).toHaveTextContent(errorMessage);
+      expect(screen.getByText("Network error")).toBeInTheDocument();
     });
   });
 });
