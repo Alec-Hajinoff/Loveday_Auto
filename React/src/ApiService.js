@@ -531,27 +531,3 @@ export const availabilityHorizonExtender = async () => {
     throw new Error("An error occurred while extending availability slots.");
   }
 };
-
-// checkoutSessionCreate() is a helper to support multi-item cart sessions in product_catalogue_post.php
-
-export const checkoutSessionCreate = async (checkoutPayload) => {
-  try {
-    const response = await fetch(
-      "http://localhost:8001/Loveday_Auto/PHP/product_catalogue_post.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(checkoutPayload),
-      },
-    );
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error creating checkout session:", error);
-    throw new Error("An error occurred while initiating payment.");
-  }
-};

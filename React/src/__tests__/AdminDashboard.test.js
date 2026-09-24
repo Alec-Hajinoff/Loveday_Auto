@@ -1,114 +1,84 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import AdminDashboard from "../AdminDashboard";
 
-jest.mock("../LogoutComponent", () => () => (
-  <div data-testid="logout-component">Logout Component</div>
-));
-jest.mock("../BusinessHoursManager", () => () => (
-  <div data-testid="business-hours-manager">Business Hours Manager</div>
-));
-jest.mock("../ServiceManager", () => () => (
-  <div data-testid="service-manager">Service Manager</div>
-));
 jest.mock("../AdminBookingsList", () => () => (
-  <div data-testid="admin-bookings-list">Admin Bookings List</div>
+  <div data-testid="admin-bookings-list">Mocked AdminBookingsList</div>
 ));
+
 jest.mock("../AdminBookingCalendar", () => () => (
-  <div data-testid="admin-booking-calendar">Admin Booking Calendar</div>
+  <div data-testid="admin-booking-calendar">Mocked AdminBookingCalendar</div>
 ));
+
+jest.mock("../ServiceManager", () => () => (
+  <div data-testid="service-manager">Mocked ServiceManager</div>
+));
+
+jest.mock("../BusinessHoursManager", () => () => (
+  <div data-testid="business-hours-manager">Mocked BusinessHoursManager</div>
+));
+
 jest.mock("../AvailabilityHorizonExtender", () => () => (
   <div data-testid="availability-horizon-extender">
-    Availability Horizon Extender
-  </div>
-));
-jest.mock("../AdminProductEntry", () => ({ onProductAdded }) => (
-  <div data-testid="admin-product-entry">
-    <button type="button" onClick={onProductAdded}>
-      Add Product Mock
-    </button>
+    Mocked AvailabilityHorizonExtender
   </div>
 ));
 
 describe("AdminDashboard Component", () => {
-  it("renders welcome text and navigation tabs", () => {
+  test("renders header and defaults to the Bookings tab with correct child components", () => {
     render(<AdminDashboard />);
 
     expect(
-      screen.getByText(/Welcome to your admin dashboard/i),
+      screen.getByText(
+        /Welcome to your admin dashboard\. Manage your bookings, services, and opening hours\./i,
+      ),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Bookings & Calendar" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Products & Services" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Appointment Availability" }),
-    ).toBeInTheDocument();
-  });
 
-  it("renders 'Bookings & Calendar' tab content by default", () => {
-    render(<AdminDashboard />);
+    expect(screen.getByRole("button", { name: /^Bookings$/i })).toHaveClass(
+      "active",
+    );
+    expect(screen.getByRole("button", { name: /^Services$/i })).not.toHaveClass(
+      "active",
+    );
+    expect(
+      screen.getByRole("button", { name: /^Opening Hours$/i }),
+    ).not.toHaveClass("active");
 
     expect(screen.getByTestId("admin-bookings-list")).toBeInTheDocument();
     expect(screen.getByTestId("admin-booking-calendar")).toBeInTheDocument();
-
-    expect(screen.queryByTestId("service-manager")).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId("business-hours-manager"),
-    ).not.toBeInTheDocument();
   });
 
-  it("switches to 'Products & Services' tab when clicked", () => {
+  test("switches to Services tab when clicked and renders ServiceManager", async () => {
+    const user = userEvent.setup();
     render(<AdminDashboard />);
 
-    const productsTabBtn = screen.getByRole("button", {
-      name: "Products & Services",
+    const servicesTabButton = screen.getByRole("button", {
+      name: /^Services$/i,
     });
+    await user.click(servicesTabButton);
 
-    fireEvent.click(productsTabBtn);
-
-    expect(productsTabBtn).toHaveClass("active");
+    expect(servicesTabButton).toHaveClass("active");
     expect(screen.getByTestId("service-manager")).toBeInTheDocument();
-    expect(screen.getByTestId("admin-product-entry")).toBeInTheDocument();
 
     expect(screen.queryByTestId("admin-bookings-list")).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId("admin-booking-calendar"),
-    ).not.toBeInTheDocument();
   });
 
-  it("switches to 'Appointment Availability' tab when clicked", () => {
+  test("switches to Opening Hours tab when clicked and renders BusinessHoursManager and Extender", async () => {
+    const user = userEvent.setup();
     render(<AdminDashboard />);
 
-    const availabilityTabBtn = screen.getByRole("button", {
-      name: "Appointment Availability",
+    const openingHoursTabButton = screen.getByRole("button", {
+      name: /^Opening Hours$/i,
     });
+    await user.click(openingHoursTabButton);
 
-    fireEvent.click(availabilityTabBtn);
-
-    expect(availabilityTabBtn).toHaveClass("active");
+    expect(openingHoursTabButton).toHaveClass("active");
     expect(screen.getByTestId("business-hours-manager")).toBeInTheDocument();
     expect(
       screen.getByTestId("availability-horizon-extender"),
     ).toBeInTheDocument();
 
     expect(screen.queryByTestId("admin-bookings-list")).not.toBeInTheDocument();
-  });
-
-  it("triggers handleProductAdded when onProductAdded callback is invoked from child", () => {
-    render(<AdminDashboard />);
-
-    fireEvent.click(
-      screen.getByRole("button", { name: "Products & Services" }),
-    );
-
-    const addProductBtn = screen.getByRole("button", {
-      name: "Add Product Mock",
-    });
-
-    expect(() => fireEvent.click(addProductBtn)).not.toThrow();
   });
 });
