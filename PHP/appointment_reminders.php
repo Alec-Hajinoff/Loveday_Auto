@@ -24,9 +24,9 @@ if (empty($mailUsername) || empty($mailPassword)) {
     exit('Server configuration error');
 }
 
-$servername     = '127.0.0.1';
-$username       = 'root';
-$passwordServer = '';
+$servername     = 'localhost:3306';
+$username       = 'loveday_auto_user';
+$passwordServer = 'EYx7ejJMiPEcSqH';
 $dbname         = 'loveday_auto';
 
 try {

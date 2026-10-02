@@ -42,11 +42,22 @@ $surname    = isset($input['surname']) ? trim($input['surname']) : null;
 $phone      = isset($input['phone']) ? trim($input['phone']) : null;
 
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ]);
+
+    $servername     = 'localhost;port=3306';
+    $username       = 'loveday_auto_user';
+    $passwordServer = 'EYx7ejJMiPEcSqH';
+    $dbname         = 'loveday_auto';
+
+    try {
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]);
+        $pdo = $conn;
+    } catch (PDOException $e) {
+        throw $e;
+    }
 
     $stmt = $pdo->prepare('SELECT first_name, surname, phone FROM users WHERE id = :id');
     $stmt->execute([':id' => $user_id]);
@@ -57,7 +68,6 @@ try {
         exit;
     }
 
-    // Rule: If database value is not null and incoming value is empty, keep existing value (do not delete)
     $final_first_name = ($currentUser['first_name'] !== null && ($first_name === '' || $first_name === null))
         ? $currentUser['first_name']
         : ($first_name !== '' ? $first_name : null);

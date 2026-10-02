@@ -37,7 +37,13 @@ if (! isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=loveday_auto', 'root', '', [
+
+    $servername     = 'localhost:3306';
+    $username       = 'loveday_auto_user';
+    $passwordServer = 'EYx7ejJMiPEcSqH';
+    $dbname         = 'loveday_auto';
+
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
