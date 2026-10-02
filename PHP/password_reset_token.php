@@ -5,13 +5,19 @@ require_once 'session_config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://lovedayauto.co.uk',
+    'https://www.lovedayauto.co.uk',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins, true)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
+
+    // Allow same-origin and direct requests.
+
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -22,14 +28,14 @@ header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
+$servername     = '127.0.0.1';
+$username       = 'root';
 $passwordServer = '';
-$dbname = 'loveday_auto';
+$dbname         = 'loveday_auto';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -55,9 +61,9 @@ if (empty($token)) {
 }
 
 try {
-    $sql = 'SELECT id FROM users 
-            WHERE password_reset_token = :token 
-            AND password_token_expires_at > NOW() 
+    $sql = 'SELECT id FROM users
+            WHERE password_reset_token = :token
+            AND password_token_expires_at > NOW()
             LIMIT 1';
 
     $stmt = $conn->prepare($sql);
@@ -68,8 +74,8 @@ try {
         echo json_encode(['valid' => true]);
     } else {
         echo json_encode([
-            'valid' => false,
-            'message' => 'This link may have expired or been used already. For your security, password reset links only work once and for a limited time.'
+            'valid'   => false,
+            'message' => 'This link may have expired or been used already. For your security, password reset links only work once and for a limited time.',
         ]);
     }
 } catch (Exception $e) {
