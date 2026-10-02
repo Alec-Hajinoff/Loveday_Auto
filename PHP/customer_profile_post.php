@@ -43,7 +43,7 @@ $phone      = isset($input['phone']) ? trim($input['phone']) : null;
 
 try {
 
-    $servername     = 'localhost;port=3306';
+    $servername     = 'localhost:3306';
     $username       = 'loveday_auto_user';
     $passwordServer = 'EYx7ejJMiPEcSqH';
     $dbname         = 'loveday_auto';

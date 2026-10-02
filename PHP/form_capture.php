@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$servername     = 'localhost;port=3306';
+$servername     = 'localhost:3306';
 $username       = 'loveday_auto_user';
 $passwordServer = 'EYx7ejJMiPEcSqH';
 $dbname         = 'loveday_auto';
