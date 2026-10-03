@@ -9,8 +9,7 @@ function RegisteredPage() {
         <div className="row">
           <div className="col-12 col-md-11 col-lg-10 mx-auto text-center">
             <p className="w-100 whitespace-nowrap">
-              Thank you for verifying your email address! Please log in using
-              your credentials.
+              Thank you for verifying your email address!
             </p>
           </div>
         </div>
