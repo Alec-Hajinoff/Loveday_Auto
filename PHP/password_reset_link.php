@@ -120,7 +120,7 @@ try {
             error_log('password_reset_link.php: Failed to store token in database for user ID: ' . $user['id']);
         }
 
-        $resetLink = 'http://localhost:3000/PasswordReset?token=' . urlencode($resetToken);
+        $resetLink = 'https://lovedayauto.co.uk/PasswordReset?token=' . urlencode($resetToken);
 
         $mail = new PHPMailer(true);
 

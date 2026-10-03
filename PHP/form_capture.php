@@ -124,7 +124,7 @@ try {
 
         $userId = $conn->lastInsertId();
 
-        $verificationLink = 'http://localhost:3000/VerifyEmail?token=' . urlencode($verificationToken);
+        $verificationLink = 'https://lovedayauto.co.uk/VerifyEmail?token=' . urlencode($verificationToken);
 
         $mail = new PHPMailer(true);
 
