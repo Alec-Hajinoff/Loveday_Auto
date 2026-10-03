@@ -7,22 +7,6 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-$config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
-if ($config === false) {
-    error_log('Failed to parse .env file');
-    echo json_encode(['status' => 'error', 'message' => 'Server configuration error']);
-    exit;
-}
-
-$mailUsername = $config['MAIL_USERNAME'];
-$mailPassword = $config['MAIL_PASSWORD'];
-
-if (empty($mailUsername) || empty($mailPassword)) {
-    error_log('Gmail credentials not found in .env file');
-    echo json_encode(['status' => 'error', 'message' => 'Server configuration error']);
-    exit;
-}
-
 $allowed_origins = [
     'http://localhost:3000',
     'https://lovedayauto.co.uk',
@@ -151,14 +135,12 @@ try {
     try {
         $mail->SMTPDebug = SMTP::DEBUG_OFF;
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $mailUsername;
-        $mail->Password   = $mailPassword;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
+        $mail->Host       = 'localhost';
+        $mail->SMTPAuth   = false;
+        $mail->SMTPSecure = false;
+        $mail->Port       = 25;
 
-        $mail->setFrom($mailUsername, 'Loveday Auto Repairs');
+        $mail->setFrom('info@lovedayauto.co.uk', 'Loveday Auto Repairs');
         $mail->addAddress($customer_email);
 
         $mail->isHTML(false);
