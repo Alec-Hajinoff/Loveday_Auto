@@ -145,7 +145,7 @@ try {
         $mail->SMTPSecure = false;
         $mail->Port       = 25;
 
-        $mail->setFrom('info@lovedayauto.co.uk', 'Loveday Auto Repairs');
+        $mail->setFrom('alec@hertfordstandard.com', 'Loveday Auto Repairs');
 
         foreach ($staff_recipients as $recipient_email) {
             $mail->addAddress($recipient_email);

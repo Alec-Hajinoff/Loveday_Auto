@@ -119,7 +119,7 @@ try {
             $mail->Port       = 25;
             $mail->Timeout    = 30;
 
-            $mail->setFrom('info@lovedayauto.co.uk', 'Loveday Auto Repairs');
+            $mail->setFrom('alec@hertfordstandard.com', 'Loveday Auto Repairs');
 
             $mail->addAddress($email);
 
