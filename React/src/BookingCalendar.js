@@ -165,6 +165,17 @@ function BookingCalendar({ onBookingComplete }) {
 
   return (
     <div className="booking-calendar-container">
+      <div className="booking-notice-box">
+        <h6 className="booking-notice-title">
+          Important information about your booking
+        </h6>
+        <p className="booking-notice-text">
+          Your appointment is for dropping off your vehicle, not for the start
+          of the repair work. We will schedule the work around our workshop
+          commitments and let you know when your vehicle is ready for
+          collection.
+        </p>
+      </div>
       <div className="calendar-header">
         <h6 className="text-primary mb-0">Available Appointments</h6>
         <div className="calendar-nav">

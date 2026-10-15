@@ -2,6 +2,29 @@
   margin: 1.5rem 0;
 }
 
+.booking-notice-box {
+  background-color: var(--color-complementary-tint, #eff6ff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-left: 4px solid var(--color-complementary, #0b62f5);
+  padding: var(--spacing-md, 1rem);
+  border-radius: var(--radius-md, 8px);
+  margin-bottom: 1.25rem;
+}
+
+.booking-notice-title {
+  font-size: var(--font-size-md, 1rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-main, #0f172a);
+  margin-bottom: 0.5rem;
+}
+
+.booking-notice-text {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text-muted, #475569);
+  margin-bottom: 0;
+  line-height: var(--line-height-base, 1.5);
+}
+
 .calendar-header {
   display: flex;
   align-items: center;
