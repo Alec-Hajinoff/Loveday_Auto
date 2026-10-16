@@ -183,20 +183,21 @@ function BusinessHoursManager() {
 
               <div className="business-hours-info-side">
                 <p>
-                  When updating your opening days or hours, please enter the
-                  complete weekly schedule. Your current opening days and hours
-                  will be replaced with the information you enter.
+                  When updating your opening days or hours for customers to drop
+                  off vehicles, please enter the complete weekly schedule. Your
+                  current opening days and hours will be replaced with the
+                  information you enter.
                 </p>
                 <p>For example, if your current opening days and hours are:</p>
                 <ul>
-                  <li>Monday: 08:00 - 17:00</li>
-                  <li>Tuesday: 08:00 - 17:00</li>
+                  <li>Monday: 08:00 - 10:00</li>
+                  <li>Tuesday: 08:00 - 10:00</li>
                 </ul>
                 <p>and you want to add Wednesday, enter:</p>
                 <ul>
-                  <li>Monday: 08:00 - 17:00</li>
-                  <li>Tuesday: 08:00 - 17:00</li>
-                  <li>Wednesday: 08:00 - 17:00</li>
+                  <li>Monday: 08:00 - 10:00</li>
+                  <li>Tuesday: 08:00 - 10:00</li>
+                  <li>Wednesday: 08:00 - 10:00</li>
                 </ul>
                 <p className="mb-0">
                   Do not enter only the day you want to change or add. Any days
