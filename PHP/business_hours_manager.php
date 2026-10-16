@@ -107,7 +107,7 @@ try {
             $open_time  = new DateTime($date_str . ' ' . $hours_by_day[$day_num]['open_time']);
             $close_time = new DateTime($date_str . ' ' . $hours_by_day[$day_num]['close_time']);
 
-            $slot_interval = new DateInterval('PT1H');
+            $slot_interval = new DateInterval('PT15M');
 
             while ($open_time < $close_time) {
                 $slot_start = $open_time->format('H:i:s');
